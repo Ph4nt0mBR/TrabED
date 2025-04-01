@@ -27,4 +27,24 @@ void regist_pass() {
 	//registrar passagem
 }
 
-õrganizar donos
+void organizadonos() {
+	//Listagem (ordenada alfabeticamente) com o nome de todos os condutores
+	//Listagem (ordenada pelo número de contribuinte) com o respetivo número e nome de todos os condutores.
+}
+
+void memoria() {
+	//Determinar a memoria ocupada por toda a estrutura de dados
+}
+
+void organizacarros() {
+	//Listagem com a matrícula, marca e modelo (Ordenado por cada um destes atributos) de todos os veículos registados.
+}
+
+void listacarroperiodo() {
+	//Listagem ordenada por matrícula dos veículos que circularam autoestrada durante o período X.
+}
+
+void rankveiculos() {
+	/*Ranking de circulação. Listagem ordenada pelo total de quilómetros
+	que cada veículo efectuou na auto-estrada durante determinado período. */
+}
