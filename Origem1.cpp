@@ -4,8 +4,7 @@
 #include <time.h>
 
 void lertxt() {
-	//(Ler o conteúdo dos ficheiros acima descritos para estruturas de dados
-	apropriadas(em memoria))
+	//(Ler o conteúdo dos ficheiros acima descritos para estruturas de dados apropriadas(em memoria))
 }
 
 void regist_dono() {
