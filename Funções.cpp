@@ -48,3 +48,32 @@ void rankveiculos() {
 	/*Ranking de circulação. Listagem ordenada pelo total de quilómetros
 	que cada veículo efectuou na auto-estrada durante determinado período. */
 }
+
+void rankmarcas() {
+	/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
+	os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
+}
+
+void listainfracao() {
+	/*Listagem de infrações. Contém a matrícula dos veículos que
+	circularam com velocidade média superior a 120 km/h durante determinado período*/
+}
+
+void rankinfracao() {
+	//Ranking de infrações p / veículo.Listagem com o veículo e respectivo
+	//número total de infrações de velocidade ocorridas durante determinado período. 
+}
+
+void velocidademedia() {
+	//velocidade média
+}
+
+void marcamedia() {
+	// Qual a marca dos carros que circulam a maior velocidade média?
+}
+
+void condutorediamax() {
+	//Qual o condutor(dono) que circula a maior velocidade média ?
+}
+
+void condutorpostal(){}
