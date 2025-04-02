@@ -76,4 +76,18 @@ void condutorediamax() {
 	//Qual o condutor(dono) que circula a maior velocidade média ?
 }
 
-void condutorpostal(){}
+void condutorpostal(){
+	//Qual a velocidade média dos condutores com código postal X?
+}
+
+void marcapopular() {
+	//Determinar qual a marca de automóvel mais comum?
+}
+
+void exportarXl() {
+	//Exportar toda a Base de Dados para o formato *.csv, para ser lido em Excel
+}
+
+void exportarXML() {
+	//Exportar toda a Base de Dados para o formato *.xml
+}
