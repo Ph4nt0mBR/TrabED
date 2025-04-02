@@ -24,6 +24,13 @@ struct carros
 
 }carros,*carros;
 
+typedef struct nocarro
+{
+	struct carros *carros;
+	struct nocarro *prox;
+}*nocarro;
+
+
 struct marcas
 {
 	char nome[20];
