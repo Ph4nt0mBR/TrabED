@@ -20,6 +20,11 @@ typedef struct no
 	struct no *prox;
 }no,*pno;
 
+typedef struct Listadono {
+	int numel;
+	pno inicio;
+} Listadono, pListadono;
+
 typedef struct carros
 {
 	char matricula[8];
@@ -38,12 +43,12 @@ typedef struct nocarro
 	carros *info;
 	struct nocarro *prox;
 
-}*nocarro;
+}*pnocarro;
 
-typedef struct Lista {
+typedef struct Listacarro {
 	int numel;
 	pnocarro inicio;
-} Lista, pLista;
+} Listacarro, pListacarro;
 
 typedef struct marcas
 {
