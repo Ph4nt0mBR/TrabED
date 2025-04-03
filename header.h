@@ -23,20 +23,27 @@ struct carros
 	int ano;
 	//falta adicionar o dono
 	int codigo;
+	int kilometros;
+	int	tempototal;
 
-}carros,*carros;
+}carros,*pcarros;
 
 typedef struct nocarro
 {
-	struct carros *carros;
+	carros *info;
 	struct nocarro *prox;
+
 }*nocarro;
 
+typedef struct Lista {
+	int numel;
+	ptELEM inicio;
+} *ptLISTA, LISTA;
 
 struct marcas
 {
 	char nome[20];
-	struct carros *carros;
+	nocarro* nocarro;
 	struct marcas *prox;
 			
 }*marcas;
