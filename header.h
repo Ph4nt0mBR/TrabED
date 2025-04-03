@@ -1,6 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include<string.h>
+
+
+#define BUFFER_SIZE 2048
+#define SAMPLE_SIZE 10
 
 typedef struct donos
 {
