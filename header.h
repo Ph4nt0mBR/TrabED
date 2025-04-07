@@ -43,7 +43,7 @@ typedef struct nocarro
 	carros *info;
 	struct nocarro *prox;
 
-}*pnocarro;
+}nocarro,*pnocarro;
 
 typedef struct Listacarro {
 	int numel;
@@ -59,16 +59,35 @@ typedef struct marcas
 
 typedef struct sensores
 {
+	//Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos os sensores!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	int codSensor;
+	char Designacao[20];
+	char Latitude[18];
+	char Longitude[15];
+}sensores,*psensores;
 
-}*sensores;
+typedef struct nosensores
+{
+	sensores* info;
+	struct nosensores* prox;
+
+}nosensores, * pnosensores;
+
+typedef struct Listasensores{
+	int numel;
+	pnosensores inicio;
+} Listasensores, pListasensores;
 
 typedef struct distancias
 {
-
-}*distancias;
+	int cod1;
+	int cod2;
+	int distancia;
+	// Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+}distancias;*pdistancias;
 
 typedef struct passagem 
 {
 
-}*passagem;
+}*ppassagem;
 
