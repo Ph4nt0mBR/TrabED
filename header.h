@@ -80,8 +80,8 @@ typedef struct Listasensores{
 
 typedef struct distancias
 {
-	int cod1;
-	int cod2;
+	int cod1;//usamos ponteiro?
+	int cod2;//usamos ponteiro?
 	int distancia;
 	// Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }distancias;*pdistancias;
