@@ -86,8 +86,38 @@ typedef struct distancias
 	// Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }distancias;*pdistancias;
 
+typedef struct nodistancias
+{
+	distancias* info;
+	struct nodistancias* prox;
+
+}nodistancias, * pnodistancias;
+
+typedef struct Listadistancias {
+	int numel;
+	pnodistancias inicio;
+} Listadistancias, pListadistancias;
+
 typedef struct passagem 
 {
 
-}*ppassagem;
+	int idsensor;
+	char codcarro;
+	char data;
+	int tiporegist;
+
+}passagem,*ppassagem;
+
+typedef struct nopassagem
+{
+	passagem* info;
+	struct nopassagem* prox;
+
+}nopassagem, * pnopassagem;
+
+typedef struct Listapassagem {
+	int numel;
+	pnopassagem inicio;
+} Listapassagem, pListapassagem;
+
 
