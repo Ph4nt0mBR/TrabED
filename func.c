@@ -1,9 +1,4 @@
-
 #include<header.h>
-
-
-
-
 
 void lertxt() {
 	//(Ler o conteúdo dos ficheiros acima descritos para estruturas de dados apropriadas(em memoria))

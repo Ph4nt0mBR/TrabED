@@ -3,7 +3,6 @@
 #include<time.h>
 #include<string.h>
 
-
 #define BUFFER_SIZE 2048
 #define SAMPLE_SIZE 10
 
@@ -100,7 +99,6 @@ typedef struct Listadistancias {
 
 typedef struct passagem 
 {
-
 	int idsensor;
 	char codcarro;
 	char data;
@@ -119,5 +117,3 @@ typedef struct Listapassagem {
 	int numel;
 	pnopassagem inicio;
 } Listapassagem, pListapassagem;
-
-
