@@ -1,12 +1,21 @@
-
 #include<header.h>
 
-
-
-
-
 void lertxt() {
-	//(Ler o conteúdo dos ficheiros acima descritos para estruturas de dados apropriadas(em memoria))
+		FILE* f = fopen("data/Donos.txt", "r");
+		if (f == NULL) {
+			printf("Erro ao abrir Donos.txt\n");
+			return;
+		}
+		//
+		while (fscanf(f, "%d %s %s",
+			&donos[totalDonos].numContribuinte,
+			donos[totalDonos].nome,
+			donos[totalDonos].codPostal) != EOF) {
+			totalDonos++;
+		}
+
+		fclose(f);
+		printf("Foram lidos %d donos do ficheiro.\n", totalDonos);
 }
 
 void regist_dono() {

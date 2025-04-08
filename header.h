@@ -3,10 +3,10 @@
 #include<time.h>
 #include<string.h>
 
-
 #define BUFFER_SIZE 2048
 #define SAMPLE_SIZE 10
 
+//fazer ficheiros diferentes para cada struct, um pra donos, um pra carro (sugestao da stora)
 typedef struct donos
 {
 	int numcontibuinte;
@@ -100,9 +100,8 @@ typedef struct Listadistancias {
 
 typedef struct passagem 
 {
-
 	int idsensor;
-	char codcarro;
+	char codcarro;//usamos ponteiro?
 	char data;
 	int tiporegist;
 
@@ -119,5 +118,3 @@ typedef struct Listapassagem {
 	int numel;
 	pnopassagem inicio;
 } Listapassagem, pListapassagem;
-
-
