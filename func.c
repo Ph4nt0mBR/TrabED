@@ -1,4 +1,17 @@
-#include<header.h>
+#include "header.h"
+
+
+pListadono crialistadono() {
+	pListadono L = (pListadono)malloc(sizeof(Listadono));
+	L->inicio = NULL;
+	L->numel = 0;
+	return L;
+}
+
+//----------------------------------------------------
+//----------------------------------------------------
+//----------------------------------------------------
+
 
 void lertxt() {
 		FILE* f = fopen("data/Donos.txt", "r");
@@ -60,10 +73,10 @@ void regist_dono(Listadono *Ld) {
 	if (opcao == 0) {
 		return ;
 	}
-
+	printf("You did it");
 }
 
-void list_dono() {
+void list_dono(Listadono *Ld) {
 	//fazer lista de donos
 }
 
