@@ -12,7 +12,7 @@ typedef struct donos
 	int numcontibuinte;
 	char nome[30];
 	int codPostal;
-}donos,*pdonos;
+}dono,*pdono;
 
 typedef struct no
 {

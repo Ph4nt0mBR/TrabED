@@ -18,9 +18,49 @@ void lertxt() {
 		printf("Foram lidos %d donos do ficheiro.\n", totalDonos);
 }
 
-void regist_dono() {
-	if(Listadono.numel == 0){malloc(Listadono.numel * sizeof(struct no)) }
-	else{realloc(Listadono.numel * sizeof(struct no)) }
+void AddDono(Listadono* l, dono* D)
+{
+	pno nNo = (pno)malloc(sizeof(no));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
+}
+
+	
+void regist_dono(Listadono *Ld) {
+	int opcao=0;
+	pListadono n;
+	printf("Gostaria de adicionar mais um dono? 1-sim 0-não");
+	scanf("%d", &opcao);
+	if (opcao == 1) {
+		dono *ndono =(pdonos)malloc(n->numel * sizeof(struct no));
+
+		printf("Qual o número de contribuinte?\n");
+		scanf("%d", &ndono->numcontibuinte);
+		printf("Qual o nome do dono?\n");//nao tenho certeza se devo meter assim o nome temos de ver depois se está bom
+		scanf("%s", ndono->nome);
+		printf("Qual o codigo postal?\n");
+		scanf("%d", &(ndono->codPostal));
+		AddDono(Ld, ndono);
+		/*
+		pno nNo = (pno)malloc(sizeof(no));
+
+		nNo->info = ndono;
+		nNo->prox = NULL;
+		if (n->inicio == NULL){
+			n->inicio = nNo;
+		}
+		while (pont->prox != Null) {
+			pont = pont->prox;
+		}
+		pont->prox = nNo;
+		*/
+	}
+	if (opcao == 0) {
+		return ;
+	}
+
 }
 
 void list_dono() {
