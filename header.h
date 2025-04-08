@@ -6,6 +6,7 @@
 #define BUFFER_SIZE 2048
 #define SAMPLE_SIZE 10
 
+//fazer ficheiros diferentes para cada struct, um pra donos, um pra carro (sugestao da stora)
 typedef struct donos
 {
 	int numcontibuinte;
