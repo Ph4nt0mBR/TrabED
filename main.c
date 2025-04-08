@@ -5,7 +5,6 @@
 
 void main() {
 	printf("oii");
-	pListadono crialistadono();
-	void AddDono(Listadono * l, dono * D);
-	void regist_dono(Listadono * Ld);
+	pListadono Ld = crialistadono();
+	regist_dono(Ld);
 }

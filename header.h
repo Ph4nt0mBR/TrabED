@@ -53,7 +53,7 @@ typedef struct Listacarro {
 typedef struct marcas
 {
 	char nome[20];
-	Lista *inf;
+	Listacarro *inf;
 	struct marca *prox;			
 }marca,*marca;
 
