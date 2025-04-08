@@ -19,7 +19,8 @@ void lertxt() {
 }
 
 void regist_dono() {
-	//Registar dono
+	if(Listadono.numel == 0){malloc(Listadono.numel * sizeof(struct no)) }
+	else{realloc(Listadono.numel * sizeof(struct no)) }
 }
 
 void list_dono() {

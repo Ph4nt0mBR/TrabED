@@ -23,7 +23,7 @@ typedef struct no
 typedef struct Listadono {
 	int numel;
 	pno inicio;
-} Listadono, pListadono;
+} Listadono, *pListadono;
 
 typedef struct carros
 {
