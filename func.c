@@ -29,7 +29,7 @@ void AddDono(Listadono* l, dono* D)
 
 	
 void regist_dono(Listadono *Ld) {
-	int opcao=0;
+	int opcao=0;//falta o addlista
 	pListadono n;
 	printf("Gostaria de adicionar mais um dono? 1-sim 0-não");
 	scanf("%d", &opcao);

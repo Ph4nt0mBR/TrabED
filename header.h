@@ -16,7 +16,7 @@ typedef struct donos
 
 typedef struct no
 {
-	struct donos *info;
+	struct dono *info;
 	struct no *prox;
 }no,*pno;
 
@@ -36,11 +36,11 @@ typedef struct carros
 	int kilometros;
 	int	tempototal;
 
-}carros,*pcarros;
+}carro,*pcarro;
 
 typedef struct nocarro
 {
-	carros *info;
+	carro *info;
 	struct nocarro *prox;
 
 }nocarro,*pnocarro;
@@ -54,8 +54,8 @@ typedef struct marcas
 {
 	char nome[20];
 	Lista *inf;
-	struct marcas *prox;			
-}*marcas;
+	struct marca *prox;			
+}marca,*marca;
 
 typedef struct sensores
 {
@@ -64,19 +64,19 @@ typedef struct sensores
 	char Designacao[20];
 	char Latitude[18];
 	char Longitude[15];
-}sensores,*psensores;
+}sensor,*psensor;
 
 typedef struct nosensores
 {
 	sensores* info;
 	struct nosensores* prox;
 
-}nosensores, * pnosensores;
+}nosensor, * pnosensor;
 
 typedef struct Listasensores{
 	int numel;
 	pnosensores inicio;
-} Listasensores, pListasensores;
+} Listasensor, pListasensor;
 
 typedef struct distancias
 {
@@ -84,19 +84,19 @@ typedef struct distancias
 	int cod2;//usamos ponteiro?
 	int distancia;
 	// Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-}distancias;*pdistancias;
+}distancia,*pdistancia;
 
 typedef struct nodistancias
 {
-	distancias* info;
-	struct nodistancias* prox;
+	distancia* info;
+	struct nodistancia* prox;
 
-}nodistancias, * pnodistancias;
+}nodistancia, * pnodistancia;
 
 typedef struct Listadistancias {
 	int numel;
-	pnodistancias inicio;
-} Listadistancias, pListadistancias;
+	pnodistancia inicio;
+} Listadistancia, pListadistancia;
 
 typedef struct passagem 
 {
