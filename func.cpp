@@ -36,10 +36,65 @@ pListapassagem crialistapasagem() {
 	return L;
 }
 
+//funçoes que criam listas
 //----------------------------------------------------
 //----------------------------------------------------
 //----------------------------------------------------
 
+void AddDono(Listadono* l, dono* D)
+{
+	pno nNo = (pno)malloc(sizeof(no));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
+
+}
+
+void Addcarro(Listacarro* l, carro* D)
+{
+	pnocarro nNo = (pnocarro)malloc(sizeof(nocarro));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
+
+}
+
+void Addsensor(Listasensor* l, sensor* D)
+{
+	pnosensor nNo = (pnosensor)malloc(sizeof(nosensor));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
+
+}
+
+void AddDono(Listadistancia* l, distancia* D)
+{
+	pnodistancia nNo = (pnodistancia)malloc(sizeof(nodistancia));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
+
+}
+
+void AddDono(Listapassagem* l, passagem* D)
+{
+	pnopassagem nNo = (pnopassagem)malloc(sizeof(nopassagem));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
+
+}
+
+//funçoes que introduzem um item na sua lista
+//----------------------------------------------------
+//----------------------------------------------------
+//-----------------------------------------------
 
 void lertxt() {
 		FILE* f = fopen("data/Donos.txt", "r");
@@ -59,14 +114,7 @@ void lertxt() {
 		printf("Foram lidos %d donos do ficheiro.\n", totalDonos);
 }
 
-void AddDono(Listadono* l, dono* D)
-{
-	pno nNo = (pno)malloc(sizeof(no));
-	nNo->info = D;
-	nNo->prox = l->inicio;
-	l->inicio = nNo;
-	l->numel++;
-}
+
 
 	
 void regist_dono(Listadono *Ld) {
