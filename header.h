@@ -60,6 +60,7 @@ typedef struct marcas
 typedef struct sensores
 {
 	//Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos os sensores!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//O Rafa ou o professor vai saber te ajudar melhor q eu. Sou uma decepção em prog
 	int codSensor;
 	char Designacao[20];
 	char Latitude[18];
