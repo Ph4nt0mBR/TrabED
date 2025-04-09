@@ -1,18 +1,110 @@
-#include<header.h>
+#include "header.h"
 
 
+pListadono crialistadono() {
+	pListadono L = (pListadono)malloc(sizeof(Listadono));
+	L->inicio = NULL;
+	L->numel = 0;
+	return L;
+}
 
+pListacarro crialistacarro() {
+	pListacarro L = (pListacarro)malloc(sizeof(Listacarro));
+	L->inicio = NULL;
+	L->numel = 0;
+	return L;
+}
+
+pListasensor crialistasensores() {
+	pListasensor L = (pListasensor)malloc(sizeof(Listasensor));
+	L->inicio = NULL;
+	L->numel = 0;
+	return L;
+}
+
+pListadistancia crialistadistancias() {
+	pListadistancia L = (pListadistancia)malloc(sizeof(Listadistancia));
+	L->inicio = NULL;
+	L->numel = 0;
+	return L;
+}
+
+pListapassagem crialistapasagem() {
+	pListapassagem L = (pListapassagem)malloc(sizeof(Listapassagem));
+	L->inicio = NULL;
+	L->numel = 0;
+	return L;
+}
+
+//----------------------------------------------------
+//----------------------------------------------------
+//----------------------------------------------------
 
 
 void lertxt() {
-	//(Ler o conteúdo dos ficheiros acima descritos para estruturas de dados apropriadas(em memoria))
+		FILE* f = fopen("data/Donos.txt", "r");
+		if (f == NULL) {
+			printf("Erro ao abrir Donos.txt\n");
+			return;
+		}
+		//
+		while (fscanf(f, "%d %s %s",
+			&donos[totalDonos].numContribuinte,
+			donos[totalDonos].nome,
+			donos[totalDonos].codPostal) != EOF) {
+			totalDonos++;
+		}
+
+		fclose(f);
+		printf("Foram lidos %d donos do ficheiro.\n", totalDonos);
 }
 
-void regist_dono() {
-	//Registar dono
+void AddDono(Listadono* l, dono* D)
+{
+	pno nNo = (pno)malloc(sizeof(no));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
 }
 
-void list_dono() {
+	
+void regist_dono(Listadono *Ld) {
+	int opcao=0;//falta o addlista
+	pListadono n;
+	printf("Gostaria de adicionar mais um dono? 1-sim 0-não");
+	scanf("%d", &opcao);
+	if (opcao == 1) {
+		dono *ndono =(pdonos)malloc(n->numel * sizeof(struct no));
+
+		printf("Qual o número de contribuinte?\n");
+		scanf("%d", &ndono->numcontibuinte);
+		printf("Qual o nome do dono?\n");//nao tenho certeza se devo meter assim o nome temos de ver depois se está bom
+		scanf("%s", ndono->nome);
+		printf("Qual o codigo postal?\n");
+		scanf("%d", &(ndono->codPostal));
+		AddDono(Ld, ndono);
+		/*
+		pno nNo = (pno)malloc(sizeof(no));
+
+		nNo->info = ndono;
+		nNo->prox = NULL;
+		if (n->inicio == NULL){
+			n->inicio = nNo;
+		}
+		while (pont->prox != Null) {
+			pont = pont->prox;
+		}
+		pont->prox = nNo;
+		*/
+	}
+	if (opcao == 0) {
+		return ;
+	}
+	printf("You did it");
+}
+
+void list_dono(Listadono *Ld) {
 	//fazer lista de donos
 }
 

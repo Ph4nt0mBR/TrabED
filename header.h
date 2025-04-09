@@ -3,27 +3,27 @@
 #include<time.h>
 #include<string.h>
 
-
 #define BUFFER_SIZE 2048
 #define SAMPLE_SIZE 10
 
+//fazer ficheiros diferentes para cada struct, um pra donos, um pra carro (sugestao da stora)
 typedef struct donos
 {
 	int numcontibuinte;
 	char nome[30];
 	int codPostal;
-}donos,*pdonos;
+}dono,*pdono;
 
 typedef struct no
 {
-	struct donos *info;
+	struct dono *info;
 	struct no *prox;
 }no,*pno;
 
 typedef struct Listadono {
 	int numel;
 	pno inicio;
-} Listadono, pListadono;
+} Listadono, *pListadono;
 
 typedef struct carros
 {
@@ -36,11 +36,11 @@ typedef struct carros
 	int kilometros;
 	int	tempototal;
 
-}carros,*pcarros;
+}carro,*pcarro;
 
 typedef struct nocarro
 {
-	carros *info;
+	carro *info;
 	struct nocarro *prox;
 
 }nocarro,*pnocarro;
@@ -53,9 +53,9 @@ typedef struct Listacarro {
 typedef struct marcas
 {
 	char nome[20];
-	Lista *inf;
-	struct marcas *prox;			
-}*marcas;
+	Listacarro *inf;
+	struct marca *prox;			
+}marca,*marca;
 
 typedef struct sensores
 {
@@ -65,45 +65,44 @@ typedef struct sensores
 	char Designacao[20];
 	char Latitude[18];
 	char Longitude[15];
-}sensores,*psensores;
+}sensor,*psensor;
 
 typedef struct nosensores
 {
 	sensores* info;
 	struct nosensores* prox;
 
-}nosensores, * pnosensores;
+}nosensor, * pnosensor;
 
 typedef struct Listasensores{
 	int numel;
 	pnosensores inicio;
-} Listasensores, pListasensores;
+} Listasensor, pListasensor;
 
 typedef struct distancias
 {
-	int cod1;
-	int cod2;
+	int cod1;//usamos ponteiro?
+	int cod2;//usamos ponteiro?
 	int distancia;
 	// Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-}distancias;*pdistancias;
+}distancia,*pdistancia;
 
 typedef struct nodistancias
 {
-	distancias* info;
-	struct nodistancias* prox;
+	distancia* info;
+	struct nodistancia* prox;
 
-}nodistancias, * pnodistancias;
+}nodistancia, * pnodistancia;
 
 typedef struct Listadistancias {
 	int numel;
-	pnodistancias inicio;
-} Listadistancias, pListadistancias;
+	pnodistancia inicio;
+} Listadistancia, pListadistancia;
 
 typedef struct passagem 
 {
-
 	int idsensor;
-	char codcarro;
+	char codcarro;//usamos ponteiro?
 	char data;
 	int tiporegist;
 
@@ -120,5 +119,3 @@ typedef struct Listapassagem {
 	int numel;
 	pnopassagem inicio;
 } Listapassagem, pListapassagem;
-
-
