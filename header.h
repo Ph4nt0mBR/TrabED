@@ -7,6 +7,7 @@
 #define SAMPLE_SIZE 10
 
 //fazer ficheiros diferentes para cada struct, um pra donos, um pra carro (sugestao da stora)
+//tá feito
 typedef struct donos
 {
 	int numcontibuinte;
@@ -53,13 +54,14 @@ typedef struct Listacarro {
 typedef struct marcas
 {
 	char nome[20];
-	Listacarro *inf;
-	struct marca *prox;			
-}marca,*marca;
+	Listacarro* inf;
+	struct marca* prox;
+}marca, * pmarca;
 
 typedef struct sensores
 {
 	//Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos os sensores!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//O Rafa ou o professor vai saber te ajudar melhor q eu. Sou uma decepção em prog
 	int codSensor;
 	char Designacao[20];
 	char Latitude[18];
@@ -78,7 +80,7 @@ typedef struct Listasensores{
 	pnosensores inicio;
 } Listasensor, pListasensor;
 
-typedef struct distancias
+typedef struct distancias//podemos transformar isto numa matriz
 {
 	int cod1;//usamos ponteiro?
 	int cod2;//usamos ponteiro?
