@@ -8,29 +8,29 @@ pListadono crialistadono() {
 	return L;
 }
 
-pListadono crialistacarro() {
-	pListadono L = (pListadono)malloc(sizeof(Listadono));
+pListacarro crialistacarro() {
+	pListacarro L = (pListacarro)malloc(sizeof(Listacarro));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;
 }
 
-pListadono crialistasensores() {
-	pListadono L = (pListadono)malloc(sizeof(Listadono));
+pListasensor crialistasensores() {
+	pListasensor L = (pListasensor)malloc(sizeof(Listasensor));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;
 }
 
-pListadono crialistadistancias() {
-	pListadono L = (pListadono)malloc(sizeof(Listadono));
+pListadistancia crialistadistancias() {
+	pListadistancia L = (pListadistancia)malloc(sizeof(Listadistancia));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;
 }
 
-pListadono crialistapasagem() {
-	pListadono L = (pListadono)malloc(sizeof(Listadono));
+pListapassagem crialistapasagem() {
+	pListapassagem L = (pListapassagem)malloc(sizeof(Listapassagem));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;

@@ -5,5 +5,10 @@
 #include "header.h"
 
 pListadono crialistadono();
+pListacarro crialistacarro();
+pListasensor crialistasensores();
+pListadistancia crialistadistancias();
+pListapassagem crialistapasagem();
 void AddDono(Listadono* l, dono* D);
 void regist_dono(Listadono* Ld);
+
