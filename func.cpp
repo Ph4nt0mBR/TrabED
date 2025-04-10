@@ -58,18 +58,20 @@ void AddDono(Listadono* l, dono* D)
 
 }
 
-void Addcarro(Listacarro* l, carro* D)
+marca Addcarro(Listacarro* l, carro* D)
 {
 	pnocarro nNo = (pnocarro)malloc(sizeof(nocarro));
 	nNo->info = D;
 	nNo->prox = l->inicio;
 	l->inicio = nNo;
 	l->numel++;
+	return nNo;
 
 }
 
-void addmarca()
+void addmarca(l
 {
+
 	//adiciona uma nova marca á lista eu faço depois já sei como vou fazer-Afonso
 }
 
@@ -109,12 +111,16 @@ void Addpassagem(Listapassagem* l, passagem* D)
 //-----------------------------------------------
 	
 void regist_dono(Listadono *Ld) {
-	int opcao=0;//falta o addlista
+	int opcao=0;
 	pListadono n;
 	printf("Gostaria de adicionar mais um dono? 1-sim 0-não");
 	scanf("%d", &opcao);
 	if (opcao == 1) {
 		dono *ndono =(pdonos)malloc(n->numel * sizeof(struct no));
+		if (ndono == NULL) {
+			printf("Ocorreu um erro ao adicionar o dono.\n");
+			return;
+		}
 
 		printf("Qual o número de contribuinte?\n");
 		scanf("%d", &ndono->numcontibuinte);
@@ -142,8 +148,10 @@ void list_dono(Listadono *Ld) {
 	}
 }
 
-void regist_veiculo(Listacarro* Lc) {
+void regist_veiculo() {
 	int opcao = 0;
+	pmarca m;
+	pListacarro Lc;
 	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao: ");
 	scanf("%d", &opcao);
 
@@ -168,6 +176,20 @@ void regist_veiculo(Listacarro* Lc) {
 
 		printf("Insira o ano de producao do carro:\n");
 		scanf("%d", &novoCarro->ano);
+
+		while (strcmp(novoCarro->marca, m->nome)!=0 && m!=NULL) {
+			m = m->prox;
+		}
+
+		if (strcmp(novoCarro->marca, m->nome) == 0) {
+			Lc = m->inf;
+		}
+		else {
+			marca nmarca = criamarca(novoCarro->marca);
+			addmarca(m,nmarca);
+			m->
+
+		}
 
 		Addcarro(Lc, novoCarro);
 		printf("Veículo adicionado com sucesso!\n");
