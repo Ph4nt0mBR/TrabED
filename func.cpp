@@ -130,13 +130,64 @@ void list_dono(Listadono *Ld) {
 	}
 }
 
-void regist_veiculo() {
-	//Registar veiculo
+void regist_veiculo(Listacarro* Lc) {
+	int opcao = 0;
+	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao: ");
+	scanf("%d", &opcao);
+
+	if (opcao == 1) {
+		carro* novoCarro = (carro*)malloc(sizeof(carro));
+		if (novoCarro == NULL) {
+			printf("Ocorreu um erro ao adicionar o veiculo.\n");
+			return;
+		}
+
+		printf("Insira a matricula do veículo:\n");
+		scanf("%s", novoCarro->matricula);
+
+		printf("Insira o nmero de contribuinte do dono:\n");
+		scanf("%d", &novoCarro->numContribuinteDono);
+
+		printf("Insira a marca do carro:\n");
+		scanf("%s", novoCarro->marca);
+
+		printf("Insira o modelo do carro:\n");
+		scanf("%s", novoCarro->modelo);
+
+		printf("Insira o ano de producao do carro:\n");
+		scanf("%d", &novoCarro->ano);
+
+		Addcarro(Lc, novoCarro);
+		printf("Veículo adicionado com sucesso!\n");
+	}
+	else {
+		printf("Veiculo nao adicionado.\n");
+	}
 }
 
-void list_veiculo() {
-	//fazer lista de veiculo
+
+void list_veiculo(Listacarro* Lc) {
+	pnocarro atual = Lc->inicio;
+
+	if (atual == NULL) {
+		printf("Nenhum veículo registrado.\n");
+		return;
+	}
+
+	printf("Lista de veículos:\n");
+	while (atual != NULL) {
+		carro* c = atual->info;
+		printf("--------------------------\n");
+		printf("Matricula: %s\n", c->matricula);
+		printf("Contribuinte do Dono: %d\n", c->numContribuinteDono);
+		printf("Marca: %s\n", c->marca);
+		printf("Modelo: %s\n", c->modelo);
+		printf("Ano: %d\n", c->ano);
+		atual = atual->prox;
+	}
+	printf("-------------------------------------------------------\n");
 }
+
 
 void regist_pass() {
 	//registrar passagem
