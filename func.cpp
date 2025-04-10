@@ -188,9 +188,28 @@ void regist_veiculo(Listacarro* Lc) {
 }
 
 
-void list_veiculo() {
-	//fazer lista de veiculo
+void list_veiculo(Listacarro* Lc) {
+	pnocarro atual = Lc->inicio;
+
+	if (atual == NULL) {
+		printf("Nenhum veículo registrado.\n");
+		return;
+	}
+
+	printf("Lista de veículos:\n");
+	while (atual != NULL) {
+		carro* c = atual->info;
+		printf("--------------------------\n");
+		printf("Matricula: %s\n", c->matricula);
+		printf("Contribuinte do Dono: %d\n", c->numContribuinteDono);
+		printf("Marca: %s\n", c->marca);
+		printf("Modelo: %s\n", c->modelo);
+		printf("Ano: %d\n", c->ano);
+		atual = atual->prox;
+	}
+	printf("-------------------------------------------------------\n");
 }
+
 
 void regist_pass() {
 	//registrar passagem
