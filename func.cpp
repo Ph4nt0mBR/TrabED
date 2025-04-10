@@ -132,19 +132,6 @@ void regist_dono(Listadono *Ld) {
 		printf("Qual o codigo postal?\n");
 		scanf("%d", &(ndono->codPostal));
 		AddDono(Ld, ndono);
-		/*
-		pno nNo = (pno)malloc(sizeof(no));
-
-		nNo->info = ndono;
-		nNo->prox = NULL;
-		if (n->inicio == NULL){
-			n->inicio = nNo;
-		}
-		while (pont->prox != Null) {
-			pont = pont->prox;
-		}
-		pont->prox = nNo;
-		*/
 	}
 	if (opcao == 0) {
 		return ;
@@ -153,7 +140,16 @@ void regist_dono(Listadono *Ld) {
 }
 
 void list_dono(Listadono *Ld) {
-	//fazer lista de donos
+	//função que apresenta no ecrã todos os donos
+	pdono linfdono;
+	pno ldono = Ld->inicio;
+	while (ldono != Null) {
+		linfdono = ldono->info;
+		printf("%d",linfdono->codPostal );
+		printf("%s",linfdono->nome );
+		printf("%d", linfdono->numcontibuinte);
+		ldono=ldono->prox,
+	}
 }
 
 void regist_veiculo() {
