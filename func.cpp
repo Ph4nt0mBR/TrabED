@@ -95,27 +95,6 @@ void AddDono(Listapassagem* l, passagem* D)
 //----------------------------------------------------
 //----------------------------------------------------
 //-----------------------------------------------
-
-void lertxt() {
-		FILE* f = fopen("data/Donos.txt", "r");
-		if (f == NULL) {
-			printf("Erro ao abrir Donos.txt\n");
-			return;
-		}
-		//
-		while (fscanf(f, "%d %s %s",
-			&donos[totalDonos].numContribuinte,
-			donos[totalDonos].nome,
-			donos[totalDonos].codPostal) != EOF) {
-			totalDonos++;
-		}
-
-		fclose(f);
-		printf("Foram lidos %d donos do ficheiro.\n", totalDonos);
-}
-
-
-
 	
 void regist_dono(Listadono *Ld) {
 	int opcao=0;//falta o addlista
@@ -136,7 +115,6 @@ void regist_dono(Listadono *Ld) {
 	if (opcao == 0) {
 		return ;
 	}
-	printf("You did it");
 }
 
 void list_dono(Listadono *Ld) {
@@ -145,9 +123,9 @@ void list_dono(Listadono *Ld) {
 	pno ldono = Ld->inicio;
 	while (ldono != Null) {
 		linfdono = ldono->info;
-		printf("%d",linfdono->codPostal );
-		printf("%s",linfdono->nome );
-		printf("%d", linfdono->numcontibuinte);
+		printf("%d\n",linfdono->codPostal );
+		printf("%s\n",linfdono->nome );
+		printf("%d\n", linfdono->numcontibuinte);
 		ldono=ldono->prox,
 	}
 }

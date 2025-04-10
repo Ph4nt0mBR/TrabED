@@ -23,7 +23,7 @@ typedef struct donos
 //Struct de nos para verificacao da lista de donos. Aponta entre nos para poupar memoria
 typedef struct no
 {
-	struct dono *info;
+	dono *info;
 	struct no *prox;
 }no,*pno;
 
@@ -59,7 +59,7 @@ typedef struct nocarro
 typedef struct Listacarro {
 	int numel;
 	pnocarro inicio;
-} Listacarro, pListacarro;
+} Listacarro, *pListacarro;
 
 //
 typedef struct marcas
@@ -92,18 +92,17 @@ typedef struct nosensores
 typedef struct Listasensores{
 	int numel;
 	pnosensores inicio;
-} Listasensor, pListasensor;
+} Listasensor, *pListasensor;
 
 <<<<<<< HEAD
 //
 typedef struct distancias
 =======
 typedef struct distancias//podemos transformar isto numa matriz
->>>>>>> 3513954b98504144dc143454b0ac8f19d46c70ab
 {
 	int cod1;//usamos ponteiro?
 	int cod2;//usamos ponteiro?
-	int distancia;
+	int distz;
 	// Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }distancia,*pdistancia;
 
@@ -119,7 +118,7 @@ typedef struct nodistancias
 typedef struct Listadistancias {
 	int numel;
 	pnodistancia inicio;
-} Listadistancia, pListadistancia;
+} Listadistancia, *pListadistancia;
 
 //
 typedef struct passagem 
@@ -143,4 +142,4 @@ typedef struct nopassagem
 typedef struct Listapassagem {
 	int numel;
 	pnopassagem inicio;
-} Listapassagem, pListapassagem;
+} Listapassagem, *pListapassagem;
