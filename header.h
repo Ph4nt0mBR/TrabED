@@ -1,12 +1,18 @@
+//Manter os inlcudes no header e incluir o header nos outros ficheiros
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
 
+//Buffer de memoria. Seria interessante quando for ler os arquivos que sao muito grandes
 #define BUFFER_SIZE 2048
 #define SAMPLE_SIZE 10
 
 //fazer ficheiros diferentes para cada struct, um pra donos, um pra carro (sugestao da stora)
+//Como assim ficheiros diferentes pra cara struct?
+//Como assim ficheiros diferentes pra cara struct? - Samuel
+
+//Struct para donos
 typedef struct donos
 {
 	int numcontibuinte;
@@ -14,17 +20,20 @@ typedef struct donos
 	int codPostal;
 }dono,*pdono;
 
+//Struct de nos para verificacao da lista de donos. Aponta entre nos para poupar memoria
 typedef struct no
 {
 	struct dono *info;
 	struct no *prox;
 }no,*pno;
 
+//
 typedef struct Listadono {
 	int numel;
 	pno inicio;
 } Listadono, *pListadono;
 
+//Struct para leitura e verificacao de carros
 typedef struct carros
 {
 	char matricula[8];
@@ -38,6 +47,7 @@ typedef struct carros
 
 }carro,*pcarro;
 
+//Struct de nos para verificacao da lista de carros. Aponta entre nos para poupar memoria
 typedef struct nocarro
 {
 	carro *info;
@@ -45,28 +55,32 @@ typedef struct nocarro
 
 }nocarro,*pnocarro;
 
+//
 typedef struct Listacarro {
 	int numel;
 	pnocarro inicio;
 } Listacarro, pListacarro;
 
+//
 typedef struct marcas
 {
 	char nome[20];
-	Listacarro *inf;
-	struct marca *prox;			
-}marca,*marca;
+	Listacarro* inf;
+	struct marca* prox;
+}marca, * pmarca;
 
+//Struct para os sensores. teremos uma matriz para as distancias entre os sensores, ja que a posicao dos sensores sao imutaveis
 typedef struct sensores
 {
-	//Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos os sensores!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//O Rafa ou o professor vai saber te ajudar melhor q eu. Sou uma decepção em prog
+	//Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos os sensores!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//O Rafa ou o professor vai saber te ajudar melhor q eu. Sou uma decepcao em prog
 	int codSensor;
 	char Designacao[20];
 	char Latitude[18];
 	char Longitude[15];
 }sensor,*psensor;
 
+//
 typedef struct nosensores
 {
 	sensores* info;
@@ -74,19 +88,26 @@ typedef struct nosensores
 
 }nosensor, * pnosensor;
 
+//
 typedef struct Listasensores{
 	int numel;
 	pnosensores inicio;
 } Listasensor, pListasensor;
 
+<<<<<<< HEAD
+//
 typedef struct distancias
+=======
+typedef struct distancias//podemos transformar isto numa matriz
+>>>>>>> 3513954b98504144dc143454b0ac8f19d46c70ab
 {
 	int cod1;//usamos ponteiro?
 	int cod2;//usamos ponteiro?
 	int distancia;
-	// Perguntar(ao prof e samuel) se devemos fazer assim já que ´não alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }distancia,*pdistancia;
 
+//
 typedef struct nodistancias
 {
 	distancia* info;
@@ -94,11 +115,13 @@ typedef struct nodistancias
 
 }nodistancia, * pnodistancia;
 
+//
 typedef struct Listadistancias {
 	int numel;
 	pnodistancia inicio;
 } Listadistancia, pListadistancia;
 
+//
 typedef struct passagem 
 {
 	int idsensor;
@@ -108,6 +131,7 @@ typedef struct passagem
 
 }passagem,*ppassagem;
 
+//
 typedef struct nopassagem
 {
 	passagem* info;
@@ -115,6 +139,7 @@ typedef struct nopassagem
 
 }nopassagem, * pnopassagem;
 
+//
 typedef struct Listapassagem {
 	int numel;
 	pnopassagem inicio;
