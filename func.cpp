@@ -2,6 +2,7 @@
 
 
 pListadono crialistadono() {
+
 	pListadono L = (pListadono)malloc(sizeof(Listadono));
 	L->inicio = NULL;
 	L->numel = 0;
