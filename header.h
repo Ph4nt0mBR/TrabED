@@ -23,7 +23,7 @@ typedef struct donos
 //Struct de nos para verificacao da lista de donos. Aponta entre nos para poupar memoria
 typedef struct no
 {
-	struct dono *info;
+	dono *info;
 	struct no *prox;
 }no,*pno;
 
@@ -59,7 +59,7 @@ typedef struct nocarro
 typedef struct Listacarro {
 	int numel;
 	pnocarro inicio;
-} Listacarro, pListacarro;
+} Listacarro, *pListacarro;
 
 //
 typedef struct marcas
@@ -69,10 +69,11 @@ typedef struct marcas
 	struct marca* prox;
 }marca, * pmarca;
 
-//Struct para os sensores.
+//Struct para os sensores. teremos uma matriz para as distancias entre os sensores, ja que a posicao dos sensores sao imutaveis
 typedef struct sensores
 {
-
+	//Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos os sensores!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//O Rafa ou o professor vai saber te ajudar melhor q eu. Sou uma decepcao em prog
 	int codSensor;
 	char Designacao[20];
 	char Latitude[18];
@@ -91,12 +92,13 @@ typedef struct nosensores
 typedef struct Listasensores{
 	int numel;
 	pnosensores inicio;
-} Listasensor, pListasensor;
+} Listasensor, *pListasensor;
 
 
 //
+typedef struct distancias
+=======
 typedef struct distancias//podemos transformar isto numa matriz
-
 {
 	int cod1;//usamos ponteiro?
 	int cod2;//usamos ponteiro?
@@ -116,7 +118,7 @@ typedef struct nodistancias
 typedef struct Listadistancias {
 	int numel;
 	pnodistancia inicio;
-} Listadistancia, pListadistancia;
+} Listadistancia, *pListadistancia;
 
 //
 typedef struct passagem 
@@ -140,4 +142,4 @@ typedef struct nopassagem
 typedef struct Listapassagem {
 	int numel;
 	pnopassagem inicio;
-} Listapassagem, pListapassagem;
+} Listapassagem, *pListapassagem;
