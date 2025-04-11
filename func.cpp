@@ -110,6 +110,7 @@ void Addpassagem(Listapassagem* l, passagem* D)
 //----------------------------------------------------
 //-----------------------------------------------
 	
+
 void regist_dono(Listadono *Ld) {
 	int opcao=0;
 	pListadono n;
@@ -187,7 +188,7 @@ void regist_veiculo() {
 		else {
 			marca nmarca = criamarca(novoCarro->marca);
 			addmarca(m,nmarca);
-			m->
+			m
 
 		}
 
