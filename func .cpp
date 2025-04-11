@@ -199,26 +199,37 @@ void regist_veiculo() {
 }
 
 
-void list_veiculo(Listacarro* Lc) {
-	pnocarro atual = Lc->inicio;
+void list_veiculo(marca m) {
+	pmarca pm= m;
 
-	if (atual == NULL) {
+	if (pm == NULL) {
 		printf("Nenhum veículo registrado.\n");
 		return;
 	}
 
-	printf("Lista de veículos:\n");
-	while (atual != NULL) {
-		carro* c = atual->info;
-		printf("--------------------------\n");
-		printf("Matricula: %s\n", c->matricula);
-		printf("Contribuinte do Dono: %d\n", c->numContribuinteDono);
-		printf("Marca: %s\n", c->marca);
-		printf("Modelo: %s\n", c->modelo);
-		printf("Ano: %d\n", c->ano);
-		atual = atual->prox;
+	while (pm != Null) {
+		Listacarro* Lc = pm->inf;
+		pnocarro atual = Lc->inicio;
+
+		if (atual == NULL) {
+			printf("Nenhum veículo desta marca registrado.\n");
+			return;
+		}
+
+		printf("Lista de veículos:\n");
+		while (atual != NULL) {
+			carro* c = atual->info;
+			printf("--------------------------\n");
+			printf("Matricula: %s\n", c->matricula);
+			printf("Contribuinte do Dono: %d\n", c->numContribuinteDono);
+			printf("Marca: %s\n", c->marca);
+			printf("Modelo: %s\n", c->modelo);
+			printf("Ano: %d\n", c->ano);
+			atual = atual->prox;
+		}
+		printf("-------------------------------------------------------\n");
+		pm = pm->prox;
 	}
-	printf("-------------------------------------------------------\n");
 }
 
 
