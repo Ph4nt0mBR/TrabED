@@ -95,9 +95,6 @@ typedef struct Listasensores{
 } Listasensor, *pListasensor;
 
 
-//
-typedef struct distancias
-=======
 typedef struct distancias//podemos transformar isto numa matriz
 {
 	int cod1;//usamos ponteiro?
