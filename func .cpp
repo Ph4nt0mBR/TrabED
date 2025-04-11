@@ -70,13 +70,12 @@ marca Addcarro(Listacarro* l, carro* D)
 
 }
 
-void addmarca(l
-	{
+void addmarca(pmarca l, marca nmarca)
+{
+	l->prox = nmarca;
 
-		//adiciona uma nova marca á lista eu faço depois já sei como vou fazer-Afonso
-	}
-
-	void Addsensor(Listasensor* l, sensor* D)
+}
+void Addsensor(Listasensor* l, sensor* D)
 {
 	pnosensor nNo = (pnosensor)malloc(sizeof(nosensor));
 	nNo->info = D;
@@ -188,10 +187,9 @@ void regist_veiculo() {
 		else {
 			marca nmarca = criamarca(novoCarro->marca);
 			addmarca(m, nmarca);
-			m->
-
+			m = m->prox;
 		}
-
+		Lc = m->inf;
 		Addcarro(Lc, novoCarro);
 		printf("Veículo adicionado com sucesso!\n");
 	}
