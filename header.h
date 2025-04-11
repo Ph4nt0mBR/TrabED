@@ -94,8 +94,6 @@ typedef struct Listasensores{
 	pnosensores inicio;
 } Listasensor, *pListasensor;
 
-<<<<<<< HEAD
-//
 typedef struct distancias
 =======
 typedef struct distancias//podemos transformar isto numa matriz
