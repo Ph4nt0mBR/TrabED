@@ -248,9 +248,62 @@ void list_veiculo(marca m) {
 }
 
 
-void regist_pass() {
-	//registrar passagem
+void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
+	passagem* novaPassagem = (passagem*)malloc(sizeof(passagem));
+	if (novaPassagem == NULL) {
+		printf("Erro ao alocar memória para a passagem.\n");
+		return;
+	}
+
+	char matricula[10];
+	int codigoSensor;
+	float distancia;
+	char dataHora[20];
+
+	printf("Insira a matrícula do carro:\n");
+	scanf("%s", matricula);
+
+	pnocarro atualCarro = Lc->inicio;
+	while (atualCarro != NULL && strcmp(atualCarro->info->matricula, matricula) != 0) {
+		atualCarro = atualCarro->prox;
+	} // isto vai buscar o carro plea matricula na lista
+
+	if (atualCarro == NULL) {
+		printf("Carro não encontrado.\n");
+		free(novaPassagem);
+		return;
+	} //senao for encontrado diz q n foi encontrado e da return
+
+	novaPassagem->pveiculo = atualCarro->info;
+
+	printf("Insira o código do sensor:\n");
+	scanf("%d", &codigoSensor);
+
+	pnosensor atualSensor = Ls->inicio;
+	while (atualSensor != NULL && atualSensor->info->codigo != codigoSensor) {
+		atualSensor = atualSensor->prox;
+	} //procuyra o sensor pelo codigo
+
+	if (atualSensor == NULL) {
+		printf("Sensor não encontrado.\n");
+		free(novaPassagem);
+		return;
+	} //se o sensor n for encontrado avisa e retorna
+
+	novaPassagem->psensor = atualSensor->info;
+
+	printf("Insira a data e hora da passagem (formato: AAAA-MM-DD_HH:MM):\n"); //pede data de passagem
+	scanf("%s", dataHora);
+	strcpy(novaPassagem->dataHora, dataHora);  
+
+	printf("Insira a distância percorrida (km):\n"); //pede a distancia percorrida
+	scanf("%f", &distancia);
+	novaPassagem->distancia = distancia;
+
+	Addpassagem(Lp, novaPassagem);
+	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa o utilizador
 }
+
 
 void organizadonos() {
 	//Listagem (ordenada alfabeticamente) com o nome de todos os condutores
