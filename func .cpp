@@ -149,7 +149,7 @@ void list_dono(Listadono* Ld) {
 }
 
 void regist_veiculo(Listadono L) {
-	int opcao = 0,contdono = 0;
+	int opcao = 0, contdono = 0;
 	pListadono pL = L;
 	pmarca m;
 	pListacarro Lc;
@@ -167,9 +167,21 @@ void regist_veiculo(Listadono L) {
 		scanf("%s", novoCarro->matricula);
 
 		printf("Insira o nmero de contribuinte do dono:\n");
-		scanf("%d",&contdono );
+		scanf("%d", &contdono);
 
-		pno Listdono= pL->inicio
+		pno ldono = pL->inicio;
+		while (strcmp(ldono, contdono) != 0 && ldono != NULL){
+			ldono = ldono->prox;
+		}
+
+		if (ldono == NULL) {
+			printf("dono não encontrado");
+			free(novoCarro);
+			return;
+		}
+		else {
+			novoCarro->pdonos = ldono->info;
+		}
 
 		printf("Insira a marca do carro:\n");
 		scanf("%s", novoCarro->marca);
