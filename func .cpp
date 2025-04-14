@@ -148,8 +148,9 @@ void list_dono(Listadono* Ld) {
 	}
 }
 
-void regist_veiculo() {
-	int opcao = 0;
+void regist_veiculo(Listadono L) {
+	int opcao = 0,contdono = 0;
+	pListadono pL = L;
 	pmarca m;
 	pListacarro Lc;
 	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao: ");
@@ -166,7 +167,9 @@ void regist_veiculo() {
 		scanf("%s", novoCarro->matricula);
 
 		printf("Insira o nmero de contribuinte do dono:\n");
-		scanf("%d", &novoCarro->numContribuinteDono);
+		scanf("%d",&contdono );
+
+		pno Listdono= pL->inicio
 
 		printf("Insira a marca do carro:\n");
 		scanf("%s", novoCarro->marca);
