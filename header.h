@@ -99,23 +99,9 @@ typedef struct distancias//podemos transformar isto numa matriz
 {
 	int cod1;//usamos ponteiro?
 	int cod2;//usamos ponteiro?
-	int dist;	
+	int dist[10][10];	
 	// Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }distancia,*pdistancia;
-
-//
-typedef struct nodistancias
-{
-	distancia* info;
-	struct nodistancia* prox;
-
-}nodistancia, * pnodistancia;
-
-//
-typedef struct Listadistancias {
-	int numel;
-	pnodistancia inicio;
-} Listadistancia, *pListadistancia;
 
 //
 typedef struct passagem 

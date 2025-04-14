@@ -301,13 +301,67 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 	novaPassagem->distancia = distancia;
 
 	Addpassagem(Lp, novaPassagem);
-	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa o utilizador
+	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa
 }
 
 
 void organizadonos() {
-	//Listagem (ordenada alfabeticamente) com o nome de todos os condutores
-	//Listagem (ordenada pelo número de contribuinte) com o respetivo número e nome de todos os condutores.
+	// Verifica se a lista esta vazia
+	if (Ld->inicio == NULL) {
+		printf("Nenhum dono registrado.\n");
+		return;
+	}
+
+	
+	pdono* donos = (pdono*)malloc(Ld->numel * sizeof(pdono));
+	if (donos == NULL) {
+		printf("Erro ao alocar memória.\n");
+		return;
+	} // Aloca array para armazenar ponteiros para donos
+
+	
+	int i = 0;
+	pno atual = Ld->inicio;
+	while (atual != NULL) {
+		donos[i++] = atual->info;
+		atual = atual->prox;
+	} //preenche o array com os ponteiros dos donos da lista
+
+	//ordena por nome
+	for (int x = 0; x < Ld->numel - 1; x++) {
+		for (int y = 0; y < Ld->numel - x - 1; y++) {
+			if (strcmp(donos[y]->nome, donos[y + 1]->nome) > 0) {
+				pdono temp = donos[y];
+				donos[y] = donos[y + 1];
+				donos[y + 1] = temp;
+			}
+		}
+	}
+
+	//mostra lista ordenada opr nome
+	printf("\n--- Donos ordenados por nome ---\n");
+	for (i = 0; i < Ld->numel; i++) {
+		printf("Nome: %s | NIF: %d | Código Postal: %d\n", donos[i]->nome, donos[i]->numcontibuinte, donos[i]->codPostal);
+	}
+
+	//ordena por n de contribuinte
+	for (int x = 0; x < Ld->numel - 1; x++) {
+		for (int y = 0; y < Ld->numel - x - 1; y++) {
+			if (donos[y]->numcontibuinte > donos[y + 1]->numcontibuinte) {
+				pdono temp = donos[y];
+				donos[y] = donos[y + 1];
+				donos[y + 1] = temp;
+			}
+		}
+	}
+
+	//mostra lista ordenada por contribuinte
+	printf("\n--- Donos ordenados por número de contribuinte ---\n");
+	for (i = 0; i < Ld->numel; i++) {
+		printf("NIF: %d | Nome: %s\n", donos[i]->numcontibuinte, donos[i]->nome);
+	}
+
+	free(donos);
 }
 
 void memoria() {
