@@ -305,64 +305,66 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 }
 
 
-void organizadonos() {
-	// Verifica se a lista esta vazia
-	if (Ld->inicio == NULL) {
-		printf("Nenhum dono registrado.\n");
+void organizadonos(Listadono* Ld, int opcao) {
+	if (Ld->inicio == NULL || Ld->inicio->prox == NULL) {
+		printf("Poucos ou nenhum dono registrado para ordenar.\n");
 		return;
 	}
 
-	
-	pdono* donos = (pdono*)malloc(Ld->numel * sizeof(pdono));
-	if (donos == NULL) {
-		printf("Erro ao alocar memória.\n");
-		return;
-	} // Aloca array para armazenar ponteiros para donos
+	int trocado;
+	pno atual, anterior = NULL, fim = NULL;
 
-	
-	int i = 0;
-	pno atual = Ld->inicio;
-	while (atual != NULL) {
-		donos[i++] = atual->info;
-		atual = atual->prox;
-	} //preenche o array com os ponteiros dos donos da lista
+	do {
+		trocado = 0;
+		atual = Ld->inicio;
+		anterior = NULL;
 
-	//ordena por nome
-	for (int x = 0; x < Ld->numel - 1; x++) {
-		for (int y = 0; y < Ld->numel - x - 1; y++) {
-			if (strcmp(donos[y]->nome, donos[y + 1]->nome) > 0) {
-				pdono temp = donos[y];
-				donos[y] = donos[y + 1];
-				donos[y + 1] = temp;
+		while (atual->prox != fim) {
+			pno proximo = atual->prox;
+
+			int precisaTrocar = 0;
+
+			if (opcao == 1 && strcmp(atual->info->nome, proximo->info->nome) > 0)
+				precisaTrocar = 1;
+			else if (opcao == 2 && atual->info->numcontibuinte > proximo->info->numcontibuinte)
+				precisaTrocar = 1;
+
+			if (precisaTrocar) {
+				atual->prox = proximo->prox;
+				proximo->prox = atual;
+
+				if (anterior == NULL) {
+					Ld->inicio = proximo;
+				}
+				else {
+					anterior->prox = proximo;
+				}
+
+				trocado = 1;
+				anterior = proximo;
+			}
+			else {
+				anterior = atual;
+				atual = atual->prox;
 			}
 		}
-	}
+		fim = atual;
+	} while (trocado);
 
-	//mostra lista ordenada opr nome
-	printf("\n--- Donos ordenados por nome ---\n");
-	for (i = 0; i < Ld->numel; i++) {
-		printf("Nome: %s | NIF: %d | Código Postal: %d\n", donos[i]->nome, donos[i]->numcontibuinte, donos[i]->codPostal);
-	}
+	if (opcao == 1)
+		printf("\n--- Donos ordenados por nome ---\n");
+	else
+		printf("\n--- Donos ordenados por número de contribuinte ---\n");
 
-	//ordena por n de contribuinte
-	for (int x = 0; x < Ld->numel - 1; x++) {
-		for (int y = 0; y < Ld->numel - x - 1; y++) {
-			if (donos[y]->numcontibuinte > donos[y + 1]->numcontibuinte) {
-				pdono temp = donos[y];
-				donos[y] = donos[y + 1];
-				donos[y + 1] = temp;
-			}
-		}
+	pno ptr = Ld->inicio;
+	while (ptr != NULL) {
+		printf("Nome: %s | NIF: %d | Código Postal: %d\n",
+			ptr->info->nome, ptr->info->numcontibuinte, ptr->info->codPostal);
+		ptr = ptr->prox;
 	}
-
-	//mostra lista ordenada por contribuinte
-	printf("\n--- Donos ordenados por número de contribuinte ---\n");
-	for (i = 0; i < Ld->numel; i++) {
-		printf("NIF: %d | Nome: %s\n", donos[i]->numcontibuinte, donos[i]->nome);
-	}
-
-	free(donos);
 }
+
+
 
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
