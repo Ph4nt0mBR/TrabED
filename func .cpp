@@ -310,26 +310,27 @@ void organizadonos(Listadono* Ld, int opcao) {
 	}
 
 	int trocado;
-	pno atual, anterior = NULL, fim = NULL;
+	pno atual, temp;
 
 	do {
 		trocado = 0;
 		atual = Ld->inicio;
-		anterior = NULL;
+		temp = NULL;
 
-		while (atual->prox != fim) {
-			pno proximo = atual->prox;
+		while (atual->prox != NULL) {
 
 			int precisaTrocar = 0;
 
-			if (opcao == 1 && strcmp(atual->info->nome, proximo->info->nome) > 0)
+			if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
 				precisaTrocar = 1;
-			else if (opcao == 2 && atual->info->numcontibuinte > proximo->info->numcontibuinte)
+			else if (opcao == 2 && atual->info->numcontibuinte > atual->prox->info->numcontibuinte)
 				precisaTrocar = 1;
 
-			/*if (precisaTrocar) {
-				atual->prox = proximo->prox;
-				proximo->prox = atual;
+			if (precisaTrocar == 1) {
+				temp = atual->prox;
+				atual->prox = atual;
+				atual= temp
+				
 
 				if (anterior == NULL) {
 					Ld->inicio = proximo;
@@ -346,7 +347,7 @@ void organizadonos(Listadono* Ld, int opcao) {
 				atual = atual->prox;
 			}
 		}
-		fim = atual;*/
+		fim = atual;
 	} while (trocado == 1);
 
 	if (opcao == 1)
