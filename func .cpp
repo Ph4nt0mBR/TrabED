@@ -23,12 +23,6 @@ pListasensor crialistasensores() {
 	return L;
 }
 
-pListadistancia crialistadistancias() {
-	pListadistancia L = (pListadistancia)malloc(sizeof(Listadistancia));
-	L->inicio = NULL;
-	L->numel = 0;
-	return L;
-}
 
 pListapassagem crialistapasagem() {
 	pListapassagem L = (pListapassagem)malloc(sizeof(Listapassagem));
@@ -78,16 +72,6 @@ void addmarca(pmarca l, marca nmarca)
 void Addsensor(Listasensor* l, sensor* D)
 {
 	pnosensor nNo = (pnosensor)malloc(sizeof(nosensor));
-	nNo->info = D;
-	nNo->prox = l->inicio;
-	l->inicio = nNo;
-	l->numel++;
-
-}
-
-void AddDono(Listadistancia* l, distancia* D)
-{
-	pnodistancia nNo = (pnodistancia)malloc(sizeof(nodistancia));
 	nNo->info = D;
 	nNo->prox = l->inicio;
 	l->inicio = nNo;
@@ -248,25 +232,41 @@ void list_veiculo(marca m) {
 }
 
 
-void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
+void regist_pass(Listapassagem* Lp, marca* Lm, Listasensor* Ls) {
 	passagem* novaPassagem = (passagem*)malloc(sizeof(passagem));
 	if (novaPassagem == NULL) {
 		printf("Erro ao alocar memória para a passagem.\n");
 		return;
 	}
 
-	char matricula[10];
+	char matricula[10],marca[10];
 	int codigoSensor;
 	float distancia;
 	char dataHora[20];
 
+	printf("Insira a matrícula do carro:\n");
+	scanf("%s", marca);
+
+	pmarca atualmarca;
+	while (atualmarca != NULL && strcmp(atualmarca->nome, marca) != 0) {
+		atualmarca = atualmarca->prox;
+	} // isto vai buscar a marca na lista
+
+	if (atualmarca == NULL) {
+		printf("Marca não encontrada.\n");
+		free(novaPassagem);
+		return;
+	} //senao for encontrada diz q n foi encontrado e da return
+
+	pListacarro Lc = atualmarca->info;
+	
 	printf("Insira a matrícula do carro:\n");
 	scanf("%s", matricula);
 
 	pnocarro atualCarro = Lc->inicio;
 	while (atualCarro != NULL && strcmp(atualCarro->info->matricula, matricula) != 0) {
 		atualCarro = atualCarro->prox;
-	} // isto vai buscar o carro plea matricula na lista
+	} // isto vai buscar o carro pela matricula na lista
 
 	if (atualCarro == NULL) {
 		printf("Carro não encontrado.\n");
@@ -296,9 +296,7 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 	scanf("%s", dataHora);
 	strcpy(novaPassagem->dataHora, dataHora);  
 
-	printf("Insira a distância percorrida (km):\n"); //pede a distancia percorrida
-	scanf("%f", &distancia);
-	novaPassagem->distancia = distancia;
+	//falta as distancias !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	Addpassagem(Lp, novaPassagem);
 	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa
