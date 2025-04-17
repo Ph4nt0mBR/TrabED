@@ -1,6 +1,38 @@
 #include "header.h"
 
 
+/* Essa função eu vou organizar ela ainda. N tira do comentario - Samuel
+void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
+	// Inicializa a matriz com zeros
+	for (int i = 0; i < MAX_NOS; i++) {
+		for (int j = 0; j < MAX_NOS; j++) {
+			matriz[i][j] = 0.0;
+		}
+	}
+
+	// Abre o arquivo
+	FILE *arquivo = fopen("distancias.txt", "r");
+	if (arquivo == NULL) {
+		perror("Erro ao abrir o arquivo");
+		exit(EXIT_FAILURE);
+	}
+
+	// Lê cada linha e preenche a matriz
+	int no1, no2;
+	double distancia;
+	while (fscanf(arquivo, "%d %d %lf", &no1, &no2, &distancia) == 3) {
+		if (no1 < 1 || no1 > 10 || no2 < 1 || no2 > 10) {
+			fprintf(stderr, "Nó inválido no arquivo: %d %d\n", no1, no2);
+			continue;
+		}
+		matriz[no1][no2] = distancia;
+		matriz[no2][no1] = distancia; // Matriz simétrica
+	}
+
+	fclose(arquivo);
+}*/
+
+
 pListadono crialistadono() {
 
 	pListadono L = (pListadono)malloc(sizeof(Listadono));
@@ -23,6 +55,12 @@ pListasensor crialistasensores() {
 	return L;
 }
 
+pListadistancia crialistadistancias() {
+	pListadistancia L = (pListadistancia)malloc(sizeof(Listadistancia));
+	L->inicio = NULL;
+	L->numel = 0;
+	return L;
+}
 
 pListapassagem crialistapasagem() {
 	pListapassagem L = (pListapassagem)malloc(sizeof(Listapassagem));
@@ -72,6 +110,16 @@ void addmarca(pmarca l, marca nmarca)
 void Addsensor(Listasensor* l, sensor* D)
 {
 	pnosensor nNo = (pnosensor)malloc(sizeof(nosensor));
+	nNo->info = D;
+	nNo->prox = l->inicio;
+	l->inicio = nNo;
+	l->numel++;
+
+}
+
+void AddDono(Listadistancia* l, distancia* D)
+{
+	pnodistancia nNo = (pnodistancia)malloc(sizeof(nodistancia));
 	nNo->info = D;
 	nNo->prox = l->inicio;
 	l->inicio = nNo;
@@ -232,41 +280,25 @@ void list_veiculo(marca m) {
 }
 
 
-void regist_pass(Listapassagem* Lp, marca* Lm, Listasensor* Ls) {
+void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 	passagem* novaPassagem = (passagem*)malloc(sizeof(passagem));
 	if (novaPassagem == NULL) {
 		printf("Erro ao alocar memória para a passagem.\n");
 		return;
 	}
 
-	char matricula[10],marca[10];
+	char matricula[10];
 	int codigoSensor;
 	float distancia;
 	char dataHora[20];
 
-	printf("Insira a matrícula do carro:\n");
-	scanf("%s", marca);
-
-	pmarca atualmarca;
-	while (atualmarca != NULL && strcmp(atualmarca->nome, marca) != 0) {
-		atualmarca = atualmarca->prox;
-	} // isto vai buscar a marca na lista
-
-	if (atualmarca == NULL) {
-		printf("Marca não encontrada.\n");
-		free(novaPassagem);
-		return;
-	} //senao for encontrada diz q n foi encontrado e da return
-
-	pListacarro Lc = atualmarca->info;
-	
 	printf("Insira a matrícula do carro:\n");
 	scanf("%s", matricula);
 
 	pnocarro atualCarro = Lc->inicio;
 	while (atualCarro != NULL && strcmp(atualCarro->info->matricula, matricula) != 0) {
 		atualCarro = atualCarro->prox;
-	} // isto vai buscar o carro pela matricula na lista
+	} // isto vai buscar o carro plea matricula na lista
 
 	if (atualCarro == NULL) {
 		printf("Carro não encontrado.\n");
@@ -296,73 +328,19 @@ void regist_pass(Listapassagem* Lp, marca* Lm, Listasensor* Ls) {
 	scanf("%s", dataHora);
 	strcpy(novaPassagem->dataHora, dataHora);  
 
-	//falta as distancias !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	printf("Insira a distância percorrida (km):\n"); //pede a distancia percorrida
+	scanf("%f", &distancia);
+	novaPassagem->distancia = distancia;
 
 	Addpassagem(Lp, novaPassagem);
-	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa
+	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa o utilizador
 }
 
 
-void organizadonos(Listadono* Ld, int opcao) {
-	if (Ld->inicio == NULL || Ld->inicio->prox == NULL) {
-		printf("Poucos ou nenhum dono registrado para ordenar.\n");
-		return;
-	}
-
-	int trocado;
-	pno atual, anterior = NULL, fim = NULL;
-
-	do {
-		trocado = 0;
-		atual = Ld->inicio;
-		anterior = NULL;
-
-		while (atual->prox != fim) {
-			pno proximo = atual->prox;
-
-			int precisaTrocar = 0;
-
-			if (opcao == 1 && strcmp(atual->info->nome, proximo->info->nome) > 0)
-				precisaTrocar = 1;
-			else if (opcao == 2 && atual->info->numcontibuinte > proximo->info->numcontibuinte)
-				precisaTrocar = 1;
-
-			/*if (precisaTrocar) {
-				atual->prox = proximo->prox;
-				proximo->prox = atual;
-
-				if (anterior == NULL) {
-					Ld->inicio = proximo;
-				}
-				else {
-					anterior->prox = proximo;
-				}
-
-				trocado = 1;
-				anterior = proximo;
-			}
-			else {
-				anterior = atual;
-				atual = atual->prox;
-			}
-		}
-		fim = atual;*/
-	} while (trocado == 1);
-
-	if (opcao == 1)
-		printf("\n--- Donos ordenados por nome ---\n");
-	else
-		printf("\n--- Donos ordenados por número de contribuinte ---\n");
-
-	pno ptr = Ld->inicio;
-	while (ptr != NULL) {
-		printf("Nome: %s | NIF: %d | Código Postal: %d\n",
-			ptr->info->nome, ptr->info->numcontibuinte, ptr->info->codPostal);
-		ptr = ptr->prox;
-	}
+void organizadonos() {
+	//Listagem (ordenada alfabeticamente) com o nome de todos os condutores
+	//Listagem (ordenada pelo número de contribuinte) com o respetivo número e nome de todos os condutores.
 }
-
-
 
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
