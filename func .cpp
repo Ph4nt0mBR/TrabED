@@ -375,11 +375,9 @@ void organizadonos(Listadono* Ld) {
 		max = atual;
 	} while (trocado == 1);
 
-
-void organizadonos() {
-	//Listagem (ordenada alfabeticamente) com o nome de todos os condutores
-	//Listagem (ordenada pelo número de contribuinte) com o respetivo número e nome de todos os condutores.
-}
+void import(){
+	//funcao que permite importar as listas
+	//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
 
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
