@@ -310,14 +310,14 @@ void organizadonos(Listadono* Ld, int opcao) {
 	}
 
 	int trocado;
-	pno atual, temp;
+	pno atual, temp,max = NULL;
 
 	do {
 		trocado = 0;
 		atual = Ld->inicio;
 		temp = NULL;
 
-		while (atual->prox != NULL) {
+		while (atual->prox != NULL && atual->prox =! max) {
 
 			int precisaTrocar = 0;
 
