@@ -333,8 +333,56 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 	novaPassagem->distancia = distancia;
 
 	Addpassagem(Lp, novaPassagem);
-	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa o utilizador
+	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa
 }
+
+
+void organizadonos(Listadono* Ld, int opcao) {
+	if (Ld->inicio == NULL || Ld->inicio->prox == NULL) {
+		printf("Poucos ou nenhum dono registrado para ordenar.\n");
+		return;
+	}
+
+	int trocado;
+	pno atual, temp;
+
+	do {
+		trocado = 0;
+		atual = Ld->inicio;
+		temp = NULL;
+
+		while (atual->prox != NULL) {
+
+			int precisaTrocar = 0;
+
+			if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
+				precisaTrocar = 1;
+			else if (opcao == 2 && atual->info->numcontibuinte > atual->prox->info->numcontibuinte)
+				precisaTrocar = 1;
+
+			if (precisaTrocar == 1) {
+				temp = atual->prox;
+				atual->prox = atual;
+				atual= temp
+				
+
+				if (anterior == NULL) {
+					Ld->inicio = proximo;
+				}
+				else {
+					anterior->prox = proximo;
+				}
+
+				trocado = 1;
+				anterior = proximo;
+			}
+			else {
+				anterior = atual;
+				atual = atual->prox;
+			}
+		}
+		fim = atual;
+	} while (trocado == 1);
 
 
 void organizadonos() {
