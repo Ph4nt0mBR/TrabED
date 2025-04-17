@@ -337,13 +337,13 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 }
 
 
-void organizadonos(Listadono* Ld, int opcao) {
+void organizadonos(Listadono* Ld) {
 	if (Ld->inicio == NULL || Ld->inicio->prox == NULL) {
 		printf("Poucos ou nenhum dono registrado para ordenar.\n");
 		return;
 	}
 
-	int trocado;
+	int trocado, opcao;
 	pno atual, temp,max = NULL;
 
 	do {
@@ -351,11 +351,15 @@ void organizadonos(Listadono* Ld, int opcao) {
 		atual = Ld->inicio;
 		temp = NULL;
 
+		printf("Deseja executar a organização por que ordem?\n 1- Nome do dono\n 2- Número de contribuinte\n 3- Parar organização");
+			scanf(%d,opcao); 
+
 		while (atual->prox != NULL && atual->prox =! max) {
 
 			int precisaTrocar = 0;
-
-			if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
+			if (opcao == 3)
+				return ;
+			else if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
 				precisaTrocar = 1;
 			else if (opcao == 2 && atual->info->numcontibuinte > atual->prox->info->numcontibuinte)
 				precisaTrocar = 1;
