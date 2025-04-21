@@ -1,5 +1,5 @@
 #include "header.h"
-
+#include "func.h"
 
 /* Essa função eu vou organizar ela ainda. N tira do comentario - Samuel
 void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
@@ -375,9 +375,10 @@ void organizadonos(Listadono* Ld) {
 		max = atual;
 	} while (trocado == 1);
 
-void import(){
-	//funcao que permite importar as listas
-	//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
+	void import() {
+		//funcao que permite importar as listas
+		//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
+	}
 
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
