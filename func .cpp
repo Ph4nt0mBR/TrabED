@@ -32,13 +32,29 @@ void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
 	fclose(arquivo);
 }*/
 
-void importdono() {
-	FILE* ficheiro = fopen("donos.txt", "r");
-	if (ficheiro == NULL) {
+int importdono(Listadono *ld) {
+	char token;
+	const char r[5]="\n";//não sei se este nome é bom
+	FILE* F = fopen("donos.txt", "r");
+	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return NULL;
+		return 0;
 	}
+	while (!feof(F))
+	{
+		token = strtok(str1, r);
+		while (token != NULL) {
 
+			//printf(" %s\n", token);
+			token = strtok(NULL, r);
+		}
+		fscanf(F, "%d\t%[]", &id, nome, cp4, cp3);
+		//printf(.....)
+		dono* X = criardono(id, nome, cp4, cp3);//TENHO DE FAZER A funcao 
+		AddDono(ld, X);
+	}
+	fclose(F);
+	return 1;
 }
 
 void importcarro() {
@@ -203,7 +219,7 @@ void regist_dono(Listadono* Ld) {
 		printf("Qual o nome do dono?\n");//nao tenho certeza se devo meter assim o nome temos de ver depois se está bom
 		scanf("%s", ndono->nome);
 		printf("Qual o codigo postal?\n");
-		scanf("%d", &(ndono->codPostal));
+		scanf("%s", &(ndono->codPostal));
 		AddDono(Ld, ndono);
 	}
 	if (opcao == 0) {
@@ -217,7 +233,7 @@ void list_dono(Listadono* Ld) {
 	pno ldono = Ld->inicio;
 	while (ldono != Null) {
 		linfdono = ldono->info;
-		printf("%d\n", linfdono->codPostal);
+		printf("%s\n", linfdono->codPostal);
 		printf("%s\n", linfdono->nome);
 		printf("%d\n", linfdono->numcontibuinte);
 		ldono = ldono->prox,
