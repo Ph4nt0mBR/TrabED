@@ -32,6 +32,25 @@ void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
 	fclose(arquivo);
 }*/
 
+void importdono() {
+	FILE* ficheiro = fopen("donos.txt", "r");
+}
+
+void importcarro() {
+	FILE* ficheiro = fopen("carros.txt", "r");
+}
+
+void importpassagem() {
+	FILE* ficheiro = fopen("passagem.txt", "r");
+}
+
+void importsensor() {
+	FILE* ficheiro = fopen("sensores.txt", "r");
+}
+
+void importdistancia() {
+	FILE* ficheiro = fopen("distancias.txt", "r");
+}
 
 pListadono crialistadono() {
 
@@ -376,7 +395,27 @@ void organizadonos(Listadono* Ld) {
 	} while (trocado == 1);
 
 	void import() {
-		//funcao que permite importar as listas
+		int opcao = 0;
+
+		printf("deseja importar donos?\n1-Sim\n2-Não");
+		scanf("%d", &opcao);
+
+		if (opcao == 1) {
+			importdono();
+			printf("deseja importar carros?\n1-Sim\n2-Não");
+			scanf("%d", &opcao);
+
+			if (opcao == 1) {
+				importcarro();
+				printf("deseja importar passagens?\n1-Sim\n2-Não");
+				scanf("%d", &opcao);
+
+				if (opcao == 1) {
+					importpassagem();
+				}
+			}
+		}
+		//funcao que permite importar as listas(exceto sensores e distancias)
 		//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
 	}
 
