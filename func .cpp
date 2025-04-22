@@ -34,24 +34,49 @@ void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
 
 void importdono() {
 	FILE* ficheiro = fopen("donos.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
+
 }
 
 void importcarro() {
 	FILE* ficheiro = fopen("carros.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
 }
 
 void importpassagem() {
 	FILE* ficheiro = fopen("passagem.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
 }
 
 void importsensor() {
 	FILE* ficheiro = fopen("sensores.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
 }
 
 void importdistancia() {
 	FILE* ficheiro = fopen("distancias.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
 }
 
+//funçoes para importar 
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 pListadono crialistadono() {
 
 	pListadono L = (pListadono)malloc(sizeof(Listadono));
