@@ -43,15 +43,15 @@ int importdono(Listadono *ld) {
 	while (!feof(F))
 	{
 		token = strtok(str1, r);
-		while (token != NULL) {
+		id = atoi(token);
+		token = strtok(NULL, r);
+		nome = token;
+		token = strtok(NULL, r);
+		cp = token;
 
-			//printf(" %s\n", token);
-			id = token;
-			token = strtok(NULL, r);
-		}
-		fscanf(F, "%d\t%[]", &id, nome, cp4, cp3);
+		fscanf(F, "%d\t%[]", &id, nome, cp);
 		//printf(.....)
-		dono* X = criardono(id, nome, cp4, cp3);//TENHO DE FAZER A funcao 
+		dono* X = criardono(id, nome, cp);//TENHO DE FAZER A funcao 
 		AddDono(ld, X);
 	}
 	fclose(F);
