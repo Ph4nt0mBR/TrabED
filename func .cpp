@@ -39,20 +39,21 @@ int importdono(Listadono *ld) {
 	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
 		return 0;
-	}
+	}		
+
+	token = strtok(str1, r);
 	while (!feof(F))
 	{
-		token = strtok(str1, r);
-		id = atoi(token);
-		token = strtok(NULL, r);
-		nome = token;
-		token = strtok(NULL, r);
-		cp = token;
+		dono* ndono = (pdonos)malloc(n->numel * sizeof(struct no));
 
-		fscanf(F, "%d\t%[]", &id, nome, cp);
-		//printf(.....)
-		dono* X = criardono(id, nome, cp);//TENHO DE FAZER A funcao 
-		AddDono(ld, X);
+		ndono->numcontibuinte = atoi(token);
+		token = strtok(NULL, r);
+		ndono->nome = token;
+		token = strtok(NULL, r);
+		ndono->codPostal = token;
+		token = strtok(NULL, r);
+
+		AddDono(ld, ndono);
 	}
 	fclose(F);
 	return 1;
