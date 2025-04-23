@@ -46,6 +46,7 @@ int importdono(Listadono *ld) {
 		while (token != NULL) {
 
 			//printf(" %s\n", token);
+			id = token;
 			token = strtok(NULL, r);
 		}
 		fscanf(F, "%d\t%[]", &id, nome, cp4, cp3);
