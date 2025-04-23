@@ -17,7 +17,7 @@ typedef struct donos
 {
 	int numcontibuinte;
 	char nome[30];
-	int codPostal;
+	char codPostal[9];
 }dono,*pdono;
 
 //Struct de nos para verificacao da lista de donos. Aponta entre nos para poupar memoria
