@@ -1,5 +1,5 @@
 #include "header.h"
-
+#include "func.h"
 
 /* Essa função eu vou organizar ela ainda. N tira do comentario - Samuel
 void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
@@ -32,7 +32,51 @@ void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
 	fclose(arquivo);
 }*/
 
+void importdono() {
+	FILE* ficheiro = fopen("donos.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
 
+}
+
+void importcarro() {
+	FILE* ficheiro = fopen("carros.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
+}
+
+void importpassagem() {
+	FILE* ficheiro = fopen("passagem.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
+}
+
+void importsensor() {
+	FILE* ficheiro = fopen("sensores.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
+}
+
+void importdistancia() {
+	FILE* ficheiro = fopen("distancias.txt", "r");
+	if (ficheiro == NULL) {
+		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+		return NULL;
+	}
+}
+
+//funçoes para importar 
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 pListadono crialistadono() {
 
 	pListadono L = (pListadono)malloc(sizeof(Listadono));
@@ -117,7 +161,7 @@ void Addsensor(Listasensor* l, sensor* D)
 
 }
 
-void AddDono(Listadistancia* l, distancia* D)
+void AddDono(distancia* D)
 {
 	pnodistancia nNo = (pnodistancia)malloc(sizeof(nodistancia));
 	nNo->info = D;
@@ -337,58 +381,68 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 }
 
 
-void organizadonos(Listadono* Ld, int opcao) {
+void organizadonos(Listadono* Ld) {
 	if (Ld->inicio == NULL || Ld->inicio->prox == NULL) {
 		printf("Poucos ou nenhum dono registrado para ordenar.\n");
 		return;
 	}
 
-	int trocado;
-	pno atual, temp;
+	int trocado, opcao;
+	pno atual, temp,max = NULL;
 
 	do {
 		trocado = 0;
 		atual = Ld->inicio;
 		temp = NULL;
 
-		while (atual->prox != NULL) {
+		printf("Deseja executar a organização por que ordem?\n 1- Nome do dono\n 2- Número de contribuinte\n 3- Parar organização");
+			scanf(%d,opcao); 
+
+		while (atual->prox != NULL && atual->prox =! max) {
 
 			int precisaTrocar = 0;
-
-			if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
+			if (opcao == 3)
+				return ;
+			else if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
 				precisaTrocar = 1;
 			else if (opcao == 2 && atual->info->numcontibuinte > atual->prox->info->numcontibuinte)
 				precisaTrocar = 1;
 
 			if (precisaTrocar == 1) {
-				temp = atual->prox;
-				atual->prox = atual;
-				atual= temp
-				
-
-				if (anterior == NULL) {
-					Ld->inicio = proximo;
-				}
-				else {
-					anterior->prox = proximo;
-				}
+				temp->info = atual->prox->info;
+				atual->prox->info = atual->info;
+				atual->info = temp->info;
 
 				trocado = 1;
-				anterior = proximo;
-			}
-			else {
-				anterior = atual;
-				atual = atual->prox;
 			}
 		}
-		fim = atual;
+		max = atual;
 	} while (trocado == 1);
 
+	void import() {
+		int opcao = 0;
 
-void organizadonos() {
-	//Listagem (ordenada alfabeticamente) com o nome de todos os condutores
-	//Listagem (ordenada pelo número de contribuinte) com o respetivo número e nome de todos os condutores.
-}
+		printf("deseja importar donos?\n1-Sim\n2-Não");
+		scanf("%d", &opcao);
+
+		if (opcao == 1) {
+			importdono();
+			printf("deseja importar carros?\n1-Sim\n2-Não");
+			scanf("%d", &opcao);
+
+			if (opcao == 1) {
+				importcarro();
+				printf("deseja importar passagens?\n1-Sim\n2-Não");
+				scanf("%d", &opcao);
+
+				if (opcao == 1) {
+					importpassagem();
+				}
+			}
+		}
+		//funcao que permite importar as listas(exceto sensores e distancias)
+		//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
+	}
 
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
