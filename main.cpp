@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "header.h"
 #include "func.h"
-#include "func .cpp"
+#include "func.cpp"
 
 void main() {
 	pListadono Ld = crialistadono();
