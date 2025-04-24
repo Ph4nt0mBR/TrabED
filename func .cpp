@@ -64,18 +64,6 @@ int importdono(Listadono *ld) {
 		strcpy(ndono->nome, NOME);
 		strcpy(ndono->codPostal, CP);
 		AddDono(ld, ndono);
-		/*
-		dono* ndono = (pdonos)malloc(n->numel * sizeof(struct no));
-
-		ndono->numcontibuinte = atoi(token);
-		token = strtok(NULL, r);
-		ndono->nome = token;
-		token = strtok(NULL, r);
-		ndono->codPostal = token;
-		token = strtok(NULL, r);
-
-		AddDono(ld, ndono);
-		*/
 	}
 	fclose(F);
 	return 1;
