@@ -1,17 +1,21 @@
 #include "header.h"
 #include "func.h"
 
-/* Essa função eu vou organizar ela ainda. N tira do comentario - Samuel
-void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
+
+
+
+
+distancias calcDistancia{
+void carregar_distancias(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
 	// Inicializa a matriz com zeros
-	for (int i = 0; i < MAX_NOS; i++) {
-		for (int j = 0; j < MAX_NOS; j++) {
+	for (int i = 0; i < SAMPLE_SIZE; i++) {
+		for (int j = 0; j < SAMPLE_SIZE; j++) {
 			matriz[i][j] = 0.0;
 		}
 	}
 
 	// Abre o arquivo
-	FILE *arquivo = fopen("distancias.txt", "r");
+	FILE* arquivo = fopen("distancias.txt", "r");
 	if (arquivo == NULL) {
 		perror("Erro ao abrir o arquivo");
 		exit(EXIT_FAILURE);
@@ -25,12 +29,16 @@ void carregar_distancias(double matriz[MAX_NOS][MAX_NOS]) {
 			fprintf(stderr, "Nó inválido no arquivo: %d %d\n", no1, no2);
 			continue;
 		}
-		matriz[no1][no2] = distancia;
-		matriz[no2][no1] = distancia; // Matriz simétrica
+		cod1[no1 - 1] = no1;
+		cod2[no2 - 1] = no2;
+		matriz[cod1 - 1][cod2 - 1] = mdist;
+		matriz[cod2 - 1][cod1 - 1] = mdist; // Matriz simétrica
+	
 	}
 
 	fclose(arquivo);
-}*/
+}
+}
 
 int importdono(Listadono *ld) {
 	char token;
@@ -462,6 +470,7 @@ void organizadonos(Listadono* Ld) {
 		//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
 	}
 
+void 
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
 }
