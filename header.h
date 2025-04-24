@@ -1,4 +1,5 @@
 //Manter os inlcudes no header e incluir o header nos outros ficheiros
+#pragma once
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
@@ -10,7 +11,7 @@
 
 //fazer ficheiros diferentes para cada struct, um pra donos, um pra carro (sugestao da stora)
 //tá feito - Afonso
-//Como assim ficheiros diferentes pra cara struct? - Samuel
+
 
 //Struct para donos
 typedef struct donos
