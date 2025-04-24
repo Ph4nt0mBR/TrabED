@@ -5,12 +5,12 @@
 
 
 
-pdistancia calcDistancia(){
-void carregar_distancias(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
+	pdistancia calcDistancia(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
 	// Inicializa a matriz com zeros
+	distancias nd;
 	for (int i = 0; i < SAMPLE_SIZE; i++) {
 		for (int j = 0; j < SAMPLE_SIZE; j++) {
-			matriz[i][j] = 0.0;
+			nd->matriz[i][j] = 0.0;
 		}
 	}
 
@@ -23,7 +23,7 @@ void carregar_distancias(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
 
 	// Lê cada linha e preenche a matriz
 	int no1, no2;
-	distancias nd;
+	
 	double distancia;
 	
 	while (fscanf(arquivo, "%d %d %lf", &no1, &no2, &distancia) == 3) {
@@ -32,15 +32,15 @@ void carregar_distancias(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
 			continue;
 		}
 		nd->cod1[no1 - 1] = no1;
-		cod2[no2 - 1] = no2;
-		matriz[cod1 - 1][cod2 - 1] = mdist;
-		matriz[cod2 - 1][cod1 - 1] = mdist; // Matriz simétrica
+		nd->cod2[no2 - 1] = no2;
+		nd->matriz[cod1 - 1][cod2 - 1] = mdist;
+		nd->matriz[cod2 - 1][cod1 - 1] = mdist; // Matriz simétrica
 	
 	}
 
 	fclose(arquivo);
 }
-}
+
 
 int importdono(Listadono *ld) {
 	//char token;
