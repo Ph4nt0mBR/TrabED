@@ -43,15 +43,13 @@
 
 
 int importdono(Listadono *ld) {
-	//char token;
-	const char r[5]="\n";//não sei se este nome é bom
+	const char r[5]="\n";
 	FILE* F = fopen("donos.txt", "r");
 	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
 		return 0;
 	}		
 
-	//token = strtok(str1, r);
 	int COD;
 	char NOME[100];
 	char CP[10];
@@ -70,11 +68,35 @@ int importdono(Listadono *ld) {
 }
 
 void importcarro() {
-	FILE* ficheiro = fopen("carros.txt", "r");
-	if (ficheiro == NULL) {
+	const char r[5] = "\n";
+	FILE* F = fopen("carros.txt", "r");
+	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return NULL;
+		return 0;
 	}
+
+	int cod, ano;
+	char Marca[100];
+	char modelo[100];
+	char Mat[10];
+	char ndono;
+
+	while (!feof(F))
+	{
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
+		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
+		carro* ncarro = (pdonos)malloc(sizeof(carro));
+
+		strcpy(ncarro->matricula,Mat);
+		strcpy(ncarro->marca,Marca);
+		strcpy(ncarro->modelo, modelo);
+		ncarro->ano = ano;
+		ncarro->pdonos = procuradono(ndono);
+		ncarro->codigo = cod;
+		//esta bosta falta marca
+	}
+	fclose(F);
+	return 1;
 }
 
 void importpassagem() {
