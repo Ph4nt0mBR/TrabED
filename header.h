@@ -97,8 +97,8 @@ typedef struct Listasensores{
 
 typedef struct distancias//podemos transformar isto numa matriz
 {
-	int cod1;//usamos ponteiro?
-	int cod2;//usamos ponteiro?
+	int cod1[10];//usamos ponteiro?
+	int cod2[10];//usamos ponteiro?
 	int dist[10][10];	
 	// Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }distancia,*pdistancia;
