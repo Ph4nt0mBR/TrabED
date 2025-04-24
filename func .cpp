@@ -41,7 +41,7 @@ void carregar_distancias(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
 }
 
 int importdono(Listadono *ld) {
-	char token;
+	//char token;
 	const char r[5]="\n";//não sei se este nome é bom
 	FILE* F = fopen("donos.txt", "r");
 	if (F == NULL) {
@@ -49,9 +49,20 @@ int importdono(Listadono *ld) {
 		return 0;
 	}		
 
-	token = strtok(str1, r);
+	//token = strtok(str1, r);
+	int COD;
+	char NOME[100];
+	char CP[10];
 	while (!feof(F))
 	{
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
+		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
+		dono* ndono = (pdonos)malloc(sizeof(dono));
+		ndono->numcontibuinte = COD;
+		strcpy(ndono->nome, NOME);
+		strcpy(ndono->codPostal, CP);
+		AddDono(ld, ndono);
+		/*
 		dono* ndono = (pdonos)malloc(n->numel * sizeof(struct no));
 
 		ndono->numcontibuinte = atoi(token);
@@ -62,6 +73,7 @@ int importdono(Listadono *ld) {
 		token = strtok(NULL, r);
 
 		AddDono(ld, ndono);
+		*/
 	}
 	fclose(F);
 	return 1;
