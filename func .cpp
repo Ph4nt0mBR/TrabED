@@ -67,7 +67,9 @@ int importdono(Listadono *ld) {
 	return 1;
 }
 
-void importcarro() {
+void importcarro(Listadono L, marca nm) {
+	
+	pListacarro Lc;
 	const char r[5] = "\n";
 	FILE* F = fopen("carros.txt", "r");
 	if (F == NULL) {
@@ -82,8 +84,11 @@ void importcarro() {
 	char ndono;
 
 	while (!feof(F))
-	{
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
+	{	
+		pmarca m = nm;
+		pno ldono = pL->inicio;
+
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
 		carro* ncarro = (pdonos)malloc(sizeof(carro));
 
@@ -91,9 +96,36 @@ void importcarro() {
 		strcpy(ncarro->marca,Marca);
 		strcpy(ncarro->modelo, modelo);
 		ncarro->ano = ano;
+
+		while (strcmp(ldono, ndono) != 0 && ldono != NULL) {
+			ldono = ldono->prox;
+		}
+
+		if (ldono == NULL) {
+			printf("dono não encontrado");
+			free(ncarro);
+			return;
+		}
+		else {
+			ncarro->pdonos = ldono->info;
+		}
 		ncarro->pdonos = procuradono(ndono);
 		ncarro->codigo = cod;
-		//esta bosta falta marca
+		while (strcmp(ncarro->marca, m->nome) != 0 && m != NULL) {
+			m = m->prox;
+		}
+
+		if (strcmp(novoCarro->marca, m->nome) == 0) {
+			Lc = m->inf;
+		}
+		else {
+			marca nmarca = criamarca(novoCarro->marca);
+			addmarca(m, nmarca);
+			m = m->prox;
+			Lc = m->inf;
+		}
+		Addcarro(Lc, ncarro);
+		m->inf = Lc;
 	}
 	fclose(F);
 	return 1;
@@ -274,10 +306,10 @@ void list_dono(Listadono* Ld) {
 	}
 }
 
-void regist_veiculo(Listadono L) {
+void regist_veiculo(Listadono L,marca nm) {
 	int opcao = 0, contdono = 0;
 	pListadono pL = L;
-	pmarca m;
+	pmarca m = nm;
 	pListacarro Lc;
 	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao: ");
 	scanf("%d", &opcao);
@@ -329,9 +361,10 @@ void regist_veiculo(Listadono L) {
 			marca nmarca = criamarca(novoCarro->marca);
 			addmarca(m, nmarca);
 			m = m->prox;
+			Lc = m->inf;
 		}
-		Lc = m->inf;
 		Addcarro(Lc, novoCarro);
+		m->inf = Lc;
 		printf("Veículo adicionado com sucesso!\n");
 	}
 	else {
