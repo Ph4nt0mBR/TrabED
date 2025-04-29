@@ -43,7 +43,7 @@
 
 
 int importdono(Listadono *ld) {
-	const char r[5]="\n";
+	//const char r[5]="\n";
 	FILE* F = fopen("donos.txt", "r");
 	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
@@ -70,7 +70,7 @@ int importdono(Listadono *ld) {
 void importcarro(Listadono L, marca nm) {
 	
 	pListacarro Lc;
-	const char r[5] = "\n";
+	//const char r[5] = "\n";
 	FILE* F = fopen("carros.txt", "r");
 	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
@@ -139,20 +139,32 @@ void importpassagem() {
 	}
 }
 
-void importsensor() {
-	FILE* ficheiro = fopen("sensores.txt", "r");
-	if (ficheiro == NULL) {
+void importsensor(Listasensores L) {
+	//const char r[5] = "\n";
+	pListasensor Ls = L;
+	FILE* F = fopen("sensores.txt", "r");
+	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return NULL;
+		return 0;
 	}
-}
 
-void importdistancia() {
-	FILE* ficheiro = fopen("distancias.txt", "r");
-	if (ficheiro == NULL) {
-		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return NULL;
+	int COD;
+	char NOME[100];
+	char Lat[16];
+	char Lon[14];
+	while (!feof(F))
+	{
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
+		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, Lat, Lon);
+		sensor* nsensor = (pdonos)malloc(sizeof(dono));
+		nsensor->codSensor = COD;
+		strcpy(nsensor->Designacao, NOME);
+		strcpy(nsensor->Latitude, Lat);
+		strcpy(nsensor->Longitude, Lon);
+		Addsensor(Ls, nsensor);
 	}
+	fclose(F);
+	return 1;
 }
 
 //funçoes para importar 
@@ -176,13 +188,6 @@ pListacarro crialistacarro() {
 
 pListasensor crialistasensores() {
 	pListasensor L = (pListasensor)malloc(sizeof(Listasensor));
-	L->inicio = NULL;
-	L->numel = 0;
-	return L;
-}
-
-pListadistancia crialistadistancias() {
-	pListadistancia L = (pListadistancia)malloc(sizeof(Listadistancia));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;
