@@ -44,6 +44,7 @@
 
 int importdono(Listadono *ld) {
 	//const char r[5]="\n";
+	pListadono L = ld;
 	FILE* F = fopen("donos.txt", "r");
 	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
@@ -57,11 +58,11 @@ int importdono(Listadono *ld) {
 	{
 		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
-		dono* ndono = (pdonos)malloc(sizeof(dono));
+		dono* ndono = (pdono)malloc(sizeof(dono));
 		ndono->numcontibuinte = COD;
 		strcpy(ndono->nome, NOME);
 		strcpy(ndono->codPostal, CP);
-		AddDono(ld, ndono);
+		AddDono(L, ndono);
 	}
 	fclose(F);
 	return 1;
@@ -90,7 +91,7 @@ void importcarro(Listadono L, marca nm) {
 
 		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
-		carro* ncarro = (pdonos)malloc(sizeof(carro));
+		carro* ncarro = (pcarro)malloc(sizeof(carro));
 
 		strcpy(ncarro->matricula,Mat);
 		strcpy(ncarro->marca,Marca);
@@ -131,12 +132,31 @@ void importcarro(Listadono L, marca nm) {
 	return 1;
 }
 
-void importpassagem() {
-	FILE* ficheiro = fopen("passagem.txt", "r");
-	if (ficheiro == NULL) {
+void importpassagem(Listapassagem L) {
+	FILE* F = fopen("distancias.txt", "r");
+	Listapassagem Lp;
+	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return NULL;
+		return 0;
 	}
+
+	int Id;
+	char COD[100];
+	char Data[10];
+	int regist;
+	while (!feof(F))
+	{
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &Id, COD, Data,&regist);
+		printf("COD = %d, NOMe: [%s], CP=[%s]\n", Id, COD, Data,regist);
+		passagem* npass = (ppassagem)malloc(sizeof(passagem));
+		npass->idsensor = Id;
+		strcpy(npass->codcarro, COD);
+		strcpy(npass->data, Data);
+		npass->tiporegist = regist;
+		Addpassagem(Lp, npass);
+	}
+	fclose(F);
+	return 1;
 }
 
 void importsensor(Listasensores L) {
@@ -156,7 +176,7 @@ void importsensor(Listasensores L) {
 	{
 		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, Lat, Lon);
-		sensor* nsensor = (pdonos)malloc(sizeof(dono));
+		sensor* nsensor = (psensor)malloc(sizeof(sensor));
 		nsensor->codSensor = COD;
 		strcpy(nsensor->Designacao, NOME);
 		strcpy(nsensor->Latitude, Lat);
@@ -476,7 +496,7 @@ void organizadonos(Listadono* Ld) {
 	}
 
 	int trocado, opcao;
-	pno atual, temp,max = NULL;
+	pno atual, temp, max = NULL;
 
 	do {
 		trocado = 0;
@@ -484,13 +504,13 @@ void organizadonos(Listadono* Ld) {
 		temp = NULL;
 
 		printf("Deseja executar a organização por que ordem?\n 1- Nome do dono\n 2- Número de contribuinte\n 3- Parar organização");
-			scanf(%d,opcao); 
+		scanf(% d, opcao);
 
-		while (atual->prox != NULL && atual->prox =! max) {
+		while (atual->prox != NULL && atual->prox = !max) {
 
 			int precisaTrocar = 0;
 			if (opcao == 3)
-				return ;
+				return;
 			else if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
 				precisaTrocar = 1;
 			else if (opcao == 2 && atual->info->numcontibuinte > atual->prox->info->numcontibuinte)
@@ -507,24 +527,26 @@ void organizadonos(Listadono* Ld) {
 		max = atual;
 	} while (trocado == 1);
 
-	void import() {
+}
+
+void import(Listadono Ld, marca m, Listapassagem Lp) {
 		int opcao = 0;
 
 		printf("deseja importar donos?\n1-Sim\n2-Não");
 		scanf("%d", &opcao);
 
 		if (opcao == 1) {
-			importdono();
+			importdono(Ld);
 			printf("deseja importar carros?\n1-Sim\n2-Não");
 			scanf("%d", &opcao);
 
 			if (opcao == 1) {
-				importcarro();
+				importcarro(Ld,m);
 				printf("deseja importar passagens?\n1-Sim\n2-Não");
 				scanf("%d", &opcao);
 
 				if (opcao == 1) {
-					importpassagem();
+					importpassagem(Lp);
 				}
 			}
 		}
