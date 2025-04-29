@@ -552,9 +552,8 @@ void import(Listadono Ld, marca m, Listapassagem Lp) {
 		}
 		//funcao que permite importar as listas(exceto sensores e distancias)
 		//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
-	}
-
-void 
+}
+ 
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
 }
