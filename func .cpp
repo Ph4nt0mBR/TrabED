@@ -562,6 +562,7 @@ void organizacarros(marca m) {
 	pmarca nm = m;
 	pListacarro Lc;
 	pnocarro nc;
+	carro tempc;
 	int troca;
 	int opcao;
 
@@ -576,7 +577,12 @@ void organizacarros(marca m) {
 				nc = Lc->inicio;
 
 				while (nc != NULL) {
-
+					if (strcmp(nc->info->matricula, nc->prox->info->matricula) > 0) {
+						tempc = nc->info;
+						nc->info = nc->prox->info;
+						nc->prox->info = tempc;
+						troca = 1;
+					}
 					nc = nc->prox;
 				}
 				nm = nm->prox;
@@ -591,7 +597,12 @@ void organizacarros(marca m) {
 				nc = Lc->inicio;
 
 				while (nc != NULL) {
-
+					if (strcmp(nc->info->marca, nc->prox->info->marca) > 0) {
+						tempc = nc->info;
+						nc->info = nc->prox->info;
+						nc->prox->info = tempc;
+						troca = 1;
+					}
 					nc = nc->prox;
 				}
 				nm = nm->prox;
@@ -606,7 +617,12 @@ void organizacarros(marca m) {
 				nc = Lc->inicio;
 
 				while (nc != NULL) {
-
+					if (strcmp(nc->info->modelo, nc->prox->info->modelo) > 0) {
+						tempc = nc->info;
+						nc->info = nc->prox->info;
+						nc->prox->info = tempc;
+						troca = 1;
+					}
 					nc = nc->prox;
 				}
 				nm = nm->prox;
