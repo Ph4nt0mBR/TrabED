@@ -116,11 +116,11 @@ void importcarro(Listadono L, marca nm) {
 			m = m->prox;
 		}
 
-		if (strcmp(novoCarro->marca, m->nome) == 0) {
+		if (strcmp(ncarro->marca, m->nome) == 0) {
 			Lc = m->inf;
 		}
 		else {
-			marca nmarca = criamarca(novoCarro->marca);
+			marca nmarca = criamarca(ncarro->marca);
 			addmarca(m, nmarca);
 			m = m->prox;
 			Lc = m->inf;
@@ -558,8 +558,65 @@ void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados
 }
 
-void organizacarros() {
-	//Listagem com a matrícula, marca e modelo (Ordenado por cada um destes atributos) de todos os veículos registados.
+void organizacarros(marca m) {
+	pmarca nm = m;
+	pListacarro Lc;
+	pnocarro nc;
+	int troca;
+	int opcao;
+
+	printf("Organizar carros por:\n1-matricula\n2-marca\n3-modelo\n4-Sair");
+	scanf("%d",opcao);
+
+	if (opcao == 1) {
+		do{
+			troca = 0;
+			while (nm != NULL) {
+				Lc = nm->inf;
+				nc = Lc->inicio;
+
+				while (nc != NULL) {
+
+					nc = nc->prox;
+				}
+				nm = nm->prox;
+			}
+		} while (troca == 1);
+	}
+	else if (opcao == 2){
+		do {
+			troca = 0;
+			while (nm != NULL) {
+				Lc = nm->inf;
+				nc = Lc->inicio;
+
+				while (nc != NULL) {
+
+					nc = nc->prox;
+				}
+				nm = nm->prox;
+			}
+		} while (troca == 1);
+	}
+	else if (opcao == 3){
+		do {
+			troca = 0;
+			while (nm != NULL) {
+				Lc = nm->inf;
+				nc = Lc->inicio;
+
+				while (nc != NULL) {
+
+					nc = nc->prox;
+				}
+				nm = nm->prox;
+			}
+		} while (troca == 1);
+	}
+	else if (opcao == 4){
+		return 0;
+	}
+
 }
 
 void listacarroperiodo() {
