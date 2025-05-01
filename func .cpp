@@ -388,6 +388,8 @@ void regist_veiculo(Listadono L,marca nm) {
 			m = m->prox;
 			Lc = m->inf;
 		}
+		novoCarro->kilometros = 0;
+		novoCarro->tempototal = 0;
 		Addcarro(Lc, novoCarro);
 		m->inf = Lc;
 		printf("Veículo adicionado com sucesso!\n");
@@ -424,6 +426,7 @@ void list_veiculo(marca m) {
 			printf("Marca: %s\n", c->marca);
 			printf("Modelo: %s\n", c->modelo);
 			printf("Ano: %d\n", c->ano);
+			printf("Codigo: %d\b", c->codigo);
 			atual = atual->prox;
 		}
 		printf("-------------------------------------------------------\n");
