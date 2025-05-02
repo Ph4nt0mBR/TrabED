@@ -107,8 +107,8 @@ typedef struct distancias//podemos transformar isto numa matriz
 typedef struct passagem 
 {
 	int idsensor;
-	char codcarro;//usamos ponteiro?
-	char data;
+	pcarro codcarro;
+	char data[100];
 	int tiporegist;
 
 }passagem,*ppassagem;

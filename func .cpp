@@ -132,16 +132,18 @@ void importcarro(Listadono L, marca nm) {
 	return 1;
 }
 
-void importpassagem(Listapassagem L) {
+void importpassagem(Listapassagem L,marca m) {
 	FILE* F = fopen("distancias.txt", "r");
-	Listapassagem Lp;
+	pmarca pm;
+	pnocarro plc;
+	pListapassagem Lp;
 	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
 		return 0;
 	}
 
 	int Id;
-	char COD[100];
+	int COD;
 	char Data[10];
 	int regist;
 	while (!feof(F))
@@ -150,7 +152,22 @@ void importpassagem(Listapassagem L) {
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", Id, COD, Data,regist);
 		passagem* npass = (ppassagem)malloc(sizeof(passagem));
 		npass->idsensor = Id;
-		strcpy(npass->codcarro, COD);
+
+		while (plc->info->codigo != COD && marca != NULL) {
+			plc = pm->inf->inicio;
+			while (plc->info->codigo != COD && plc != NULL) {
+				plc = plc->prox;
+			}
+			pm = pm->prox;
+
+		}
+		if (plc->info->codigo != COD;) {
+			printf("esse caro não existe ou aconteceu algum erro");
+			free(npass);
+			return;
+		}
+		npass->codcarro = plc->info;
+		npass->codcarro = COD;
 		strcpy(npass->data, Data);
 		npass->tiporegist = regist;
 		Addpassagem(Lp, npass);
@@ -422,7 +439,7 @@ void list_veiculo(marca m) {
 			carro* c = atual->info;
 			printf("--------------------------\n");
 			printf("Matricula: %s\n", c->matricula);
-			printf("Contribuinte do Dono: %d\n", c->numContribuinteDono);
+			printf("Contribuinte do Dono: %d\n", c->pdonos->numcontibuinte);
 			printf("Marca: %s\n", c->marca);
 			printf("Modelo: %s\n", c->modelo);
 			printf("Ano: %d\n", c->ano);
@@ -461,7 +478,7 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 		return;
 	} //senao for encontrado diz q n foi encontrado e da return
 
-	novaPassagem->pveiculo = atualCarro->info;
+	novaPassagem->codcarro = atualCarro->info;
 
 	printf("Insira o código do sensor:\n");
 	scanf("%d", &codigoSensor);
@@ -479,7 +496,7 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 
 	novaPassagem->psensor = atualSensor->info;
 
-	printf("Insira a data e hora da passagem (formato: AAAA-MM-DD_HH:MM):\n"); //pede data de passagem
+	printf("Insira a data e hora da passagem (formato: AAAA-MM-DD_HH:MM:SS):\n"); //pede data de passagem
 	scanf("%s", dataHora);
 	strcpy(novaPassagem->dataHora, dataHora);  
 
@@ -638,7 +655,37 @@ void organizacarros(marca m) {
 
 }
 
-void listacarroperiodo() {
+void listacarroperiodo(Listapassagem pass) {
+	int opcao;
+	printf("Deseja listar os carros que circularam num periodo?\n1-Sim\n2-não");
+	scanf("%d", &opcao);
+
+	if (opcao == 1) {
+		pListapassagem ppass = pass;
+		pnopassagem pnpass = ppass->inicio;
+		char horafim[100];
+		char horainicio[100];
+		
+		printf("entre que datas os carros circularam");
+		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)");
+		scanf("%s", horainicio);
+		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)");
+		scanf("%s", horafim);
+
+		while (pnpass != NULL) {
+			if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
+				printf("--------------------------\n");
+				printf("Matricula: %s\n", pnpass->info->codcarro->matricula);
+				printf("Contribuinte do Dono: %d\n", pnpass->info->codcarro->pdonos->numcontibuinte);
+				printf("Marca: %s\n", pnpass->info->codcarro->marca);
+				printf("Modelo: %s\n", pnpass->info->codcarro->modelo);
+				printf("Ano: %d\n", pnpass->info->codcarro->ano);
+				printf("Codigo: %d\b", pnpass->info->codcarro->codigo);
+			}
+			pnpass = pnpass->prox;
+		}
+
+	}
 	//Listagem ordenada por matrícula dos veículos que circularam autoestrada durante o período X.
 }
 
