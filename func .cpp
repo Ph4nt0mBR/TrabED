@@ -110,8 +110,9 @@ void importcarro(Listadono L, marca nm) {
 		else {
 			ncarro->pdonos = ldono->info;
 		}
-		ncarro->pdonos = procuradono(ndono);
 		ncarro->codigo = cod;
+		ncarro->kilometros = 0;
+		ncarro->tempototal = 0;
 		while (strcmp(ncarro->marca, m->nome) != 0 && m != NULL) {
 			m = m->prox;
 		}
@@ -686,10 +687,49 @@ void listacarroperiodo(Listapassagem pass) {
 		}
 
 	}
-	//Listagem ordenada por matrícula dos veículos que circularam autoestrada durante o período X.
 }
 
-void rankveiculos() {
+void rankveiculos(Listapassagem pass) {
+	int opcao;
+	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
+	scanf("%d", &opcao);
+
+	if (opcao == 1) {
+		pListapassagem ppass = pass;
+		pListapassagem pLpass = (pListapassagem)malloc(sizeof(Listapassagem));
+		pnopassagem pnLpass = pLpass->inicio;
+		pnopassagem pnpass = ppass->inicio;
+		char horafim[100];
+		char horainicio[100];
+
+		printf("entre que datas os carros circularam");
+		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)");
+		scanf("%s", horainicio);
+		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)");
+		scanf("%s", horafim);
+
+		while (pnpass != NULL) {
+			if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
+				pnLpass->info = pnpass->info->;
+				pnLpass = pnLpass->prox;
+				pLpass->numel++;
+			}
+			pnpass = pnpass->prox;
+		}
+		//Esta funçao ainda nao foi finalizada atualmente contem a criacao  e destruição de uma lista para guardar todas as passagens neste periodo agora tenho de ver como uso isso e 
+
+		pnLpass = pLpass->inicio;
+		while (pnLpass != NULL) {
+			pnopassagem ptemp;
+			ptemp = pnLpass;
+			pnLpass = pnLpass->prox;
+			free(ptemp->info);
+			free(ptemp);
+		}
+		free(pnLpass);
+		free(pLpass->numel);
+		free(pLpass);
+	}
 	/*Ranking de circulação. Listagem ordenada pelo total de quilómetros
 	que cada veículo efectuou na auto-estrada durante determinado período. */
 }
