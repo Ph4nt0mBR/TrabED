@@ -723,7 +723,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 		while (pnLpass != NULL) {
 			pnopassagem p = pnLpass->prox;
 
-			while (p != NULL) {
+			while (p->prox != NULL) {
 				if (p->prox->info->codcarro == pnLpass->info->codcarro){
 					pnopassagem delp = p;
 					p = p->prox;
