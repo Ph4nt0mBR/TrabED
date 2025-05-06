@@ -689,12 +689,14 @@ void listacarroperiodo(Listapassagem pass) {
 	}
 }
 
-void rankveiculos(Listapassagem pass) {
-	int opcao;
+void rankveiculos(Listapassagem pass,distancia d) {
+	int opcao, troca;
 	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
 	scanf("%d", &opcao);
 
 	if (opcao == 1) {
+		int s1, s2;
+		pdistancia td= d;
 		pListapassagem ppass = pass;
 		pListapassagem pLpass = (pListapassagem)malloc(sizeof(Listapassagem));
 		pnopassagem pnLpass = pLpass->inicio;
@@ -710,13 +712,63 @@ void rankveiculos(Listapassagem pass) {
 
 		while (pnpass != NULL) {
 			if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
-				pnLpass->info = pnpass->info->;
+				pnLpass->info = pnpass->info;
 				pnLpass = pnLpass->prox;
 				pLpass->numel++;
 			}
 			pnpass = pnpass->prox;
 		}
 		//Esta funçao ainda nao foi finalizada atualmente contem a criacao  e destruição de uma lista para guardar todas as passagens neste periodo agora tenho de ver como uso isso e 
+		pnLpass = pLpass->inicio;
+		while (pnLpass != NULL) {
+			pnopassagem p = pnLpass->prox;
+
+			while (p != NULL) {
+				if (p->prox->info->codcarro == pnLpass->info->codcarro){
+					pnopassagem delp = p;
+					p = p->prox;
+					pnopassagem ptemp = p;
+					s1 = pnLpass->info->idsensor;
+					s2 = p->info->idsensor;
+					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist(s1)(s2);
+					p = p->prox;
+					free(ptemp->info);
+					free(ptemp);
+					delp->prox = p;
+				}
+				else{
+					p = p->prox;
+				}
+			}
+			pnLpass = pnLpass->prox;
+		}
+
+	
+		do{
+			troca = 0;
+			pnLpass = pLpass->inicio;
+			while (pnLpass != NULL) {
+			pnopassagem ptemp;
+			if (pnLpass->info->codcarro->kilometros > pnLpass->prox->info->codcarro->kilometros) {
+				ptemp = pnLpass->info;
+				pnLpass->info = pnLpass->prox->info;
+				pnLpass->prox->info = ptemp;
+				troca = 1;
+					}
+				}
+		} while (troca == 1);
+
+		pnLpass = pLpass->inicio;
+		while (pnLpass != NULL) {
+				printf("--------------------------\n");
+				printf("Matricula: %s\n", pnLpass->info->codcarro->matricula);
+				printf("Contribuinte do Dono: %d\n", pnLpass->info->codcarro->pdonos->numcontibuinte);
+				printf("Marca: %s\n", pnLpass->info->codcarro->marca);
+				printf("Modelo: %s\n", pnLpass->info->codcarro->modelo);
+				printf("Ano: %d\n", pnLpass->info->codcarro->ano);
+				printf("Codigo: %d\b", pnLpass->info->codcarro->codigo);
+				pnLpass = pnLpass->prox;
+		}
 
 		pnLpass = pLpass->inicio;
 		while (pnLpass != NULL) {
