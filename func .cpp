@@ -116,7 +116,7 @@ void importcarro(Listadono L, marca nm) {
 		while (strcmp(ncarro->marca, m->nome) != 0 && m != NULL) {
 			m = m->prox;
 		}
-
+		m->Numcarrototal++;
 		if (strcmp(ncarro->marca, m->nome) == 0) {
 			Lc = m->inf;
 		}
@@ -240,6 +240,7 @@ pListapassagem crialistapasagem() {
 
 pmarca criamarca(char nome) {
 	pmarca L = (pmarca)malloc(sizeof(marca));
+	L->Numcarrototal = 0;
 	L->prox = NULL;
 	L->nome = nome;
 	L->inf = crialistacarro();
@@ -392,8 +393,10 @@ void regist_veiculo(Listadono L,marca nm) {
 
 		printf("Insira o ano de producao do carro:\n");
 		scanf("%d", &novoCarro->ano);
-
+		m->Numcarrototal++;
+		int temp = m->Numcarrototal;
 		while (strcmp(novoCarro->marca, m->nome) != 0 && m != NULL) {
+			m->Numcarrototal;
 			m = m->prox;
 		}
 
@@ -408,6 +411,8 @@ void regist_veiculo(Listadono L,marca nm) {
 		}
 		novoCarro->kilometros = 0;
 		novoCarro->tempototal = 0;
+
+		novoCarro->codigo = m->Numcarrototal;
 		Addcarro(Lc, novoCarro);
 		m->inf = Lc;
 		printf("Veículo adicionado com sucesso!\n");
@@ -723,7 +728,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 		while (pnLpass != NULL) {
 			pnopassagem p = pnLpass->prox;
 
-			while (p != NULL) {
+			while (p->prox != NULL) {
 				if (p->prox->info->codcarro == pnLpass->info->codcarro){
 					pnopassagem delp = p;
 					p = p->prox;
