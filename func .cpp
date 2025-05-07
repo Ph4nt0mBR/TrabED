@@ -69,7 +69,7 @@ int importdono(Listadono *ld) {
 }
 
 void importcarro(Listadono L, marca nm) {
-	
+
 	pListacarro Lc;
 	//const char r[5] = "\n";
 	FILE* F = fopen("carros.txt", "r");
@@ -825,7 +825,18 @@ void condutorpostal() {
 	//Qual a velocidade média dos condutores com código postal X?
 }
 
-void marcapopular() {
+void marcapopular(marca m) {
+	pmarca pm = m;
+	pmarca ppm = pm->prox;
+
+	while (ppm->prox != NULL) {
+		if (pm->NUmcarromarca < ppm->NUmcarromarca) {
+			pm = ppm;
+			ppm++;
+		}
+	}
+
+	printf("A marca mais popular é %s", pm->nome);
 	//Determinar qual a marca de automóvel mais comum?
 }
 
