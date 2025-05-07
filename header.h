@@ -66,6 +66,7 @@ typedef struct marcas
 {
 	int Numcarrototal;
 	int NUmcarromarca;
+	int numkillmarca;
 	char nome[20];
 	Listacarro* inf;
 	struct marca* prox;

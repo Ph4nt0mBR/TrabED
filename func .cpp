@@ -69,7 +69,7 @@ int importdono(Listadono *ld) {
 }
 
 void importcarro(Listadono L, marca nm) {
-	
+
 	pListacarro Lc;
 	//const char r[5] = "\n";
 	FILE* F = fopen("carros.txt", "r");
@@ -794,7 +794,127 @@ void rankveiculos(Listapassagem pass,distancia d) {
 	que cada veículo efectuou na auto-estrada durante determinado período. */
 }
 
-void rankmarcas() {
+
+void rankmarcas(Listapassagem pass, distancia d, marca m) {
+	int opcao, troca;
+	pmarca pm = m;
+	pListacarro pl;
+	pnocarro pn;
+	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
+	scanf("%d", &opcao);
+
+	if (opcao == 1) {
+		int s1, s2;
+		pdistancia td = d;
+		pListapassagem ppass = pass;
+		pListapassagem pLpass = (pListapassagem)malloc(sizeof(Listapassagem));
+		pnopassagem pnLpass = pLpass->inicio;
+		pnopassagem pnpass = ppass->inicio;
+		char horafim[100];
+		char horainicio[100];
+
+		printf("entre que datas os carros circularam");
+		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)");
+		scanf("%s", horainicio);
+		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)");
+		scanf("%s", horafim);
+
+		while (pnpass != NULL) {
+			if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
+				pnLpass->info = pnpass->info;
+				pnLpass = pnLpass->prox;
+				pLpass->numel++;
+			}
+			pnpass = pnpass->prox;
+		}
+		//Esta funçao ainda nao foi finalizada atualmente contem a criacao  e destruição de uma lista para guardar todas as passagens neste periodo agora tenho de ver como uso isso e 
+		pnLpass = pLpass->inicio;
+		while (pnLpass != NULL) {
+			pnopassagem p = pnLpass->prox;
+
+			while (p->prox != NULL) {
+				if (p->prox->info->codcarro == pnLpass->info->codcarro) {
+					pnopassagem delp = p;
+					p = p->prox;
+					pnopassagem ptemp = p;
+					s1 = pnLpass->info->idsensor;
+					s2 = p->info->idsensor;
+					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist(s1)(s2);
+					p = p->prox;
+					free(ptemp->info);
+					free(ptemp);
+					delp->prox = p;
+				}
+				else {
+					p = p->prox;
+				}
+			}
+			pnLpass = pnLpass->prox;
+		}
+
+
+		do {
+			troca = 0;
+			pnLpass = pLpass->inicio;
+			while (pnLpass != NULL) {
+				pnopassagem ptemp;
+				if (pnLpass->info->codcarro->kilometros > pnLpass->prox->info->codcarro->kilometros) {
+					ptemp = pnLpass->info;
+					pnLpass->info = pnLpass->prox->info;
+					pnLpass->prox->info = ptemp;
+					troca = 1;
+				}
+			}
+		} while (troca == 1);
+
+		pnLpass = pLpass->inicio;
+		while (pnLpass != NULL) {
+			pnopassagem ptemp;
+			ptemp = pnLpass;
+			pnLpass = pnLpass->prox;
+			free(ptemp->info);
+			free(ptemp);
+		}
+		free(pnLpass);
+		free(pLpass->numel);
+		free(pLpass);
+	
+		while (pm != NULL) {
+			pl = pm->inf;
+			pn = pl->inicio;
+
+			while (pn != NULL) {
+				pm->numkillmarca = pm->numkillmarca + pn->info->kilometros;
+				pn = pn->prox;
+			}
+			pm = pm->prox;
+		}
+
+		pm = m;
+
+		do
+		{
+			pmarca antpm = pm;
+			pm = pm->prox;
+			pmarca ppm = pm->prox;
+			pmarca temppm;
+			while (ppm != NULL) {
+				troca = 0;
+
+				if (pm->numkillmarca < ppm->numkillmarca) {
+					
+					antpm->prox = ppm;//antpm->pm->ppm->
+					pm = ppm->prox;
+					ppm->prox = pm;//antpm->ppm->pm->
+					troca = 1;
+				}
+
+				if (pm->numkillmarca>antpm->numkillmarca)
+				{
+
+				}
+			}
+		} while (troca == 1);
 	/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
 	os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
 }
@@ -825,7 +945,18 @@ void condutorpostal() {
 	//Qual a velocidade média dos condutores com código postal X?
 }
 
-void marcapopular() {
+void marcapopular(marca m) {
+	pmarca pm = m;
+	pmarca ppm = pm->prox;
+
+	while (ppm->prox != NULL) {
+		if (pm->NUmcarromarca < ppm->NUmcarromarca) {
+			pm = ppm;
+			ppm++;
+		}
+	}
+
+	printf("A marca mais popular é %s", pm->nome);
 	//Determinar qual a marca de automóvel mais comum?
 }
 
