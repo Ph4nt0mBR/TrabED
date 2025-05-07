@@ -64,6 +64,8 @@ typedef struct Listacarro {
 //
 typedef struct marcas
 {
+	int Numcarrototal;
+	int NUmcarromarca;
 	char nome[20];
 	Listacarro* inf;
 	struct marca* prox;

@@ -126,6 +126,7 @@ void importcarro(Listadono L, marca nm) {
 			m = m->prox;
 			Lc = m->inf;
 		}
+		m->NUmcarromarca++;
 		Addcarro(Lc, ncarro);
 		m->inf = Lc;
 	}
@@ -241,6 +242,7 @@ pListapassagem crialistapasagem() {
 pmarca criamarca(char nome) {
 	pmarca L = (pmarca)malloc(sizeof(marca));
 	L->Numcarrototal = 0;
+	L->NUmcarromarca = 0;
 	L->prox = NULL;
 	L->nome = nome;
 	L->inf = crialistacarro();
@@ -413,6 +415,7 @@ void regist_veiculo(Listadono L,marca nm) {
 		novoCarro->tempototal = 0;
 
 		novoCarro->codigo = m->Numcarrototal;
+		m->NUmcarromarca++;
 		Addcarro(Lc, novoCarro);
 		m->inf = Lc;
 		printf("Veículo adicionado com sucesso!\n");
