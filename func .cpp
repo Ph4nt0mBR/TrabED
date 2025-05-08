@@ -580,11 +580,23 @@ void import(Listadono Ld, marca m, Listapassagem Lp) {
 			}
 		}
 		//funcao que permite importar as listas(exceto sensores e distancias)
-		//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
+		//sao usadas varias mini funçoes para importar cada um
 }
  
 void memoria() {
-	//Determinar a memoria ocupada por toda a estrutura de dados
+	//Determinar a memoria ocupada por toda a estrutura de dados !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 void organizacarros(marca m) {
@@ -897,9 +909,16 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 			pmarca antpm = pm;
 			pm = pm->prox;
 			pmarca ppm = pm->prox;
-			pmarca temppm;
+			pmarca temppm;	
+			troca = 0;
+
+			if (pm->numkillmarca>antpm->numkillmarca){
+				antpm->prox = pm->prox;
+				pm->prox = antpm;
+				troca = 1;
+				}
 			while (ppm != NULL) {
-				troca = 0;
+	
 
 				if (pm->numkillmarca < ppm->numkillmarca) {
 					
@@ -909,10 +928,7 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 					troca = 1;
 				}
 
-				if (pm->numkillmarca>antpm->numkillmarca)
-				{
 
-				}
 			}
 		} while (troca == 1);
 	/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
