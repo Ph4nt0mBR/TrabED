@@ -580,11 +580,23 @@ void import(Listadono Ld, marca m, Listapassagem Lp) {
 			}
 		}
 		//funcao que permite importar as listas(exceto sensores e distancias)
-		//pode ser feita fazendo varias mini funçoes para importar cada e usar esta para chamar elas
+		//sao usadas varias mini funçoes para importar cada um
 }
  
 void memoria() {
-	//Determinar a memoria ocupada por toda a estrutura de dados
+	//Determinar a memoria ocupada por toda a estrutura de dados !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 void organizacarros(marca m) {
@@ -827,7 +839,7 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 			}
 			pnpass = pnpass->prox;
 		}
-		//Esta funçao ainda nao foi finalizada atualmente contem a criacao  e destruição de uma lista para guardar todas as passagens neste periodo agora tenho de ver como uso isso e 
+
 		pnLpass = pLpass->inicio;
 		while (pnLpass != NULL) {
 			pnopassagem p = pnLpass->prox;
@@ -852,21 +864,6 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 			pnLpass = pnLpass->prox;
 		}
 
-
-		do {
-			troca = 0;
-			pnLpass = pLpass->inicio;
-			while (pnLpass != NULL) {
-				pnopassagem ptemp;
-				if (pnLpass->info->codcarro->kilometros > pnLpass->prox->info->codcarro->kilometros) {
-					ptemp = pnLpass->info;
-					pnLpass->info = pnLpass->prox->info;
-					pnLpass->prox->info = ptemp;
-					troca = 1;
-				}
-			}
-		} while (troca == 1);
-
 		pnLpass = pLpass->inicio;
 		while (pnLpass != NULL) {
 			pnopassagem ptemp;
@@ -878,7 +875,7 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 		free(pnLpass);
 		free(pLpass->numel);
 		free(pLpass);
-	
+
 		while (pm != NULL) {
 			pl = pm->inf;
 			pn = pl->inicio;
@@ -898,25 +895,30 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 			pm = pm->prox;
 			pmarca ppm = pm->prox;
 			pmarca temppm;
+			troca = 0;
+
+			if (pm->numkillmarca > antpm->numkillmarca) {
+				antpm->prox = pm->prox;
+				pm->prox = antpm;
+				troca = 1;
+			}
 			while (ppm != NULL) {
-				troca = 0;
+
 
 				if (pm->numkillmarca < ppm->numkillmarca) {
-					
+
 					antpm->prox = ppm;//antpm->pm->ppm->
 					pm = ppm->prox;
 					ppm->prox = pm;//antpm->ppm->pm->
 					troca = 1;
 				}
 
-				if (pm->numkillmarca>antpm->numkillmarca)
-				{
 
-				}
 			}
 		} while (troca == 1);
-	/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
-	os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
+		/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
+		os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
+	}
 }
 
 void listainfracao() {
@@ -952,7 +954,6 @@ void marcapopular(marca m) {
 	while (ppm->prox != NULL) {
 		if (pm->NUmcarromarca < ppm->NUmcarromarca) {
 			pm = ppm;
-			ppm++;
 		}
 	}
 
