@@ -864,17 +864,6 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 			pnLpass = pnLpass->prox;
 		}
 
-		pnLpass = pLpass->inicio;
-		while (pnLpass != NULL) {
-			pnopassagem ptemp;
-			ptemp = pnLpass;
-			pnLpass = pnLpass->prox;
-			free(ptemp->info);
-			free(ptemp);
-		}
-		free(pnLpass);
-		free(pLpass->numel);
-		free(pLpass);
 
 		while (pm != NULL) {
 			pl = pm->inf;
@@ -932,6 +921,7 @@ void rankinfracao() {
 }
 
 void velocidademedia() {
+
 	//velocidade média
 }
 
