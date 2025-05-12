@@ -7,10 +7,10 @@
 
 	pdistancia calcDistancia(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
 	// Inicializa a matriz com zeros
-	distancias nd;
+	pdistancia nd =  (pdistancia)malloc(sizeof(distancias));
 	for (int i = 0; i < SAMPLE_SIZE; i++) {
 		for (int j = 0; j < SAMPLE_SIZE; j++) {
-			nd->matriz[i][j] = 0.0;
+			nd->dist[i][j] = 0.0;
 		}
 	}
 
@@ -23,9 +23,9 @@
 
 	// Lê cada linha e preenche a matriz
 	int no1, no2;
-	
+
 	double distancia;
-	
+
 	while (fscanf(arquivo, "%d %d %lf", &no1, &no2, &distancia) == 3) {
 		if (no1 < 1 || no1 > 10 || no2 < 1 || no2 > 10) {
 			fprintf(stderr, "Nó inválido no arquivo: %d %d\n", no1, no2);
@@ -33,9 +33,9 @@
 		}
 		nd->cod1[no1 - 1] = no1;
 		nd->cod2[no2 - 1] = no2;
-		nd->matriz[cod1 - 1][cod2 - 1] = mdist;
-		nd->matriz[cod2 - 1][cod1 - 1] = mdist; // Matriz simétrica
-	
+		nd->dist[no1 - 1][no2 - 1] = mdist;
+		nd->dist[no2 - 1][no1 - 1] = mdist; // Matriz simétrica
+
 	}
 
 	fclose(arquivo);
@@ -49,7 +49,7 @@ int importdono(Listadono *ld) {
 	if (F == NULL) {
 		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
 		return 0;
-	}		
+	}
 
 	int COD;
 	char NOME[100];
@@ -68,7 +68,7 @@ int importdono(Listadono *ld) {
 	return 1;
 }
 
-void importcarro(Listadono L, marca nm) {
+int importcarro(Listadono L, marcas nm) {
 
 	pListacarro Lc;
 	//const char r[5] = "\n";
@@ -85,12 +85,12 @@ void importcarro(Listadono L, marca nm) {
 	char ndono;
 
 	while (!feof(F))
-	{	
+	{
 		pmarca m = nm;
-		pno ldono = pL->inicio;
+		pno ldono = L->inicio;
 
 		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
-		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
+		printf("COD = %d, NOMe: [%s], CP=[%s]\n", cod, marca, ndono);
 		carro* ncarro = (pcarro)malloc(sizeof(carro));
 
 		strcpy(ncarro->matricula,Mat);
@@ -98,14 +98,14 @@ void importcarro(Listadono L, marca nm) {
 		strcpy(ncarro->modelo, modelo);
 		ncarro->ano = ano;
 
-		while (strcmp(ldono, ndono) != 0 && ldono != NULL) {
+		while (strcmp(ldono->info->nome, ndono) != 0 && ldono != NULL) {
 			ldono = ldono->prox;
 		}
 
 		if (ldono == NULL) {
 			printf("dono não encontrado");
 			free(ncarro);
-			return;
+			return 0;
 		}
 		else {
 			ncarro->pdonos = ldono->info;
@@ -134,7 +134,7 @@ void importcarro(Listadono L, marca nm) {
 	return 1;
 }
 
-void importpassagem(Listapassagem L,marca m) {
+int importpassagem(Listapassagem L,marca m) {
 	FILE* F = fopen("distancias.txt", "r");
 	pmarca pm;
 	pnocarro plc;
@@ -206,7 +206,7 @@ void importsensor(Listasensores L) {
 	return 1;
 }
 
-//funçoes para importar 
+//funçoes para importar
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
@@ -246,6 +246,7 @@ pmarca criamarca(char nome) {
 	L->prox = NULL;
 	L->nome = nome;
 	L->inf = crialistacarro();
+	return L;
 }
 
 //funçoes que criam listas
@@ -282,16 +283,6 @@ void addmarca(pmarca l, marca nmarca)
 void Addsensor(Listasensor* l, sensor* D)
 {
 	pnosensor nNo = (pnosensor)malloc(sizeof(nosensor));
-	nNo->info = D;
-	nNo->prox = l->inicio;
-	l->inicio = nNo;
-	l->numel++;
-
-}
-
-void AddDono(distancia* D)
-{
-	pnodistancia nNo = (pnodistancia)malloc(sizeof(nodistancia));
 	nNo->info = D;
 	nNo->prox = l->inicio;
 	l->inicio = nNo;
@@ -507,7 +498,7 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 
 	printf("Insira a data e hora da passagem (formato: AAAA-MM-DD_HH:MM:SS):\n"); //pede data de passagem
 	scanf("%s", dataHora);
-	strcpy(novaPassagem->dataHora, dataHora);  
+	strcpy(novaPassagem->dataHora, dataHora);
 
 	printf("Insira a distância percorrida (km):\n"); //pede a distancia percorrida
 	scanf("%f", &distancia);
@@ -582,7 +573,7 @@ void import(Listadono Ld, marca m, Listapassagem Lp) {
 		//funcao que permite importar as listas(exceto sensores e distancias)
 		//sao usadas varias mini funçoes para importar cada um
 }
- 
+
 void memoria() {
 	//Determinar a memoria ocupada por toda a estrutura de dados !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 
@@ -686,7 +677,7 @@ void listacarroperiodo(Listapassagem pass) {
 		pnopassagem pnpass = ppass->inicio;
 		char horafim[100];
 		char horainicio[100];
-		
+
 		printf("entre que datas os carros circularam");
 		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)");
 		scanf("%s", horainicio);
@@ -738,7 +729,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 			}
 			pnpass = pnpass->prox;
 		}
-		//Esta funçao ainda nao foi finalizada atualmente contem a criacao  e destruição de uma lista para guardar todas as passagens neste periodo agora tenho de ver como uso isso e 
+		//Esta funçao ainda nao foi finalizada atualmente contem a criacao  e destruição de uma lista para guardar todas as passagens neste periodo agora tenho de ver como uso isso e
 		pnLpass = pLpass->inicio;
 		while (pnLpass != NULL) {
 			pnopassagem p = pnLpass->prox;
@@ -763,7 +754,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 			pnLpass = pnLpass->prox;
 		}
 
-	
+
 		do{
 			troca = 0;
 			pnLpass = pLpass->inicio;
@@ -917,7 +908,7 @@ void listainfracao() {
 
 void rankinfracao() {
 	//Ranking de infrações p / veículo.Listagem com o veículo e respectivo
-	//número total de infrações de velocidade ocorridas durante determinado período. 
+	//número total de infrações de velocidade ocorridas durante determinado período.
 }
 
 void velocidademedia() {

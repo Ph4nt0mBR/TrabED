@@ -70,7 +70,7 @@ typedef struct marcas
 	char nome[20];
 	Listacarro* inf;
 	struct marca* prox;
-}marca, * pmarca;
+}marcas, * pmarca;
 
 //Struct para os sensores. teremos uma matriz para as distancias entre os sensores, ja que a posicao dos sensores sao imutaveis
 typedef struct sensores
@@ -94,7 +94,7 @@ typedef struct nosensores
 //
 typedef struct Listasensores{
 	int numel;
-	pnosensores inicio;
+	pnosensor inicio;
 } Listasensor, *pListasensor;
 
 
@@ -102,12 +102,12 @@ typedef struct distancias//podemos transformar isto numa matriz
 {
 	int cod1[10];//usamos ponteiro?
 	int cod2[10];//usamos ponteiro?
-	int dist[10][10];	
+	int dist[10][10];
 	// Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos as distancias e se quer fazer doutra forma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }distancia,*pdistancia;
 
 //
-typedef struct passagem 
+typedef struct passagem
 {
 	int idsensor;
 	pcarro codcarro;
