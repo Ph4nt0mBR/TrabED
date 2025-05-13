@@ -44,30 +44,85 @@
 
 
 int importdono(Listadono *ld) {
-	//const char r[5]="\n";
-	pListadono L = ld;
-	FILE* F = fopen("donos.txt", "r");
-	if (F == NULL) {
-		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return 0;
-	}
+    pListadono L = ld;
+    FILE* F = fopen("donos.txt", "r");
+    if (F == NULL) {
+        printf("\nErro ao abrir o ficheiro para leitura!\n");
+        return 0;
+    }
 
-	int COD;
-	char NOME[100];
-	char CP[10];
-	while (!feof(F))
-	{
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
-		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
-		dono* ndono = (pdono)malloc(sizeof(dono));
-		ndono->numcontibuinte = COD;
-		strcpy(ndono->nome, NOME);
-		strcpy(ndono->codPostal, CP);
-		AddDono(L, ndono);
-	}
-	fclose(F);
-	return 1;
+    char buffer[1024];
+    int line = 0;
+    int count = 0;
+    int problemas = 0;
+
+    printf("Iniciando leitura...\n");
+
+    while (fgets(buffer, sizeof(buffer), F)) {
+        line++;
+        size_t len = strlen(buffer);
+
+        // Remove caracteres de nova linha
+        if (len > 0 && buffer[len-1] == '\n') buffer[--len] = '\0';
+        if (len > 0 && buffer[len-1] == '\r') buffer[--len] = '\0';
+
+        // Pula linhas vazias
+        if (len == 0) continue;
+
+        int COD;
+        char NOME[100] = {0};
+        char CP[10] = {0};
+        int campos_lidos;
+
+        // Tentativa 1: Formato com tabs
+        campos_lidos = sscanf(buffer, "%d\t%99[^\t]\t%9s", &COD, NOME, CP);
+
+        // Tentativa 2: Formato com espaços (se falhou com tabs)
+        if (campos_lidos != 3) {
+            campos_lidos = sscanf(buffer, "%d %99[^\n] %9s", &COD, NOME, CP);
+        }
+
+        if (campos_lidos == 3) {
+            // Verifica dados numéricos
+            if (COD <= 0) {
+                printf("Linha %d: Código inválido (%d)\n", line, COD);
+                problemas++;
+                continue;
+            }
+
+            // Cria e adiciona o dono
+            pdono ndono = (pdono)malloc(sizeof(dono));
+            if (!ndono) {
+                printf("Erro de memória na linha %d\n", line);
+                problemas++;
+                continue;
+            }
+            printf("%d\t",COD);
+            printf("%s\t",NOME);
+            printf("%s\n",CP);
+            ndono->numcontibuinte = COD;
+            strncpy(ndono->nome, NOME, sizeof(ndono->nome)-1);
+            strncpy(ndono->codPostal, CP, sizeof(ndono->codPostal)-1);
+
+            AddDono(L, ndono);
+            count++;
+        } else {
+            printf("ERRO - Linha %d: Formato inválido\n", line);
+            printf("Conteúdo: [%s]\n", buffer);
+            problemas++;
+        }
+    }
+
+    fclose(F);
+
+    printf("\nRelatório Final:\n");
+    printf("Total de linhas: %d\n", line);
+    printf("Registros importados: %d\n", count);
+    printf("Problemas detectados: %d\n", problemas);
+
+    return (count > 0) ? 1 : 0;
 }
+
 
 int importcarro(Listadono *L, marcas nm) {
 
