@@ -10,7 +10,7 @@
 
 //fazer ficheiros diferentes para cada struct, um pra donos, um pra carro (sugestao da stora)
 //tá feito - Afonso
-
+#pragma once
 
 //Struct para donos
 typedef struct donos
@@ -69,7 +69,7 @@ typedef struct marcas
 	int numkillmarca;
 	char nome[20];
 	Listacarro* inf;
-	struct marca* prox;
+    marcas* prox;
 }marca, * pmarca;
 
 //Struct para os sensores. teremos uma matriz para as distancias entre os sensores, ja que a posicao dos sensores sao imutaveis
