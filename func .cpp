@@ -57,7 +57,7 @@ int importdono(Listadono *ld) {
 	char CP[10];
 	while (!feof(F))
 	{
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, CP);
 		dono* ndono = (pdono)malloc(sizeof(dono));
 		ndono->numcontibuinte = COD;
