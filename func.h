@@ -31,4 +31,4 @@ void listacarroperiodo(Listapassagem pass);
 void rankveiculos(Listapassagem pass,distancia d);
 void rankmarcas(Listapassagem pass, distancia d, marca m);
 
-void marcapopular(marca m);
+void marcapopular(marcas m);
