@@ -90,7 +90,7 @@ int importcarro(Listadono L, marcas nm) {
 		pno ldono = L->inicio;
 
 		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
-		printf("COD = %d, NOMe: [%s], CP=[%s]\n", cod, marca, ndono);
+		printf("COD = %d, NOMe: [%s], CP=[%s]\n", cod, Marca, ndono);
 		carro* ncarro = (pcarro)malloc(sizeof(carro));
 
 		strcpy(ncarro->matricula,Mat);

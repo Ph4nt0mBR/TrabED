@@ -70,7 +70,7 @@ typedef struct marcas
 	char nome[20];
 	Listacarro* inf;
 	struct marca* prox;
-}marcas, * pmarca;
+}marca, * pmarca;
 
 //Struct para os sensores. teremos uma matriz para as distancias entre os sensores, ja que a posicao dos sensores sao imutaveis
 typedef struct sensores
