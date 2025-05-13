@@ -16,7 +16,7 @@
 typedef struct donos
 {
 	int numcontibuinte;
-	char nome[30];
+	char nome[100];
 	char codPostal[9];
 }dono,*pdono;
 
@@ -41,7 +41,7 @@ typedef struct carros
 	char modelo[20];
 	int ano;
 	donos *pdonos;
-	int codigo;
+	int codigo = 0;
 	int kilometros;
 	int	tempototal;
 
