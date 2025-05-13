@@ -5,7 +5,8 @@
 
 
 
-	pdistancia calcDistancia(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]) {
+	pdistancia calcDistancia(double matriz[SAMPLE_SIZE][SAMPLE_SIZE])
+	{
 	// Inicializa a matriz com zeros
 	pdistancia nd =  (pdistancia)malloc(sizeof(distancias));
 	for (int i = 0; i < SAMPLE_SIZE; i++) {
@@ -33,8 +34,8 @@
 		}
 		nd->cod1[no1 - 1] = no1;
 		nd->cod2[no2 - 1] = no2;
-		nd->dist[no1 - 1][no2 - 1] = mdist;
-		nd->dist[no2 - 1][no1 - 1] = mdist; // Matriz simétrica
+//		nd->dist[no1 - 1][no2 - 1] = mdist;
+//		nd->dist[no2 - 1][no1 - 1] = mdist; // Matriz simétrica
 
 	}
 
@@ -68,7 +69,7 @@ int importdono(Listadono *ld) {
 	return 1;
 }
 
-int importcarro(Listadono L, marcas nm) {
+int importcarro(Listadono *L, marcas nm) {
 
 	pListacarro Lc;
 	//const char r[5] = "\n";
@@ -82,11 +83,11 @@ int importcarro(Listadono L, marcas nm) {
 	char Marca[100];
 	char modelo[100];
 	char Mat[10];
-	char ndono;
+	char ndono[50];
 
 	while (!feof(F))
 	{
-		pmarca m = nm;
+		pmarca m = &nm;
 		pno ldono = L->inicio;
 
 		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
@@ -121,7 +122,7 @@ int importcarro(Listadono L, marcas nm) {
 			Lc = m->inf;
 		}
 		else {
-			marca nmarca = criamarca(ncarro->marca);
+			marca *nmarca = criamarca(ncarro->marca);
 			addmarca(m, nmarca);
 			m = m->prox;
 			Lc = m->inf;
@@ -150,12 +151,12 @@ int importpassagem(Listapassagem L,marca m) {
 	int regist;
 	while (!feof(F))
 	{
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &Id, COD, Data,&regist);
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &Id, &COD, Data,&regist);
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", Id, COD, Data,regist);
 		passagem* npass = (ppassagem)malloc(sizeof(passagem));
 		npass->idsensor = Id;
 
-		while (plc->info->codigo != COD && marca != NULL) {
+		while ((plc->info->codigo != COD) && (pm != NULL)) {
 			plc = pm->inf->inicio;
 			while (plc->info->codigo != COD && plc != NULL) {
 				plc = plc->prox;
@@ -163,13 +164,12 @@ int importpassagem(Listapassagem L,marca m) {
 			pm = pm->prox;
 
 		}
-		if (plc->info->codigo != COD;) {
+		if (plc->info->codigo != COD) {
 			printf("esse caro não existe ou aconteceu algum erro");
 			free(npass);
-			return;
+			return 0;
 		}
 		npass->codcarro = plc->info;
-		npass->codcarro = COD;
 		strcpy(npass->data, Data);
 		npass->tiporegist = regist;
 		Addpassagem(Lp, npass);
@@ -178,7 +178,8 @@ int importpassagem(Listapassagem L,marca m) {
 	return 1;
 }
 
-void importsensor(Listasensores L) {
+int importsensor(Listasensores *L) {
+
 	//const char r[5] = "\n";
 	pListasensor Ls = L;
 	FILE* F = fopen("sensores.txt", "r");
@@ -193,7 +194,7 @@ void importsensor(Listasensores L) {
 	char Lon[14];
 	while (!feof(F))
 	{
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, CP);
+		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, Lat, Lon);
 		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, Lat, Lon);
 		sensor* nsensor = (psensor)malloc(sizeof(sensor));
 		nsensor->codSensor = COD;
@@ -203,6 +204,7 @@ void importsensor(Listasensores L) {
 		Addsensor(Ls, nsensor);
 	}
 	fclose(F);
+
 	return 1;
 }
 
@@ -239,12 +241,12 @@ pListapassagem crialistapasagem() {
 	return L;
 }
 
-pmarca criamarca(char nome) {
+pmarca criamarca(char *nome) {
 	pmarca L = (pmarca)malloc(sizeof(marca));
 	L->Numcarrototal = 0;
 	L->NUmcarromarca = 0;
 	L->prox = NULL;
-	L->nome = nome;
+	strcpy(L->nome, nome);
 	L->inf = crialistacarro();
 	return L;
 }
@@ -264,18 +266,17 @@ void AddDono(Listadono* l, dono* D)
 
 }
 
-marca Addcarro(Listacarro* l, carro* D)
+void Addcarro(Listacarro* l, carro* D)
 {
 	pnocarro nNo = (pnocarro)malloc(sizeof(nocarro));
 	nNo->info = D;
 	nNo->prox = l->inicio;
 	l->inicio = nNo;
 	l->numel++;
-	return nNo;
 
 }
 
-void addmarca(pmarca l, marca nmarca)
+void addmarca(pmarca l, marca *nmarca)
 {
 	l->prox = nmarca;
 
@@ -308,10 +309,10 @@ void Addpassagem(Listapassagem* l, passagem* D)
 void regist_dono(Listadono* Ld) {
 	int opcao = 0;
 	pListadono n;
-	printf("Gostaria de adicionar mais um dono? 1-sim 0-não");
+	printf("Gostaria de adicionar mais um dono? 1-sim 0-não\n");
 	scanf("%d", &opcao);
 	if (opcao == 1) {
-		dono* ndono = (pdonos)malloc(n->numel * sizeof(struct no));
+		dono* ndono = (pdono)malloc(n->numel * sizeof(struct no));
 		if (ndono == NULL) {
 			printf("Ocorreu um erro ao adicionar o dono.\n");
 			return;
@@ -334,19 +335,19 @@ void list_dono(Listadono* Ld) {
 	//função que apresenta no ecrã todos os donos
 	pdono linfdono;
 	pno ldono = Ld->inicio;
-	while (ldono != Null) {
+	while (ldono != NULL) {
 		linfdono = ldono->info;
-		printf("%s\n", linfdono->codPostal);
-		printf("%s\n", linfdono->nome);
-		printf("%d\n", linfdono->numcontibuinte);
-		ldono = ldono->prox,
+		printf("Código postal:%s\n", linfdono->codPostal);
+		printf("Nome:%s\n", linfdono->nome);
+		printf("numero de contribuinte:%d\n", linfdono->numcontibuinte);
+		ldono = ldono->prox;
 	}
 }
 
 void regist_veiculo(Listadono L,marca nm) {
 	int opcao = 0, contdono = 0;
-	pListadono pL = L;
-	pmarca m = nm;
+	pListadono pL = &L;
+	pmarca m = &nm;
 	pListacarro Lc;
 	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao: ");
 	scanf("%d", &opcao);
@@ -365,7 +366,7 @@ void regist_veiculo(Listadono L,marca nm) {
 		scanf("%d", &contdono);
 
 		pno ldono = pL->inicio;
-		while (strcmp(ldono, contdono) != 0 && ldono != NULL){
+		while ((ldono->info->numcontibuinte, contdono) != 0 && (ldono != NULL)){
 			ldono = ldono->prox;
 		}
 
@@ -397,7 +398,7 @@ void regist_veiculo(Listadono L,marca nm) {
 			Lc = m->inf;
 		}
 		else {
-			marca nmarca = criamarca(novoCarro->marca);
+			pmarca nmarca = criamarca(novoCarro->marca);
 			addmarca(m, nmarca);
 			m = m->prox;
 			Lc = m->inf;
@@ -418,14 +419,14 @@ void regist_veiculo(Listadono L,marca nm) {
 
 
 void list_veiculo(marca m) {
-	pmarca pm= m;
+	pmarca pm= &m;
 
 	if (pm == NULL) {
 		printf("Nenhum veículo registrado.\n");
 		return;
 	}
 
-	while (pm != Null) {
+	while (pm != NULL) {
 		Listacarro* Lc = pm->inf;
 		pnocarro atual = Lc->inicio;
 
@@ -483,8 +484,8 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 	printf("Insira o código do sensor:\n");
 	scanf("%d", &codigoSensor);
 
-	pnosensor atualSensor = Ls->inicio;
-	while (atualSensor != NULL && atualSensor->info->codigo != codigoSensor) {
+/*	pnosensor atualSensor = Ls->inicio;
+	while (atualSensor != NULL && atualSensor->info->codSensor != codigoSensor) {
 		atualSensor = atualSensor->prox;
 	} //procuyra o sensor pelo codigo
 
@@ -492,17 +493,13 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 		printf("Sensor não encontrado.\n");
 		free(novaPassagem);
 		return;
-	} //se o sensor n for encontrado avisa e retorna
+	} //se o sensor n for encontrado avisa e retorna*/
 
-	novaPassagem->psensor = atualSensor->info;
+	novaPassagem->idsensor = codigoSensor;
 
 	printf("Insira a data e hora da passagem (formato: AAAA-MM-DD_HH:MM:SS):\n"); //pede data de passagem
 	scanf("%s", dataHora);
-	strcpy(novaPassagem->dataHora, dataHora);
-
-	printf("Insira a distância percorrida (km):\n"); //pede a distancia percorrida
-	scanf("%f", &distancia);
-	novaPassagem->distancia = distancia;
+	strcpy(novaPassagem->data, dataHora);
 
 	Addpassagem(Lp, novaPassagem);
 	printf("Passagem registrada com sucesso!\n"); //adicona a passagem e avisa
@@ -524,9 +521,9 @@ void organizadonos(Listadono* Ld) {
 		temp = NULL;
 
 		printf("Deseja executar a organização por que ordem?\n 1- Nome do dono\n 2- Número de contribuinte\n 3- Parar organização");
-		scanf(% d, opcao);
+		scanf( "%d", opcao);
 
-		while (atual->prox != NULL && atual->prox = !max) {
+		while (atual->prox != NULL && atual->prox != max) {
 
 			int precisaTrocar = 0;
 			if (opcao == 3)
@@ -549,7 +546,7 @@ void organizadonos(Listadono* Ld) {
 
 }
 
-void import(Listadono Ld, marca m, Listapassagem Lp) {
+void import(Listadono *Ld, marca m, Listapassagem Lp) {
 		int opcao = 0;
 
 		printf("deseja importar donos?\n1-Sim\n2-Não");
@@ -566,7 +563,7 @@ void import(Listadono Ld, marca m, Listapassagem Lp) {
 				scanf("%d", &opcao);
 
 				if (opcao == 1) {
-					importpassagem(Lp);
+					importpassagem(Lp,m);
 				}
 			}
 		}
@@ -591,10 +588,10 @@ void memoria() {
 }
 
 void organizacarros(marca m) {
-	pmarca nm = m;
+	pmarca nm = &m;
 	pListacarro Lc;
 	pnocarro nc;
-	carro tempc;
+	pcarro tempc;
 	int troca;
 	int opcao;
 
@@ -662,7 +659,7 @@ void organizacarros(marca m) {
 		} while (troca == 1);
 	}
 	else if (opcao == 4){
-		return 0;
+		return ;
 	}
 
 }
@@ -673,7 +670,7 @@ void listacarroperiodo(Listapassagem pass) {
 	scanf("%d", &opcao);
 
 	if (opcao == 1) {
-		pListapassagem ppass = pass;
+		pListapassagem ppass = &pass;
 		pnopassagem pnpass = ppass->inicio;
 		char horafim[100];
 		char horainicio[100];
@@ -707,8 +704,8 @@ void rankveiculos(Listapassagem pass,distancia d) {
 
 	if (opcao == 1) {
 		int s1, s2;
-		pdistancia td= d;
-		pListapassagem ppass = pass;
+		pdistancia td= &d;
+		pListapassagem ppass = &pass;
 		pListapassagem pLpass = (pListapassagem)malloc(sizeof(Listapassagem));
 		pnopassagem pnLpass = pLpass->inicio;
 		pnopassagem pnpass = ppass->inicio;
@@ -741,7 +738,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 					pnopassagem ptemp = p;
 					s1 = pnLpass->info->idsensor;
 					s2 = p->info->idsensor;
-					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist(s1)(s2);
+					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist[s1][s2];
 					p = p->prox;
 					free(ptemp->info);
 					free(ptemp);
@@ -759,7 +756,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 			troca = 0;
 			pnLpass = pLpass->inicio;
 			while (pnLpass != NULL) {
-			pnopassagem ptemp;
+			ppassagem ptemp;
 			if (pnLpass->info->codcarro->kilometros > pnLpass->prox->info->codcarro->kilometros) {
 				ptemp = pnLpass->info;
 				pnLpass->info = pnLpass->prox->info;
@@ -790,7 +787,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 			free(ptemp);
 		}
 		free(pnLpass);
-		free(pLpass->numel);
+		//free(pLpass->numel);
 		free(pLpass);
 	}
 	/*Ranking de circulação. Listagem ordenada pelo total de quilómetros
@@ -800,7 +797,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 
 void rankmarcas(Listapassagem pass, distancia d, marca m) {
 	int opcao, troca;
-	pmarca pm = m;
+	pmarca pm = &m;
 	pListacarro pl;
 	pnocarro pn;
 	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
@@ -808,8 +805,8 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 
 	if (opcao == 1) {
 		int s1, s2;
-		pdistancia td = d;
-		pListapassagem ppass = pass;
+		pdistancia td = &d;
+		pListapassagem ppass = &pass;
 		pListapassagem pLpass = (pListapassagem)malloc(sizeof(Listapassagem));
 		pnopassagem pnLpass = pLpass->inicio;
 		pnopassagem pnpass = ppass->inicio;
@@ -842,7 +839,7 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 					pnopassagem ptemp = p;
 					s1 = pnLpass->info->idsensor;
 					s2 = p->info->idsensor;
-					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist(s1)(s2);
+					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist[s1][s2];
 					p = p->prox;
 					free(ptemp->info);
 					free(ptemp);
@@ -867,7 +864,7 @@ void rankmarcas(Listapassagem pass, distancia d, marca m) {
 			pm = pm->prox;
 		}
 
-		pm = m;
+		pm = &m;
 
 		do
 		{
@@ -929,7 +926,7 @@ void condutorpostal() {
 }
 
 void marcapopular(marca m) {
-	pmarca pm = m;
+	pmarca pm = &m;
 	pmarca ppm = pm->prox;
 
 	while (ppm->prox != NULL) {
