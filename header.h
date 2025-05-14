@@ -78,9 +78,9 @@ typedef struct sensores
 	//Perguntar(ao prof e samuel) se devemos fazer assim ja que nao alteramos os sensores!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//O Rafa ou o professor vai saber te ajudar melhor q eu. Sou uma decepcao em prog
 	int codSensor;
-	char Designacao[20];
-	char Latitude[18];
-	char Longitude[15];
+	char Designacao[50];
+	char Latitude[50];
+	char Longitude[50];
 }sensor,*psensor;
 
 //

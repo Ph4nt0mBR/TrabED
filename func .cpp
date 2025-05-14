@@ -5,16 +5,15 @@
 
 
 
-	pdistancia calcDistancia(double matriz[SAMPLE_SIZE][SAMPLE_SIZE])
+	pdistancia calcDistancia()
 	{
 	// Inicializa a matriz com zeros
 	pdistancia nd =  (pdistancia)malloc(sizeof(distancias));
-	for (int i = 0; i < SAMPLE_SIZE; i++) {
-		for (int j = 0; j < SAMPLE_SIZE; j++) {
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
 			nd->dist[i][j] = 0.0;
 		}
 	}
-
 	// Abre o arquivo
 	FILE* arquivo = fopen("distancias.txt", "r");
 	if (arquivo == NULL) {
@@ -36,9 +35,8 @@
 		nd->cod2[no2 - 1] = no2;
 		nd->dist[no1 - 1][no2 - 1] = distancia;
 		nd->dist[no2 - 1][no1 - 1] = distancia; // Matriz simétrica
-
+        printf("%d\n",nd->dist[no1-1][no2-1]);
 	}
-
 	fclose(arquivo);
 }
 
@@ -157,7 +155,6 @@ int importcarro(Listadono *L, marcas *nm) {
         ncarro->kilometros = 0;
         ncarro->tempototal = 0;
         pno ldono = L->inicio;
-
         while ((ldono != NULL )&& (ldono->info->numcontibuinte != ndono)){
             ldono = ldono->prox;
         }
@@ -166,13 +163,13 @@ int importcarro(Listadono *L, marcas *nm) {
             free(ncarro);
             continue;
         }
-        ncarro->pdonos = ldono->info;
+       ncarro->pdonos = ldono->info;
 
         pmarca m = nm;
-        while (m && strcmp(m->nome, ncarro->marca) != 0)
+        while (m != NULL && strcmp(m->nome, ncarro->marca) != 0)
             m = m->prox;
 
-        if (!m) {
+        if (m == NULL) {
             pmarca nmarca = criamarca(ncarro->marca);
             if (!nmarca) {
                 printf("Erro ao criar marca '%s'.\n", ncarro->marca);
@@ -186,6 +183,7 @@ int importcarro(Listadono *L, marcas *nm) {
         }
 
         m->Numcarrototal++;
+
         Addcarro(m->inf, ncarro);
     }
 
@@ -237,33 +235,45 @@ int importpassagem(Listapassagem *L,marca *m) {
 }
 
 int importsensor(Listasensores *L) {
+    pListasensor Ls = L;
+    FILE* F = fopen("sensores.txt", "r");
+    if (F == NULL) {
+        printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+        return 0;
+    }
 
-	//const char r[5] = "\n";
-	pListasensor Ls = L;
-	FILE* F = fopen("sensores.txt", "r");
-	if (F == NULL) {
-		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return 0;
-	}
+    int COD;
+    char NOME[100];
+    char Lat[17];  // Aumentado para 17 (16 caracteres + \0)
+    char Lon[15];  // Aumentado para 15 (14 caracteres + \0)
 
-	int COD;
-	char NOME[100];
-	char Lat[16];
-	char Lon[14];
-	while (!feof(F))
-	{
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &COD, NOME, Lat, Lon);
-		printf("COD = %d, NOMe: [%s], CP=[%s]\n", COD, NOME, Lat, Lon);
-		sensor* nsensor = (psensor)malloc(sizeof(sensor));
-		nsensor->codSensor = COD;
-		strcpy(nsensor->Designacao, NOME);
-		strcpy(nsensor->Latitude, Lat);
-		strcpy(nsensor->Longitude, Lon);
-		Addsensor(Ls, nsensor);
-	}
-	fclose(F);
+    char linha[256];
+    while (fgets(linha, sizeof(linha), F)) {
+        linha[strcspn(linha, "\n")] = '\0'; // Remove a quebra de linha
 
-	return 1;
+        if (strlen(linha) == 0) {
+            continue; // Ignora linhas vazias
+        }
+
+        // Formato ajustado para ler Latitude (16 caracteres) e Longitude (14 caracteres)
+        int camposLidos = sscanf(linha, "%d\t%99[^\t]\t%16[^\t]\t%14[^\t]",
+                                &COD, NOME, Lat, Lon);
+
+        if (camposLidos == 4) {
+            printf("COD = %d, NOME: [%s], Lat=[%s], Lon=[%s]\n", COD, NOME, Lat, Lon);
+            sensor* nsensor = (psensor)malloc(sizeof(sensor));
+            nsensor->codSensor = COD;
+            strcpy(nsensor->Designacao, NOME);
+            strcpy(nsensor->Latitude, Lat);
+            strcpy(nsensor->Longitude, Lon);
+            Addsensor(Ls, nsensor);
+        } else {
+            printf("Formato inválido na linha: %s\n", linha);
+        }
+    }
+
+    fclose(F);
+    return 1;
 }
 
 //funçoes para importar
@@ -447,12 +457,11 @@ void regist_veiculo(Listadono *L,marca *nm) {
 		scanf("%d", &novoCarro->ano);
 		m->Numcarrototal++;
 		int temp = m->Numcarrototal;
-		while (strcmp(novoCarro->marca, m->nome) != 0 && m != NULL) {
+		while (m->prox != NULL && strcmp(novoCarro->marca, m->nome) != 0 ) {
 			m->Numcarrototal;
 			m = m->prox;
 		}
-
-		if (strcmp(novoCarro->marca, m->nome) == 0) {
+		if (m != NULL && strcmp(novoCarro->marca, m->nome) == 0) {
 			Lc = m->inf;
 		}
 		else {
@@ -464,10 +473,11 @@ void regist_veiculo(Listadono *L,marca *nm) {
 		novoCarro->kilometros = 0;
 		novoCarro->tempototal = 0;
 
-		novoCarro->codigo = m->Numcarrototal;
+		novoCarro->codigo = 0;//m->Numcarrototal;
 		m->NUmcarromarca++;
+
 		Addcarro(Lc, novoCarro);
-		m->inf = Lc;
+		//m->inf = Lc;
 		printf("Veículo adicionado com sucesso!\n");
 	}
 	else {
@@ -485,17 +495,21 @@ void list_veiculo(marca *m) {
 	}
 
 	while (pm != NULL) {
-		Listacarro* Lc = pm->inf;
+        Listacarro* Lc = pm->inf;
 		pnocarro atual = Lc->inicio;
 
-		if (atual == NULL) {
-			printf("Nenhum veículo desta marca registado.\n");
-			return;
+		while(atual == NULL && pm!= NULL) {
+        printf("Nenhum veículo desta marca registado.\n");
+        pm = pm->prox;
+        Listacarro* Lc = pm->inf;
+		pnocarro atual = Lc->inicio;
+
 		}
 
 		printf("Lista de veículos:\n");
 		while (atual != NULL) {
 			carro* c = atual->info;
+			printf("%s",pm->nome);
 			printf("--------------------------\n");
 			printf("Matricula: %s\n", c->matricula);
 			printf("Contribuinte do Dono: %d\n", c->pdonos->numcontibuinte);
