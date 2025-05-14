@@ -34,8 +34,8 @@
 		}
 		nd->cod1[no1 - 1] = no1;
 		nd->cod2[no2 - 1] = no2;
-//		nd->dist[no1 - 1][no2 - 1] = mdist;
-//		nd->dist[no2 - 1][no1 - 1] = mdist; // Matriz simétrica
+		nd->dist[no1 - 1][no2 - 1] = distancia;
+		nd->dist[no2 - 1][no1 - 1] = distancia; // Matriz simétrica
 
 	}
 
