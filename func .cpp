@@ -102,13 +102,13 @@ int importdono(Listadono *ld) {
             printf("%s\n",CP);
             ndono->numcontibuinte = COD;
             strncpy(ndono->nome, NOME, sizeof(ndono->nome)-1);
-            strncpy(ndono->codPostal, CP, sizeof(ndono->codPostal)-1);
+            strncpy(ndono->codPostal, CP, sizeof(CP));
 
             AddDono(L, ndono);
             count++;
         } else {
             printf("ERRO - Linha %d: Formato inválido\n", line);
-            printf("Conteúdo: [%s]\n", buffer);
+            printf("Conteúdo: [%s]\n\n", buffer);
             problemas++;
         }
     }
@@ -118,79 +118,83 @@ int importdono(Listadono *ld) {
     printf("\nRelatório Final:\n");
     printf("Total de linhas: %d\n", line);
     printf("Registros importados: %d\n", count);
-    printf("Problemas detectados: %d\n", problemas);
+    printf("Problemas detectados: %d\n\n", problemas);
 
     return (count > 0) ? 1 : 0;
 }
 
 
-int importcarro(Listadono *L, marcas nm) {
+int importcarro(Listadono *L, marcas *nm) {
+    FILE* F = fopen("carros.txt", "r");
+    if (F == NULL) {
+        printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
+        return 0;
+    }
+    long ndono;
+    int cod, ano;
+    char Marca[100], modelo[100], Mat[10];
+    while (1) {
+        int result = fscanf(F, "%9[^\t]\t%99[^\t]\t%99[^\t]\t%d\t%d\t%d\n",Mat, Marca, modelo, &ano, &ndono, &cod);
+        if (result != 6) {
+            if (feof(F)) break;
+            printf("Erro ao ler linha do ficheiro.\n");
+            continue;
+        }
 
-	pListacarro Lc;
-	//const char r[5] = "\n";
-	FILE* F = fopen("carros.txt", "r");
-	if (F == NULL) {
-		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return 0;
-	}
+        printf("COD = %d, MARCA: [%s], DONO: [%d]\n", cod, Marca, ndono);
 
-	int cod, ano;
-	char Marca[100];
-	char modelo[100];
-	char Mat[10];
-	char ndono[50];
+        pcarro ncarro = (pcarro)malloc(sizeof(carro));
+        if (ncarro == NULL) {
+            printf("Erro de alocação de memória.\n");
+            fclose(F);
+            return 0;
+        }
+        strcpy(ncarro->matricula, Mat);
+        strcpy(ncarro->marca, Marca);
+        strcpy(ncarro->modelo, modelo);
+        ncarro->ano = ano;
+        ncarro->codigo = cod;
+        ncarro->kilometros = 0;
+        ncarro->tempototal = 0;
+        pno ldono = L->inicio;
 
-	while (!feof(F))
-	{
-		pmarca m = &nm;
-		pno ldono = L->inicio;
+        while ((ldono != NULL )&& (ldono->info->numcontibuinte != ndono)){
+            ldono = ldono->prox;
+        }
+        if (ldono == NULL) {
+            printf("Dono '%d' não encontrado. Carro '%s' ignorado.\n", ndono, Mat);
+            free(ncarro);
+            continue;
+        }
+        printf("oi");
+        ncarro->pdonos = ldono->info;
 
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", Mat, Marca, modelo, &ano, ndono, &cod);
-		printf("COD = %d, NOMe: [%s], CP=[%s]\n", cod, Marca, ndono);
-		carro* ncarro = (pcarro)malloc(sizeof(carro));
+        pmarca m = nm;
+        while (m && strcmp(m->nome, ncarro->marca) != 0)
+            m = m->prox;
 
-		strcpy(ncarro->matricula,Mat);
-		strcpy(ncarro->marca,Marca);
-		strcpy(ncarro->modelo, modelo);
-		ncarro->ano = ano;
+        if (!m) {
+            pmarca nmarca = criamarca(ncarro->marca);
+            if (!nmarca) {
+                printf("Erro ao criar marca '%s'.\n", ncarro->marca);
+                free(ncarro);
+                continue;
+            }
+            addmarca(nm, nmarca);
+            m = nmarca;
+            m->inf = NULL;
+            m->Numcarrototal = 0;
+        }
 
-		while (strcmp(ldono->info->nome, ndono) != 0 && ldono != NULL) {
-			ldono = ldono->prox;
-		}
+        m->Numcarrototal++;
+        Addcarro(m->inf, ncarro);
+    }
 
-		if (ldono == NULL) {
-			printf("dono não encontrado");
-			free(ncarro);
-			return 0;
-		}
-		else {
-			ncarro->pdonos = ldono->info;
-		}
-		ncarro->codigo = cod;
-		ncarro->kilometros = 0;
-		ncarro->tempototal = 0;
-		while (strcmp(ncarro->marca, m->nome) != 0 && m != NULL) {
-			m = m->prox;
-		}
-		m->Numcarrototal++;
-		if (strcmp(ncarro->marca, m->nome) == 0) {
-			Lc = m->inf;
-		}
-		else {
-			marca *nmarca = criamarca(ncarro->marca);
-			addmarca(m, nmarca);
-			m = m->prox;
-			Lc = m->inf;
-		}
-		m->NUmcarromarca++;
-		Addcarro(Lc, ncarro);
-		m->inf = Lc;
-	}
-	fclose(F);
-	return 1;
+    fclose(F);
+    return 1;
 }
 
-int importpassagem(Listapassagem L,marca m) {
+int importpassagem(Listapassagem *L,marca *m) {
 	FILE* F = fopen("distancias.txt", "r");
 	pmarca pm;
 	pnocarro plc;
@@ -399,12 +403,12 @@ void list_dono(Listadono* Ld) {
 	}
 }
 
-void regist_veiculo(Listadono L,marca nm) {
+void regist_veiculo(Listadono *L,marca *nm) {
 	int opcao = 0, contdono = 0;
-	pListadono pL = &L;
-	pmarca m = &nm;
+	pListadono pL = L;
+	pmarca m = nm;
 	pListacarro Lc;
-	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao: ");
+	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao:\n ");
 	scanf("%d", &opcao);
 
 	if (opcao == 1) {
@@ -421,12 +425,12 @@ void regist_veiculo(Listadono L,marca nm) {
 		scanf("%d", &contdono);
 
 		pno ldono = pL->inicio;
-		while ((ldono->info->numcontibuinte, contdono) != 0 && (ldono != NULL)){
+		while ((ldono != NULL )&&(ldono->info->numcontibuinte != contdono)  ){
 			ldono = ldono->prox;
 		}
 
 		if (ldono == NULL) {
-			printf("dono não encontrado");
+			printf("dono não encontrado\n");
 			free(novoCarro);
 			return;
 		}
@@ -473,8 +477,8 @@ void regist_veiculo(Listadono L,marca nm) {
 }
 
 
-void list_veiculo(marca m) {
-	pmarca pm= &m;
+void list_veiculo(marca *m) {
+	pmarca pm= m;
 
 	if (pm == NULL) {
 		printf("Nenhum veículo registrado.\n");
@@ -486,7 +490,7 @@ void list_veiculo(marca m) {
 		pnocarro atual = Lc->inicio;
 
 		if (atual == NULL) {
-			printf("Nenhum veículo desta marca registrado.\n");
+			printf("Nenhum veículo desta marca registado.\n");
 			return;
 		}
 
@@ -601,7 +605,7 @@ void organizadonos(Listadono* Ld) {
 
 }
 
-void import(Listadono *Ld, marca m, Listapassagem Lp) {
+void import(Listadono *Ld, marca *m, Listapassagem *Lp) {
 		int opcao = 0;
 
 		printf("deseja importar donos?\n1-Sim\n2-Não");
