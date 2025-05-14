@@ -4,9 +4,10 @@
 #include "func.h"
 
 int main() {
-    setlocale(LC_ALL, "Portuguese");
-	setlocale(LC_ALL, "pt_PT.UTF-8");
     //calcDistancia();
+    //setlocale(LC_ALL, "Portuguese");
+    //setlocale(LC_ALL, "pt_PT.UTF-8");
+
     pListasensor Ls = crialistasensores();
     pListapassagem pp = crialistapasagem();
     importsensor(Ls);

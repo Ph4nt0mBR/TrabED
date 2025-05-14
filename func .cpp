@@ -5,8 +5,9 @@
 
 
 
-	pdistancia calcDistancia()
-	{
+pdistancia calcDistancia()
+{
+    printf("sizeof(distancias) = %d\n", sizeof(distancias));
 	// Inicializa a matriz com zeros
 	pdistancia nd =  (pdistancia)malloc(sizeof(distancias));
 	for (int i = 0; i < 10; i++) {
@@ -15,8 +16,8 @@
 		}
 	}
 	// Abre o arquivo
-	FILE* arquivo = fopen("distancias.txt", "r");
-	if (arquivo == NULL) {
+	FILE* F = fopen("distancias.txt", "r");
+	if (F == NULL) {
 		perror("Erro ao abrir o arquivo");
 		exit(EXIT_FAILURE);
 	}
@@ -24,20 +25,21 @@
 	// Lê cada linha e preenche a matriz
 	int no1, no2;
 
-	double distancia;
+	float distancia;
 
-	while (fscanf(arquivo, "%d %d %lf", &no1, &no2, &distancia) == 3) {
+	while (fscanf(F, "%d %d %f", &no1, &no2, &distancia) == 3) {
 		if (no1 < 1 || no1 > 10 || no2 < 1 || no2 > 10) {
 			fprintf(stderr, "Nó inválido no arquivo: %d %d\n", no1, no2);
 			continue;
 		}
+
 		nd->cod1[no1 - 1] = no1;
 		nd->cod2[no2 - 1] = no2;
 		nd->dist[no1 - 1][no2 - 1] = distancia;
 		nd->dist[no2 - 1][no1 - 1] = distancia; // Matriz simétrica
-        printf("%d\n",nd->dist[no1-1][no2-1]);
+        printf("%f\n",nd->dist[no1-1][no2-1]);
 	}
-	fclose(arquivo);
+	fclose(F);
 }
 
 
@@ -191,47 +193,67 @@ int importcarro(Listadono *L, marcas *nm) {
     return 1;
 }
 
-int importpassagem(Listapassagem *L,marca *m) {
-	FILE* F = fopen("distancias.txt", "r");
-	pmarca pm;
-	pnocarro plc;
-	pListapassagem Lp;
-	if (F == NULL) {
-		printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
-		return 0;
-	}
+int importpassagem(Listapassagem *L, marca *m) {
+    FILE* F = fopen("passagem.txt", "r");
+    if (F == NULL) {
+        printf("\nErro ao abrir o ficheiro!\n");
+        return 0;
+    }
 
-	int Id;
-	int COD;
-	char Data[10];
-	int regist;
-	while (!feof(F))
-	{
-		fscanf(F, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t", &Id, &COD, Data,&regist);
-		printf("COD = %d, NOMe: [%s], CP=[%s]\n", Id, COD, Data,regist);
-		passagem* npass = (ppassagem)malloc(sizeof(passagem));
-		npass->idsensor = Id;
+    int Id, COD, regist;
+    char Data[20];
 
-		while ((plc->info->codigo != COD) && (pm != NULL)) {
-			plc = pm->inf->inicio;
-			while (plc->info->codigo != COD && plc != NULL) {
-				plc = plc->prox;
-			}
-			pm = pm->prox;
+    while (fscanf(F, "%d\t%d\t%s[^\t]\t%d", &Id, &COD, Data, &regist) == 3) {
+        printf("Processando: ID=%d, COD=%d, Data=%s, Regist=%d\n", Id, COD, Data, regist);
 
-		}
-		if (plc->info->codigo != COD) {
-			printf("esse caro não existe ou aconteceu algum erro");
-			free(npass);
-			return 0;
-		}
-		npass->codcarro = plc->info;
-		strcpy(npass->data, Data);
-		npass->tiporegist = regist;
-		Addpassagem(Lp, npass);
-	}
-	fclose(F);
-	return 1;
+        passagem* npass = (passagem*)malloc(sizeof(passagem));
+        if (!npass) {
+            printf("Erro de alocação de memória\n");
+            fclose(F);
+            return 0;
+        }
+
+        npass->idsensor = Id;
+        strcpy(npass->data, Data);
+        npass->tiporegist = regist;
+        // Busca pelo carro correspondente
+        pmarca pm = m;
+        pnocarro plc = NULL;
+        int encontrado = 0;
+
+        while (pm != NULL && !encontrado) {
+            if (pm->inf == NULL || pm->inf->inicio == NULL) {
+                pm = pm->prox;
+                continue;
+            }
+            nocarro *current = pm->inf->inicio;
+            while (current != NULL && !encontrado) {
+                if (current->info != NULL && current->info->codigo == COD) {
+                    plc = current;
+                    encontrado = 1;
+                    printf("Carro COD %d encontrado na marca\n", COD);
+                }
+                current = current->prox;
+            }
+
+            if (!encontrado) pm = pm->prox;
+        }
+/*
+        if (!encontrado) {
+            printf("Carro COD %d não encontrado! Registro ignorado.\n", COD);
+            free(npass);
+            continue;  // Continua para próximo registro ao invés de retornar
+        }
+*/
+        npass->codcarro = plc->info;
+
+    Addpassagem(L,npass);
+
+    }
+
+    fclose(F);
+    printf("Importação concluída com sucesso!\n");
+    return 1;
 }
 
 int importsensor(Listasensores *L) {
@@ -256,7 +278,7 @@ int importsensor(Listasensores *L) {
         }
 
         // Formato ajustado para ler Latitude (16 caracteres) e Longitude (14 caracteres)
-        int camposLidos = sscanf(linha, "%d\t%99[^\t]\t%16[^\t]\t%14[^\t]",
+        int camposLidos = sscanf(linha, "%d\t%99[^\t]\t%20[^\t]\t%s",
                                 &COD, NOME, Lat, Lon);
 
         if (camposLidos == 4) {
@@ -513,7 +535,7 @@ void list_veiculo(marca *m) {
 		printf("Lista de veículos:\n");
 		while (atual != NULL) {
 			carro* c = atual->info;
-			printf("\n--------------------------\n");
+			printf("--------------------------\n");
 			printf("Matricula: %s\n", c->matricula);
 			printf("Contribuinte do Dono: %d\n", c->pdonos->numcontibuinte);
 			printf("Marca: %s\n", c->marca);
