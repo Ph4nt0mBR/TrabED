@@ -166,7 +166,6 @@ int importcarro(Listadono *L, marcas *nm) {
             free(ncarro);
             continue;
         }
-        printf("oi");
         ncarro->pdonos = ldono->info;
 
         pmarca m = nm;
