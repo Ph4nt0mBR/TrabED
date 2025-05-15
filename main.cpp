@@ -14,11 +14,11 @@ int main() {
     char c[10] = "Renault";
 	pListadono Ld = crialistadono();
     pmarca m = criamarca(c);
-    importdono(Ld);
+    //importdono(Ld);
 	//regist_dono(Ld);
 	//list_dono(Ld);
-    importcarro(Ld, m);
-    importpassagem(pp,m);
+    //importcarro(Ld, m);
+    //importpassagem(pp,m);
     //regist_veiculo(Ld,m);
     //list_veiculo(m);
 	return 0;

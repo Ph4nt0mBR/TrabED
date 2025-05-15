@@ -97,9 +97,9 @@ int importdono(Listadono *ld) {
                 problemas++;
                 continue;
             }
-            printf("%d\t",COD);
-            printf("%s\t",NOME);
-            printf("%s\n",CP);
+           // printf("%d\t",COD);
+           // printf("%s\t",NOME);
+            //printf("%s\n",CP);
             ndono->numcontibuinte = COD;
             strncpy(ndono->nome, NOME, sizeof(ndono->nome)-1);
             strncpy(ndono->codPostal, CP, sizeof(CP));
@@ -203,7 +203,7 @@ int importpassagem(Listapassagem *L, marca *m) {
     int Id, COD, regist;
     char Data[20];
 
-    while (fscanf(F, "%d\t%d\t%s[^\t]\t%d", &Id, &COD, Data, &regist) == 3) {
+    while (fscanf(F, "%d\t%d\t%[^\t]\t%d", &Id, &COD, Data, &regist) == 4) {
         printf("Processando: ID=%d, COD=%d, Data=%s, Regist=%d\n", Id, COD, Data, regist);
 
         passagem* npass = (passagem*)malloc(sizeof(passagem));
@@ -245,10 +245,8 @@ int importpassagem(Listapassagem *L, marca *m) {
             continue;  // Continua para próximo registro ao invés de retornar
         }
 */
-        npass->codcarro = plc->info;
-
+        //npass->codcarro = plc->info;
     Addpassagem(L,npass);
-
     }
 
     fclose(F);
@@ -392,7 +390,6 @@ void Addpassagem(Listapassagem* l, passagem* D)
 	nNo->prox = l->inicio;
 	l->inicio = nNo;
 	l->numel++;
-
 }
 
 //funçoes que introduzem um item na sua lista
