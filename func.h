@@ -5,7 +5,7 @@
 #include<string.h>
 #include "header.h"
 
-pdistancia calcDistancia(double matriz[SAMPLE_SIZE][SAMPLE_SIZE]);
+pdistancia calcDistancia();
 int importdono(Listadono *ld);
 int importcarro(Listadono *L, marcas *nm);
 int importpassagem(Listapassagem *L,marca *m);
