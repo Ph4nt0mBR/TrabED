@@ -24,7 +24,7 @@ void regist_dono(Listadono* Ld);
 void list_dono(Listadono* Ld);
 void regist_veiculo(Listadono *L,marca *nm);
 void list_veiculo(marca *m);
-void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls);
+void regist_pass(Listapassagem* Lp, marca* m, Listasensor* Ls);
 void organizadonos(Listadono* Ld);
 void import(Listadono *Ld, marca *m, Listapassagem *Lp);
 void organizacarros(marca m);

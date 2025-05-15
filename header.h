@@ -69,7 +69,7 @@ typedef struct marcas
 	int numkillmarca;
 	char nome[20];
 	Listacarro* inf;
-    marcas* prox;
+    struct marcas* prox;
 }marca, * pmarca;
 
 //Struct para os sensores. teremos uma matriz para as distancias entre os sensores, ja que a posicao dos sensores sao imutaveis

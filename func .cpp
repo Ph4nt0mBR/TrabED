@@ -1,6 +1,6 @@
 #include "header.h"
 #include "func.h"
-
+#include<locale>
 
 
 
@@ -124,7 +124,8 @@ int importdono(Listadono *ld) {
 }
 
 
-int importcarro(Listadono *L, marcas *nm) {
+int importcarro(Listadono *L, marcas *nm)
+{
     FILE* F = fopen("carros.txt", "r");
     if (F == NULL) {
         printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
@@ -255,6 +256,8 @@ int importpassagem(Listapassagem *L, marca *m) {
 }
 
 int importsensor(Listasensores *L) {
+     setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_ALL, "pt_PT.UTF-8");
     pListasensor Ls = L;
     FILE* F = fopen("sensores.txt", "r");
     if (F == NULL) {
@@ -264,8 +267,8 @@ int importsensor(Listasensores *L) {
 
     int COD;
     char NOME[100];
-    char Lat[17];  // Aumentado para 17 (16 caracteres + \0)
-    char Lon[15];  // Aumentado para 15 (14 caracteres + \0)
+    char Lat[100];  // Aumentado para 17 (16 caracteres + \0)
+    char Lon[100];  // Aumentado para 15 (14 caracteres + \0)
 
     char linha[256];
     while (fgets(linha, sizeof(linha), F)) {
@@ -276,8 +279,7 @@ int importsensor(Listasensores *L) {
         }
 
         // Formato ajustado para ler Latitude (16 caracteres) e Longitude (14 caracteres)
-        int camposLidos = sscanf(linha, "%d\t%99[^\t]\t%20[^\t]\t%s",
-                                &COD, NOME, Lat, Lon);
+        int camposLidos = sscanf(linha, "%d\t%[^\t]\t%[^\t]\t%[^\n]",&COD, NOME, Lat, Lon);
 
         if (camposLidos == 4) {
             printf("COD = %d, NOME: [%s], Lat=[%s], Lon=[%s]\n", COD, NOME, Lat, Lon);
@@ -370,7 +372,8 @@ void Addcarro(Listacarro* lista, pcarro carro) {
 
 void addmarca(pmarca l, marca *nmarca)
 {
-	l->prox = nmarca;
+	nmarca->prox = l ;
+
 
 }
 void Addsensor(Listasensor* l, sensor* D)
@@ -462,7 +465,7 @@ void regist_veiculo(Listadono *L,marca *nm) {
 		}
 
 		if (ldono == NULL) {
-			printf("dono não encontrado\n");
+			printf("dono nao encontrado");
 			free(novoCarro);
 			return;
 		}
@@ -505,29 +508,27 @@ void regist_veiculo(Listadono *L,marca *nm) {
 	}
 	else {
 		printf("Veiculo nao adicionado.\n");
+		return;
 	}
 }
 
 
 void list_veiculo(marca *m) {
-	pmarca pm= m;
+	pmarca pm = m;
 
 	if (pm == NULL) {
 		printf("Nenhum veículo registrado.\n");
 		return;
 	}
 
-	while (pm != NULL) {
+	while (pm != NULL)
+    {
         Listacarro* Lc = pm->inf;
 		pnocarro atual = Lc->inicio;
 
-		while(atual == NULL && pm!= NULL) {
-        printf("Nenhum veículo desta marca registado.\n");
-        pm = pm->prox;
-        Listacarro* Lc = pm->inf;
-		pnocarro atual = Lc->inicio;
-
-		}
+		//while(atual == NULL && pm!= NULL) {
+       // printf("Nenhum veículo desta marca registado.\n");
+		//}
 
 		printf("Lista de veículos:\n");
 		while (atual != NULL) {
@@ -538,16 +539,17 @@ void list_veiculo(marca *m) {
 			printf("Marca: %s\n", c->marca);
 			printf("Modelo: %s\n", c->modelo);
 			printf("Ano: %d\n", c->ano);
-			printf("Codigo: %d\b", c->codigo);
+			printf("Codigo: %d", c->codigo);
 			atual = atual->prox;
 		}
 		printf("-------------------------------------------------------\n");
 		pm = pm->prox;
 	}
+	printf("oi");
 }
 
 
-void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
+void regist_pass(Listapassagem* Lp, marca *m, Listasensor* Ls) {
 	passagem* novaPassagem = (passagem*)malloc(sizeof(passagem));
 	if (novaPassagem == NULL) {
 		printf("Erro ao alocar memória para a passagem.\n");
@@ -558,14 +560,21 @@ void regist_pass(Listapassagem* Lp, Listacarro* Lc, Listasensor* Ls) {
 	int codigoSensor;
 	float distancia;
 	char dataHora[20];
+	char marcad[50];
+    pmarca pm = m;
+    printf("Qual a marca do carro");
+    scanf("%s",marcad);
 
-	printf("Insira a matrícula do carro:\n");
-	scanf("%s", matricula);
-
-	pnocarro atualCarro = Lc->inicio;
-	while (atualCarro != NULL && strcmp(atualCarro->info->matricula, matricula) != 0) {
+    while(strcmp(marcad,pm->nome ) != 0){
+        pm = pm->prox;
+    }
+        pListacarro Lc = pm->inf;
+        printf("Insira a matrícula do carro:\n");
+        scanf("%s", matricula);
+        pnocarro atualCarro = Lc->inicio;
+        while (atualCarro != NULL && strcmp(atualCarro->info->matricula, matricula) != 0) {
 		atualCarro = atualCarro->prox;
-	} // isto vai buscar o carro plea matricula na lista
+        } // isto vai buscar o carro plea matricula na lista
 
 	if (atualCarro == NULL) {
 		printf("Carro não encontrado.\n");
