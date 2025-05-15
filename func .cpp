@@ -614,35 +614,38 @@ void organizadonos(Listadono* Ld) {
 		printf("Poucos ou nenhum dono registrado para ordenar.\n");
 		return;
 	}
-
 	int trocado, opcao;
-	pno atual, temp, max = NULL;
+	pdono temp;
+	pno atual, max = NULL;
 
 	do {
 		trocado = 0;
 		atual = Ld->inicio;
 		temp = NULL;
 
-		printf("Deseja executar a organização por que ordem?\n 1- Nome do dono\n 2- Número de contribuinte\n 3- Parar organização");
-		scanf( "%d", opcao);
+		printf("Deseja executar a organizacao por que ordem?\n 1- Nome do dono\n 2- Numero de contribuinte\n 3- Parar organizacao\n");
+		scanf( "%d", &opcao);
 
-		while (atual->prox != NULL && atual->prox != max) {
 
-			int precisaTrocar = 0;
-			if (opcao == 3)
-				return;
-			else if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0)
-				precisaTrocar = 1;
-			else if (opcao == 2 && atual->info->numcontibuinte > atual->prox->info->numcontibuinte)
-				precisaTrocar = 1;
+		while (atual->prox != NULL) {
+            int precisaTrocar = 0;
+            if (opcao == 3)
+                return;
+            else if (opcao == 1 && strcmp(atual->info->nome, atual->prox->info->nome) > 0){
+                precisaTrocar = 1;
+            }
+            else if (opcao == 2 && atual->info->numcontibuinte > atual->prox->info->numcontibuinte){
+                precisaTrocar = 1;
+            }
 
-			if (precisaTrocar == 1) {
-				temp->info = atual->prox->info;
-				atual->prox->info = atual->info;
-				atual->info = temp->info;
-
-				trocado = 1;
-			}
+                if( precisaTrocar == 1){
+                    printf("%s\t",atual->info->nome);
+                    temp = atual->prox->info;
+                    atual->prox->info = atual->info;
+                    atual->info = temp;
+                    trocado = 1;
+                    printf("%s\n\n",atual->info->nome);
+                }
 		}
 		max = atual;
 	} while (trocado == 1);
@@ -652,17 +655,17 @@ void organizadonos(Listadono* Ld) {
 void import(Listadono *Ld, marca *m, Listapassagem *Lp) {
 		int opcao = 0;
 
-		printf("deseja importar donos?\n1-Sim\n2-Não");
+		printf("Deseja importar donos?\n1-Sim\n2-Nao\n");
 		scanf("%d", &opcao);
 
 		if (opcao == 1) {
 			importdono(Ld);
-			printf("deseja importar carros?\n1-Sim\n2-Não");
+			printf("deseja importar carros?\n1-Sim\n2-Nao\n");
 			scanf("%d", &opcao);
 
 			if (opcao == 1) {
 				importcarro(Ld,m);
-				printf("deseja importar passagens?\n1-Sim\n2-Não");
+				printf("deseja importar passagens?\n1-Sim\n2-Nao\n");
 				scanf("%d", &opcao);
 
 				if (opcao == 1) {
