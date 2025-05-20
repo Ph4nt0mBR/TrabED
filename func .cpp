@@ -124,7 +124,7 @@ int importdono(Listadono *ld) {
 }
 
 
-int importcarro(Listadono *L, HASHING *Has)
+int importcarro(Listadono *L, HASHING *has)
 {
     FILE* F = fopen("carros.txt", "r");
     if (F == NULL) {
@@ -168,18 +168,17 @@ int importcarro(Listadono *L, HASHING *Has)
         }
        ncarro->pdonos = ldono->info;
 
-        pmarca m = nm;
+        pmarca m = has->Inicio;
         while (m != NULL && strcmp(m->nome, ncarro->marca) != 0)
             m = m->prox;
 
         if (m == NULL) {
-            pmarca nmarca = criamarca(ncarro->marca);
+            pmarca nmarca = criamarca(has,ncarro->marca);
             if (!nmarca) {
                 printf("Erro ao criar marca '%s'.\n", ncarro->marca);
                 free(ncarro);
                 continue;
             }
-            addmarca(nm, nmarca);
             m = nmarca;
             m->inf = NULL;
             m->Numcarrototal = 0;
@@ -194,7 +193,7 @@ int importcarro(Listadono *L, HASHING *Has)
     return 1;
 }
 
-int importpassagem(Listapassagem *L, marca *m) {
+int importpassagem(Listapassagem *L, HASHING has) {
     FILE* F = fopen("passagem.txt", "r");
     if (F == NULL) {
         printf("\nErro ao abrir o ficheiro!\n");
@@ -218,7 +217,7 @@ int importpassagem(Listapassagem *L, marca *m) {
         strcpy(npass->data, Data);
         npass->tiporegist = regist;
         // Busca pelo carro correspondente
-        pmarca pm = m;
+        pmarca pm = has->Inicio;
         pnocarro plc = NULL;
         int encontrado = 0;
 
@@ -381,12 +380,6 @@ void Addcarro(Listacarro* lista, pcarro carro) {
     }
 }
 
-void addmarca(pmarca l, marca *nmarca)
-{
-	nmarca->prox = l ;
-
-
-}
 void Addsensor(Listasensor* l, sensor* D)
 {
 	pnosensor nNo = (pnosensor)malloc(sizeof(nosensor));
@@ -449,10 +442,10 @@ void list_dono(Listadono* Ld) {
 	}
 }
 
-void regist_veiculo(Listadono *L,marca *nm) {
+void regist_veiculo(Listadono *L,HASHING *has) {
 	int opcao = 0, contdono = 0;
 	pListadono pL = L;
-	pmarca m = nm;
+	pmarca m = has->Inicio;
 	pListacarro Lc;
 	printf("Gostaria de adicionar um veiculo? 1-Sim | 0-Nao:\n ");
 	scanf("%d", &opcao);
@@ -502,8 +495,7 @@ void regist_veiculo(Listadono *L,marca *nm) {
 			Lc = m->inf;
 		}
 		else {
-			pmarca nmarca = criamarca(novoCarro->marca);
-			addmarca(m, nmarca);
+			pmarca nmarca = criamarca(has, novoCarro->marca);
 			m = m->prox;
 			Lc = m->inf;
 		}
@@ -664,7 +656,7 @@ void organizadonos(Listadono* Ld) {
 
 }
 
-void import(Listadono *Ld, marca *m, Listapassagem *Lp) {
+void import(Listadono *Ld, HASHING *has, Listapassagem *Lp) {
 		int opcao = 0;
 
 		printf("Deseja importar donos?\n1-Sim\n2-Nao\n");
@@ -676,12 +668,12 @@ void import(Listadono *Ld, marca *m, Listapassagem *Lp) {
 			scanf("%d", &opcao);
 
 			if (opcao == 1) {
-				importcarro(Ld,m);
+				importcarro(Ld,has);
 				printf("deseja importar passagens?\n1-Sim\n2-Nao\n");
 				scanf("%d", &opcao);
 
 				if (opcao == 1) {
-					importpassagem(Lp,m);
+					importpassagem(Lp,has);
 				}
 			}
 		}

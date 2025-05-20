@@ -7,8 +7,8 @@
 
 pdistancia calcDistancia();
 int importdono(Listadono *ld);
-int importcarro(Listadono *L, marcas *nm);
-int importpassagem(Listapassagem *L,marca *m);
+int importcarro(Listadono *L, HASHING *has);
+int importpassagem(Listapassagem *L,HASHING *has);
 int importsensor(Listasensores *L);
 pListadono crialistadono();
 pListacarro crialistacarro();
@@ -18,19 +18,18 @@ pmarca criamarca(HASHING *has, char *nome);
 HASHING *CriarHASHING();
 void AddDono(Listadono* l, dono* D);
 void Addcarro(Listacarro* l, carro* D);
-void addmarca(pmarca l, marca *nmarca);
 void Addsensor(Listasensor* l, sensor* D);
 void Addpassagem(Listapassagem* l, passagem* D);
 void regist_dono(Listadono* Ld);
 void list_dono(Listadono* Ld);
-void regist_veiculo(Listadono *L,marca *nm);
-void list_veiculo(marca *m);
-void regist_pass(Listapassagem* Lp, marca* m, Listasensor* Ls);
+void regist_veiculo(Listadono *L,HASHING *has);
+void list_veiculo(HASHING *has);
+void regist_pass(Listapassagem* Lp, HASHING *has, Listasensor* Ls);
 void organizadonos(Listadono* Ld);
-void import(Listadono *Ld, marca *m, Listapassagem *Lp);
-void organizacarros(marca m);
+void import(Listadono *Ld, HASHING *has, Listapassagem *Lp);
+void organizacarros(HASHING *has);
 void listacarroperiodo(Listapassagem pass);
 void rankveiculos(Listapassagem pass,distancia d);
-void rankmarcas(Listapassagem pass, distancia d, marca m);
+void rankmarcas(Listapassagem pass, distancia d, HASHING *has);
 
-void marcapopular(marcas m);
+void marcapopular(HASHING *has);
