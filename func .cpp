@@ -331,7 +331,7 @@ pListapassagem crialistapasagem() {
 	return L;
 }
 
-pmarca criamarca(char *nome) {
+pmarca criamarca(HASHING *has ,char *nome) {
     pmarca nova = (pmarca)malloc(sizeof(marca));
     if (nova) {
         strcpy(nova->nome, nome);
@@ -340,9 +340,20 @@ pmarca criamarca(char *nome) {
         nova->inf = crialistacarro(); // Lista de carros inicializada
         nova->prox = NULL;
     }
+    pmarca temp = has->Inicio;
+    has->Inicio = nova;
+    nova->prox = temp;
     return nova;
 }
 
+HASHING *CriarHASHING()
+{
+    HASHING *Has = (HASHING *)malloc(sizeof(HASHING));
+    Has->Inicio = NULL;
+    //Has->N_CHAVES = 0;
+    //Has->Flag_Destruir = flag;
+    return Has;
+}
 //funçoes que criam listas
 //----------------------------------------------------
 //----------------------------------------------------

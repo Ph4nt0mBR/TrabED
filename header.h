@@ -72,6 +72,13 @@ typedef struct marcas
     struct marcas* prox;
 }marca, * pmarca;
 
+typedef struct
+{
+    marca *Inicio;
+    //int N_CHAVES;
+   //int Flag_Destruir;
+}HASHING;
+
 //Struct para os sensores. teremos uma matriz para as distancias entre os sensores, ja que a posicao dos sensores sao imutaveis
 typedef struct sensores
 {

@@ -33,9 +33,8 @@ int main() {
     pListasensor Ls = crialistasensores();
     pListapassagem pp = crialistapasagem();
     importsensor(Ls);
-    char c[50] = "Mitsubishi";
+    HASHING *Has = CriarHASHING();
 	pListadono Ld = crialistadono();
-    pmarca m = criamarca(c);
     import(Ld, m, pp);
     organizadonos(Ld);
 	//regist_dono(Ld);
