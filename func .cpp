@@ -124,7 +124,7 @@ int importdono(Listadono *ld) {
 }
 
 
-int importcarro(Listadono *L, marcas *nm)
+int importcarro(Listadono *L, HASHING *has)
 {
     FILE* F = fopen("carros.txt", "r");
     if (F == NULL) {
@@ -194,7 +194,7 @@ int importcarro(Listadono *L, marcas *nm)
     return 1;
 }
 
-int importpassagem(Listapassagem *L, marca *m) {
+int importpassagem(Listapassagem *L, HASHING *has) {
     FILE* F = fopen("passagem.txt", "r");
     if (F == NULL) {
         printf("\nErro ao abrir o ficheiro!\n");
@@ -449,7 +449,7 @@ void list_dono(Listadono* Ld) {
 	}
 }
 
-void regist_veiculo(Listadono *L,marca *nm) {
+void regist_veiculo(Listadono *L, HASHING *has) {
 	int opcao = 0, contdono = 0;
 	pListadono pL = L;
 	pmarca m = nm;
@@ -524,7 +524,7 @@ void regist_veiculo(Listadono *L,marca *nm) {
 }
 
 
-void list_veiculo(marca *m) {
+void list_veiculo(HASHING *has) {
 	pmarca pm = m;
 
 	if (pm == NULL) {
@@ -560,7 +560,7 @@ void list_veiculo(marca *m) {
 }
 
 
-void regist_pass(Listapassagem* Lp, marca *m, Listasensor* Ls) {
+void regist_pass(Listapassagem* Lp, HASHING *has, Listasensor* Ls) {
 	passagem* novaPassagem = (passagem*)malloc(sizeof(passagem));
 	if (novaPassagem == NULL) {
 		printf("Erro ao alocar memória para a passagem.\n");
@@ -664,7 +664,7 @@ void organizadonos(Listadono* Ld) {
 
 }
 
-void import(Listadono *Ld, marca *m, Listapassagem *Lp) {
+void import(Listadono *Ld, HASHING *has, Listapassagem *Lp) {
 		int opcao = 0;
 
 		printf("Deseja importar donos?\n1-Sim\n2-Nao\n");
@@ -705,7 +705,7 @@ void memoria() {
 
 }
 
-void organizacarros(marca m) {
+void organizacarros(HASHING *has) {
 	pmarca nm = &m;
 	pListacarro Lc;
 	pnocarro nc;
@@ -913,7 +913,7 @@ void rankveiculos(Listapassagem pass,distancia d) {
 }
 
 
-void rankmarcas(Listapassagem pass, distancia d, marca m) {
+void rankmarcas(Listapassagem pass, distancia d, HASHING *has) {
 	int opcao, troca;
 	pmarca pm = &m;
 	pListacarro pl;
@@ -1043,7 +1043,7 @@ void condutorpostal() {
 	//Qual a velocidade média dos condutores com código postal X?
 }
 
-void marcapopular(marca m) {
+void marcapopular(HASHING *has) {
 	pmarca pm = &m;
 	pmarca ppm = pm->prox;
 
