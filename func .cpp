@@ -124,7 +124,7 @@ int importdono(Listadono *ld) {
 }
 
 
-int importcarro(Listadono *L, marcas *nm)
+int importcarro(Listadono *L, HASHING *Has)
 {
     FILE* F = fopen("carros.txt", "r");
     if (F == NULL) {
