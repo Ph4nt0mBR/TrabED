@@ -142,7 +142,7 @@ int importcarro(Listadono *L, marcas *nm)
             continue;
         }
 
-        printf("COD = %d, MARCA: [%s], DONO: [%d]\n", cod, Marca, ndono);
+        //printf("COD = %d, MARCA: [%s], DONO: [%d]\n", cod, Marca, ndono);
 
         pcarro ncarro = (pcarro)malloc(sizeof(carro));
         if (ncarro == NULL) {
@@ -618,13 +618,15 @@ void organizadonos(Listadono* Ld) {
 	pdono temp;
 	pno atual, max = NULL;
 
+    printf("Deseja executar a organizacao por que ordem?\n 1- Nome do dono\n 2- Numero de contribuinte\n 3- Parar organizacao\n");
+    scanf( "%d", &opcao);
+
 	do {
 		trocado = 0;
 		atual = Ld->inicio;
 		temp = NULL;
 
-		printf("Deseja executar a organizacao por que ordem?\n 1- Nome do dono\n 2- Numero de contribuinte\n 3- Parar organizacao\n");
-		scanf( "%d", &opcao);
+
 
 
 		while (atual->prox != NULL) {
@@ -639,14 +641,15 @@ void organizadonos(Listadono* Ld) {
             }
 
                 if( precisaTrocar == 1){
-                    printf("%s\t",atual->info->nome);
+                    //printf("%s\t",atual->info->nome);
                     temp = atual->prox->info;
                     atual->prox->info = atual->info;
                     atual->info = temp;
                     trocado = 1;
-                    printf("%s\n\n",atual->info->nome);
+                    //printf("%s\n\n",atual->info->nome);
                 }
-		}
+           atual = atual->prox;
+            }
 		max = atual;
 	} while (trocado == 1);
 
