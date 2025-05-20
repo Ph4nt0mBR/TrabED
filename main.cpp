@@ -36,11 +36,11 @@ int main() {
     HASHING *has = CriarHASHING();
 	pListadono Ld = crialistadono();
     import(Ld, has, pp);
-    organizadonos(Ld);
+    //organizadonos(Ld);
 	//regist_dono(Ld);
 	//list_dono(Ld);
     //regist_veiculo(Ld,m);
-    //list_veiculo(m);
+    list_veiculo(has);
 
 /*
         // Inicializa estruturas

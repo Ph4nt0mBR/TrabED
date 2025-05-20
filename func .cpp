@@ -142,7 +142,7 @@ int importcarro(Listadono *L, HASHING *has)
             continue;
         }
 
-        //printf("COD = %d, MARCA: [%s], DONO: [%d]\n", cod, Marca, ndono);
+        //printf("IMPORTOU carro: COD = %d, MARCA: [%s], DONO: [%d]\n", cod, Marca, ndono);
 
         pcarro ncarro = (pcarro)malloc(sizeof(carro));
         if (ncarro == NULL) {
@@ -173,6 +173,8 @@ int importcarro(Listadono *L, HASHING *has)
             m = m->prox;
 
         if (m == NULL) {
+                printf("\nmarca [%s] nova...",ncarro->marca);
+                    getchar();
             pmarca nmarca = criamarca(has,ncarro->marca);
             if (!nmarca) {
                 printf("Erro ao criar marca '%s'.\n", ncarro->marca);
@@ -180,7 +182,7 @@ int importcarro(Listadono *L, HASHING *has)
                 continue;
             }
             m = nmarca;
-            m->inf = NULL;
+          //  m->inf = NULL;
             m->Numcarrototal = 0;
         }
 
@@ -193,7 +195,7 @@ int importcarro(Listadono *L, HASHING *has)
     return 1;
 }
 
-int importpassagem(Listapassagem *L, HASHING has) {
+int importpassagem(Listapassagem *L, HASHING *has) {
     FILE* F = fopen("passagem.txt", "r");
     if (F == NULL) {
         printf("\nErro ao abrir o ficheiro!\n");
@@ -516,27 +518,34 @@ void regist_veiculo(Listadono *L,HASHING *has) {
 }
 
 
-void list_veiculo(marca *m) {
-	pmarca pm = m;
-
+void list_veiculo(HASHING *has) {
+	pmarca pm = has->Inicio;
 	if (pm == NULL) {
-		printf("Nenhum veículo registrado.\n");
+		printf("Nenhum veiculo registrado.\n");
 		return;
 	}
+	/*
+	while (pm != NULL)
+    {
+        printf("\n marca: [%s]", pm->nome);
+        pm = pm->prox;
+    }
+    printf("\nFIM da lista de marcas...\n\n");
+    getchar();
+*/
 
 	while (pm != NULL)
     {
+		printf("Lista de veiculos da marca [%s]:\n",pm->nome);
+
         Listacarro* Lc = pm->inf;
-		pnocarro atual = Lc->inicio;
-
-		//while(atual == NULL && pm!= NULL) {
-       // printf("Nenhum veículo desta marca registado.\n");
-		//}
-
-		printf("Lista de veículos:\n");
+        if(Lc)
+        {
+        pnocarro atual = Lc->inicio;
+		printf("Lista de veiculos da marca [%s]:\n",pm->nome);
 		while (atual != NULL) {
 			carro* c = atual->info;
-			printf("--------------------------\n");
+			printf("\n--------------------------\n");
 			printf("Matricula: %s\n", c->matricula);
 			printf("Contribuinte do Dono: %d\n", c->pdonos->numcontibuinte);
 			printf("Marca: %s\n", c->marca);
@@ -545,7 +554,14 @@ void list_veiculo(marca *m) {
 			printf("Codigo: %d", c->codigo);
 			atual = atual->prox;
 		}
-		printf("-------------------------------------------------------\n");
+        }
+
+		//while(atual == NULL && pm!= NULL) {
+       // printf("Nenhum veículo desta marca registado.\n");
+		//}
+
+
+		printf("\n-------------------------------------------------------\n");
 		pm = pm->prox;
 	}
 	printf("oi");
