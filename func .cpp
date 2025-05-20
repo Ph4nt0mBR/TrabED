@@ -124,7 +124,7 @@ int importdono(Listadono *ld) {
 }
 
 
-int importcarro(Listadono *L, HASHING *Has)
+int importcarro(Listadono *L, HASHING *has)
 {
     FILE* F = fopen("carros.txt", "r");
     if (F == NULL) {
@@ -168,12 +168,12 @@ int importcarro(Listadono *L, HASHING *Has)
         }
        ncarro->pdonos = ldono->info;
 
-        pmarca m = nm;
+        pmarca m = has->Inicio;
         while (m != NULL && strcmp(m->nome, ncarro->marca) != 0)
             m = m->prox;
 
         if (m == NULL) {
-            pmarca nmarca = criamarca(ncarro->marca);
+            pmarca nmarca = criamarca(has,ncarro->marca);
             if (!nmarca) {
                 printf("Erro ao criar marca '%s'.\n", ncarro->marca);
                 free(ncarro);

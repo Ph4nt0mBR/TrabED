@@ -33,7 +33,7 @@ int main() {
     pListasensor Ls = crialistasensores();
     pListapassagem pp = crialistapasagem();
     importsensor(Ls);
-    HASHING *Has = CriarHASHING();
+    HASHING *has = CriarHASHING();
 	pListadono Ld = crialistadono();
     import(Ld, m, pp);
     organizadonos(Ld);
