@@ -641,12 +641,10 @@ void organizadonos(Listadono* Ld) {
             }
 
                 if( precisaTrocar == 1){
-                    //printf("%s\t",atual->info->nome);
                     temp = atual->prox->info;
                     atual->prox->info = atual->info;
                     atual->info = temp;
                     trocado = 1;
-                    //printf("%s\n\n",atual->info->nome);
                 }
            atual = atual->prox;
             }

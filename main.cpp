@@ -39,7 +39,7 @@ int main() {
     import(Ld, m, pp);
     organizadonos(Ld);
 	//regist_dono(Ld);
-	list_dono(Ld);
+	//list_dono(Ld);
     //regist_veiculo(Ld,m);
     //list_veiculo(m);
 
