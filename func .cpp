@@ -142,7 +142,7 @@ int importcarro(Listadono *L, HASHING *has)
             continue;
         }
 
-        //printf("IMPORTOU carro: COD = %d, MARCA: [%s], DONO: [%d]\n", cod, Marca, ndono);
+        //printf("IMPORTOU carro: COD = %d, MARCA: [%s], DONO: [%d], MATRICULA[%s]\n", cod, Marca, ndono,Mat);
 
         pcarro ncarro = (pcarro)malloc(sizeof(carro));
         if (ncarro == NULL) {
@@ -173,8 +173,6 @@ int importcarro(Listadono *L, HASHING *has)
             m = m->prox;
 
         if (m == NULL) {
-                printf("\nmarca [%s] nova...",ncarro->marca);
-                    getchar();
             pmarca nmarca = criamarca(has,ncarro->marca);
             if (!nmarca) {
                 printf("Erro ao criar marca '%s'.\n", ncarro->marca);
@@ -520,6 +518,7 @@ void regist_veiculo(Listadono *L,HASHING *has) {
 
 void list_veiculo(HASHING *has) {
 	pmarca pm = has->Inicio;
+	int i = 0, continuar, skip = 0;
 	if (pm == NULL) {
 		printf("Nenhum veiculo registrado.\n");
 		return;
@@ -553,6 +552,21 @@ void list_veiculo(HASHING *has) {
 			printf("Ano: %d\n", c->ano);
 			printf("Codigo: %d", c->codigo);
 			atual = atual->prox;
+			i++;
+			if( skip == 0 && i%100 == 0 ){
+                printf("\nmore-1\nexit-2\n");
+                scanf("%d",&continuar);
+                if(continuar == 1 ){
+                continue;
+                }
+                else if(continuar == 2){
+                    return ;
+                }
+                else{
+                    skip = 1;
+                    continue;
+                }
+            }
 		}
         }
 
@@ -564,11 +578,10 @@ void list_veiculo(HASHING *has) {
 		printf("\n-------------------------------------------------------\n");
 		pm = pm->prox;
 	}
-	printf("oi");
 }
 
 
-void regist_pass(Listapassagem* Lp, marca *m, Listasensor* Ls) {
+void regist_pass(Listapassagem* Lp, HASHING *has, Listasensor* Ls) {
 	passagem* novaPassagem = (passagem*)malloc(sizeof(passagem));
 	if (novaPassagem == NULL) {
 		printf("Erro ao alocar memória para a passagem.\n");
@@ -580,15 +593,20 @@ void regist_pass(Listapassagem* Lp, marca *m, Listasensor* Ls) {
 	float distancia;
 	char dataHora[20];
 	char marcad[50];
-    pmarca pm = m;
-    printf("Qual a marca do carro");
+    pmarca pm = has->Inicio;
+    printf("Qual a marca do carro?\n");
     scanf("%s",marcad);
 
-    while(strcmp(marcad,pm->nome ) != 0){
+    while( pm != NULL && strcmp(marcad,pm->nome ) != 0){
         pm = pm->prox;
     }
+    	if (pm == NULL) {
+		printf("marca nao encontrado.\n");
+		free(novaPassagem);
+		return;
+	}
         pListacarro Lc = pm->inf;
-        printf("Insira a matrícula do carro:\n");
+        printf("Insira a matricula do carro:\n");
         scanf("%s", matricula);
         pnocarro atualCarro = Lc->inicio;
         while (atualCarro != NULL && strcmp(atualCarro->info->matricula, matricula) != 0) {
@@ -596,14 +614,14 @@ void regist_pass(Listapassagem* Lp, marca *m, Listasensor* Ls) {
         } // isto vai buscar o carro plea matricula na lista
 
 	if (atualCarro == NULL) {
-		printf("Carro não encontrado.\n");
+		printf("Carro nao encontrado.\n");
 		free(novaPassagem);
 		return;
 	} //senao for encontrado diz q n foi encontrado e da return
 
 	novaPassagem->codcarro = atualCarro->info;
 
-	printf("Insira o código do sensor:\n");
+	printf("Insira o codigo do sensor:\n");
 	scanf("%d", &codigoSensor);
 
 /*	pnosensor atualSensor = Ls->inicio;
@@ -713,16 +731,20 @@ void memoria() {
 
 }
 
-void organizacarros(marca m) {
-	pmarca nm = &m;
+void organizacarros(HASHING *has) {
+	pmarca nm = has->Inicio;
+	pListacarro tempL;
+	pmarca tempmarca;
 	pListacarro Lc;
 	pnocarro nc;
 	pcarro tempc;
+	char tempn[20];
+	int t;
 	int troca;
 	int opcao;
 
 	printf("Organizar carros por:\n1-matricula\n2-marca\n3-modelo\n4-Sair");
-	scanf("%d",opcao);
+	scanf("%d",&opcao);
 
 	if (opcao == 1) {
 		do{
@@ -745,23 +767,40 @@ void organizacarros(marca m) {
 		} while (troca == 1);
 	}
 	else if (opcao == 2){
-		do {
-			troca = 0;
-			while (nm != NULL) {
-				Lc = nm->inf;
-				nc = Lc->inicio;
 
-				while (nc != NULL) {
-					if (strcmp(nc->info->marca, nc->prox->info->marca) > 0) {
-						tempc = nc->info;
-						nc->info = nc->prox->info;
-						nc->prox->info = tempc;
-						troca = 1;
-					}
-					nc = nc->prox;
-				}
-				nm = nm->prox;
+		do {
+        nm = has->Inicio;
+        if(nm == NULL){
+                printf("\n HASH esta a NUL????");
+            return;
+        }
+
+			troca = 0;
+			while (nm->prox != NULL) {
+			if(strcmp(nm->nome,nm->prox->nome)>0){
+                tempL = nm->inf;
+                nm->inf = nm->prox->inf;
+                nm->prox->inf = tempL;
+
+                strcpy(tempn,nm->nome);
+                strcpy(nm->nome,nm->prox->nome);
+                strcpy(nm->prox->nome, tempn);
+
+                t =nm->NUmcarromarca;
+                nm->NUmcarromarca = nm->prox->NUmcarromarca;
+                nm->prox->NUmcarromarca = t;
+                t =nm->Numcarrototal;
+                nm->Numcarrototal = nm->prox->Numcarrototal;
+                nm->prox->Numcarrototal = t;
+                t =nm->numkillmarca;
+                nm->numkillmarca = nm->prox->numkillmarca;
+                nm->prox->numkillmarca = t;
+                troca = 1;
+
 			}
+            nm = nm->prox;
+            }
+
 		} while (troca == 1);
 	}
 	else if (opcao == 3){

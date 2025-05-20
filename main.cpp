@@ -37,10 +37,12 @@ int main() {
 	pListadono Ld = crialistadono();
     import(Ld, has, pp);
     //organizadonos(Ld);
-	//regist_dono(Ld);
 	//list_dono(Ld);
     //regist_veiculo(Ld,m);
-    list_veiculo(has);
+
+   //regist_pass(pp,has,Ls);
+   organizacarros(has);
+   list_veiculo(has);
 
 /*
         // Inicializa estruturas

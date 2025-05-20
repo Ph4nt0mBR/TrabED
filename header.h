@@ -36,7 +36,7 @@ typedef struct Listadono {
 //Struct para leitura e verificacao de carros
 typedef struct carros
 {
-	char matricula[8];
+	char matricula[9];
 	char marca[20];
 	char modelo[20];
 	int ano;
