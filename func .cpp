@@ -656,7 +656,7 @@ void organizadonos(Listadono* Ld) {
 
 }
 
-void import(Listadono *Ld, HASHING *has, Listapassagem *Lp) {
+void import(Listadono *Ld, marca *m, Listapassagem *Lp) {
 		int opcao = 0;
 
 		printf("Deseja importar donos?\n1-Sim\n2-Nao\n");
