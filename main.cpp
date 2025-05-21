@@ -44,7 +44,8 @@ int main() {
    //organizacarros(has);
   // list_veiculo(has);
     //listacarroperiodo(pp);
-    marcapopular(has);
+    //marcapopular(has);
+    rankveiculos(pp,d);
 /*
         // Inicializa estruturas
         Listadono* Ld = crialistadono();

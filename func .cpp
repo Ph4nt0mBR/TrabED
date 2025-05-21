@@ -555,7 +555,7 @@ void list_veiculo(HASHING *has) {
 			atual = atual->prox;
 			i++;
 			if( skip == 0 && i%100 == 0 ){
-                printf("\nmore-1\nexit-2\n");
+                printf("\nmore-1\nexit-2\nskip-3");
                 scanf("%d",&continuar);
                 if(continuar == 1 ){
                 continue;
@@ -925,11 +925,11 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
        char *horaa =strtok(NULL, ":");
        char *mina = strtok(NULL,":");
        char *segundoa = strtok(NULL, ":");
-			if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
+			//if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
 				pnLpass->info = pnpass->info;
 				pnLpass = pnLpass->prox;
 				pLpass->numel++;
-			}
+			//}
 			pnpass = pnpass->prox;
 		}
 
@@ -1133,10 +1133,13 @@ void condutorpostal() {
 
 void marcapopular(HASHING *has) {
 	pmarca pm = has->Inicio;
+	if(pm == NULL){
+        printf("nao existe nenhuma marca");
+        return;
+	}
 	pmarca ppm = pm->prox;
 
 	while (ppm->prox != NULL) {
-            printf("f");
 		if (pm->NUmcarromarca < ppm->NUmcarromarca) {
 			pm = ppm;
 			ppm= ppm->prox;
