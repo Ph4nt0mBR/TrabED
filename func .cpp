@@ -42,6 +42,9 @@ pdistancia calcDistancia()
 	fclose(F);
     return nd;
 }
+/*Lê distâncias entre pares de nós do arquivo "distancias.txt" e armazena-as numa matriz 10x10 dentro da struct "distancias". 
+Cada linha do arquivo deve conter: <no1> <no2> <distancia>. Os nós devem estar no intervalo [1, 10]. A distância é registada nos dois sentidos.*/
+
 
 
 int importdono(Listadono *ld) {
@@ -123,6 +126,9 @@ int importdono(Listadono *ld) {
 
     return (count > 0) ? 1 : 0;
 }
+/*Lê dados de donos a partir do arquivo "donos.txt" e adiciona-os à lista ligada "Listadono". Cada linha deve conter: <código> <nome> <código postal>, separados por tabulação ou espaço.
+Ignora ou reporta linhas mal formatadas ou com dados inválidos.*/
+
 
 
 int importcarro(Listadono *L, HASHING *has)
@@ -193,6 +199,9 @@ int importcarro(Listadono *L, HASHING *has)
     fclose(F);
     return 1;
 }
+/*Lê dados de carros do arquivo "carros.txt" e associa-os ao respetivo dono na lista "Listadono" e à marca na struct hashing.
+Cada linha deve conter: <matrícula> <marca> <modelo> <ano> <NIF do dono> <código>, separados por tabulações.*/
+
 
 int importpassagem(Listapassagem *L, HASHING *has) {
     FILE* F = fopen("passagem.txt", "r");
@@ -254,6 +263,9 @@ int importpassagem(Listapassagem *L, HASHING *has) {
     printf("Importação concluída com sucesso!\n");
     return 1;
 }
+/*Lê dados de passagens do arquivo "passagem.txt" e associa cada uma ao carro correspondente na estrutura "HASHING".
+Cada linha deve conter: <ID sensor> <código do carro> <data> <tipo de registo>, separados por tabulações.*/
+
 
 int importsensor(Listasensores *L) {
      setlocale(LC_ALL, "Portuguese");
@@ -297,6 +309,12 @@ int importsensor(Listasensores *L) {
     fclose(F);
     return 1;
 }
+/*Lê dados dos sensores do arquivo "sensores.txt" e adiciona-os à lista "Listasensores".
+Cada linha deve conter: <código> <designação> <latitude> <longitude>, separados por tabulações.*/
+
+
+
+
 
 //funçoes para importar
 //-------------------------------------------------------------------
@@ -1148,8 +1166,35 @@ void marcapopular(HASHING *has) {
 	//Determinar qual a marca de automóvel mais comum?
 }
 
-void exportarXl() {
-	//Exportar toda a Base de Dados para o formato *.csv, para ser lido em Excel
+void exportarXl(Listapassagem* Lp, HASHING* has) {
+	FILE* f = fopen("base_dados.csv", "w");
+	if (f == NULL) {
+		printf("Erro ao abrir o ficheiro CSV para escrita.\n");
+		return;
+	}
+
+	//cabeçalho do ficheiroCSV
+	fprintf(f, "Matricula,Marca,Modelo,CodigoCarro,ContribuinteDono,NomeDono,DataHora,IDSensor\n");
+
+	pnopassagem atual = Lp->inicio;
+	while (atual != NULL) {
+		// Verificar se o carro e o dono existem
+		if (atual->info->codcarro && atual->info->codcarro->pdonos) {
+			fprintf(f, "%s,%s,%s,%d,%d,%s,%s,%d\n",
+				atual->info->codcarro->matricula,
+				atual->info->codcarro->marca,
+				atual->info->codcarro->modelo,
+				atual->info->codcarro->codigo,
+				atual->info->codcarro->pdonos->numcontibuinte,
+				atual->info->codcarro->pdonos->nome,
+				atual->info->data,
+				atual->info->idsensor);
+		}
+		atual = atual->prox;
+	}
+
+	fclose(f);
+	printf("Dados exportados com sucesso para base_dados.csv\n");
 }
 
 void exportarXML() {
