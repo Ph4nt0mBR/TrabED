@@ -28,8 +28,8 @@ void regist_pass(Listapassagem* Lp, HASHING *has, Listasensor* Ls);
 void organizadonos(Listadono* Ld);
 void import(Listadono *Ld, HASHING *has, Listapassagem *Lp);
 void organizacarros(HASHING *has);
-void listacarroperiodo(Listapassagem pass);
-void rankveiculos(Listapassagem pass,distancia d);
+void listacarroperiodo(Listapassagem *pass);
+void rankveiculos(Listapassagem *pass,distancia *d);
 void rankmarcas(Listapassagem pass, distancia d, HASHING *has);
 
 void marcapopular(HASHING *has);

@@ -26,7 +26,8 @@
 
 
 int main() {
-    //calcDistancia();
+    pdistancia d =calcDistancia();
+
     //setlocale(LC_ALL, "Portuguese");
     //setlocale(LC_ALL, "pt_PT.UTF-8");
 
@@ -39,11 +40,11 @@ int main() {
     //organizadonos(Ld);
 	//list_dono(Ld);
     //regist_veiculo(Ld,m);
-
    //regist_pass(pp,has,Ls);
-   organizacarros(has);
-   list_veiculo(has);
-
+   //organizacarros(has);
+  // list_veiculo(has);
+    //listacarroperiodo(pp);
+    marcapopular(has);
 /*
         // Inicializa estruturas
         Listadono* Ld = crialistadono();
