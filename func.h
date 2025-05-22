@@ -30,9 +30,11 @@ void import(Listadono *Ld, HASHING *has, Listapassagem *Lp);
 void organizacarros(HASHING *has);
 void listacarroperiodo(Listapassagem *pass);
 void rankveiculos(Listapassagem *pass,distancia *d);
-void rankmarcas(Listapassagem pass, distancia d, HASHING *has);
+void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has);
 
 void condutorediamax(HASHING *has);
 void marcapopular(HASHING *has);
+void exportarXl(Listapassagem* Lp, HASHING* has);
+
 void calcvelociade(Listapassagem *p, distancia *d);
 float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec);

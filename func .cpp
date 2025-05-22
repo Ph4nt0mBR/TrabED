@@ -908,6 +908,7 @@ void listacarroperiodo(Listapassagem *pass) {
 
 void rankveiculos(Listapassagem *pass,distancia *d) {
 	int opcao, troca;
+
 	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
 	scanf("%d", &opcao);
 
@@ -940,23 +941,29 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
        char *horaf =strtok(NULL, ":");
        char *minf = strtok(NULL,":");
        char *segundof = strtok(NULL, ":");
+       float tempoi = calctempo(anoi,mesi,diai,horai,mini,segundoi);
+       float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
 
 		while (pnpass != NULL) {
-       char *anoa = strtok(pnpass->info->data,"-");
-       char *mesa = strtok(NULL, "-");
-       char *diaa = strtok(NULL, " ");
-       char *horaa =strtok(NULL, ":");
-       char *mina = strtok(NULL,":");
-       char *segundoa = strtok(NULL, ":");
-			//if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
+            char *anoa = strtok(pnpass->info->data,"-");
+            char *mesa = strtok(NULL, "-");
+            char *diaa = strtok(NULL, " ");
+            char *horaa =strtok(NULL, ":");
+            char *mina = strtok(NULL,":");
+            char *segundoa = strtok(NULL, ":");
+            float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
+            printf("tempoi : %f\t",tempoi);
+            printf("tempoa : %f\t",tempoa);
+            printf("tempof : %f\n",tempof);
+			if (tempoi<tempoa && tempof>tempoa) {
 				pnLpass->info = pnpass->info;
-
+                printf("r");
 				pnopassagem Lpass =(pnopassagem)malloc(sizeof(nopassagem));
 				pnLpass->prox = Lpass;
 				pLpass->numel= pLpass->numel + 1;
-			//}
+			}
 			pnpass = pnpass->prox;
-			printf("o");
+
 		}
 
 		pnLpass = pLpass->inicio;
@@ -1032,7 +1039,7 @@ void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has) {
 	pmarca pm = has->Inicio;
 	pListacarro pl;
 	pnocarro pn;
-	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
+	printf("\n\nDeseja rankear as marcas num periodo pelos kilometros?\n1-Sim\n2-não");
 	scanf("%d", &opcao);
 
 	if (opcao == 1) {
@@ -1051,13 +1058,42 @@ void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has) {
 		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)");
 		scanf("%s", horafim);
 
+        char *anoi = strtok(horainicio,"-");
+       char *mesi = strtok(NULL, "-");
+       char *diai = strtok(NULL, "_");
+       char *horai =strtok(NULL, ":");
+       char *mini = strtok(NULL,":");
+       char *segundoi = strtok(NULL, ":");
+       char *anof = strtok(horafim,"-");
+       char *mesf = strtok(NULL, "-");
+       char *diaf = strtok(NULL, "_");
+       char *horaf =strtok(NULL, ":");
+       char *minf = strtok(NULL,":");
+       char *segundof = strtok(NULL, ":");
+       float tempoi = calctempo(anoi,mesi,diai,horai,mini,segundoi);
+       float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
+
 		while (pnpass != NULL) {
-			if (strcmp(pnpass->info->data, horainicio) > 0 && strcmp(pnpass->info->data, horafim) < 0) {
+            char *anoa = strtok(pnpass->info->data,"-");
+            char *mesa = strtok(NULL, "-");
+            char *diaa = strtok(NULL, " ");
+            char *horaa =strtok(NULL, ":");
+            char *mina = strtok(NULL,":");
+            char *segundoa = strtok(NULL, ":");
+            float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
+            printf("tempoi : %f\t",tempoi);
+            printf("tempoa : %f\t",tempoa);
+            printf("tempof : %f\n",tempof);
+			if (tempoi<tempoa && tempof>tempoa) {
 				pnLpass->info = pnpass->info;
-				pnLpass = pnLpass->prox;
-				pLpass->numel++;
+
+				pnopassagem Lpass =(pnopassagem)malloc(sizeof(nopassagem));
+
+				pnLpass->prox = Lpass;
+				pLpass->numel= pLpass->numel + 1;
 			}
 			pnpass = pnpass->prox;
+			printf("o");
 		}
 
 		pnLpass = pLpass->inicio;
@@ -1288,3 +1324,35 @@ float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
     return tempo/3600;
 
 }
+
+void resetveiculo(Listapassagem *pass,distancia *d){
+    pnopassagem nop = pass->inicio;
+    while(nop != NULL){
+        nop->info->codcarro->kilometros = 0;
+        nop->info->codcarro->tempototal = 0;
+        nop = nop->prox;
+    }
+}
+
+void resetmarca(HASHING *has){
+    pmarca m = has->Inicio;
+    while( m != NULL){
+        m->numkillmarca = 0;
+        m = m->prox;
+    }
+}
+
+void velocidade(Listapassagem *Lp, distancia *d){
+    pnopassagem np = Lp->inicio;
+        while(np != NULL){
+               pnopassagem npa = np;
+               pnopassagem npf = np;
+               while(npf!= NULL){
+                if(npf->info->codcarro->codigo == npa->info->codcarro->codigo ){
+                 //   npa->info->codcarro->kilometros =
+                }
+               }
+            np->prox;
+        }
+}
+
