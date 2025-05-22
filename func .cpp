@@ -389,6 +389,7 @@ void AddDono(Listadono* l, dono* D)
 	l->numel++;
 
 }
+//Adiciona um novo dono a lista ligada "Listadono", inserindo-o no inicio da lista.
 
 void Addcarro(Listacarro* lista, pcarro carro) {
     if (!lista || !carro) return;
@@ -401,6 +402,8 @@ void Addcarro(Listacarro* lista, pcarro carro) {
         lista->numel++;
     }
 }
+//Adiciona um novo carro à lista ligada "Listacarro", inserindo-o no inicio da lista, se for valido.
+
 
 void Addsensor(Listasensor* l, sensor* D)
 {
@@ -411,6 +414,7 @@ void Addsensor(Listasensor* l, sensor* D)
 	l->numel++;
 
 }
+//Adiciona um novo sensor a lista ligada "Listasensor",adicionando-o no inicio da lista.
 
 void Addpassagem(Listapassagem* l, passagem* D)
 {
@@ -1258,8 +1262,36 @@ void exportarXl(Listapassagem* Lp, HASHING* has) {
 	printf("Dados exportados com sucesso para base_dados.csv\n");
 }
 
-void exportarXML() {
-	//Exportar toda a Base de Dados para o formato *.xml
+void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls) {
+    FILE* f = fopen("base_dados.xml", "w");
+    if (f == NULL) {
+        printf("Erro ao abrir o ficheiro XML para escrita.\n");
+        return;
+    }
+
+    fprintf(f, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(f, "<BaseDeDados>\n");
+
+    pnopassagem atual = Lp->inicio;
+    while (atual != NULL) {
+        if (atual->info->codcarro && atual->info->codcarro->pdonos) {
+            fprintf(f, "  <Passagem>\n");
+            fprintf(f, "    <Matricula>%s</Matricula>\n", atual->info->codcarro->matricula);
+            fprintf(f, "    <Marca>%s</Marca>\n", atual->info->codcarro->marca);
+            fprintf(f, "    <Modelo>%s</Modelo>\n", atual->info->codcarro->modelo);
+            fprintf(f, "    <CodigoCarro>%d</CodigoCarro>\n", atual->info->codcarro->codigo);
+            fprintf(f, "    <ContribuinteDono>%d</ContribuinteDono>\n", atual->info->codcarro->pdonos->numcontibuinte);
+            fprintf(f, "    <NomeDono>%s</NomeDono>\n", atual->info->codcarro->pdonos->nome);
+            fprintf(f, "    <DataHora>%s</DataHora>\n", atual->info->data);
+            fprintf(f, "    <IDSensor>%d</IDSensor>\n", atual->info->idsensor);
+            fprintf(f, "  </Passagem>\n");
+        }
+        atual = atual->prox;
+    }
+
+    fprintf(f, "</BaseDeDados>\n");
+    fclose(f);
+    printf("Dados exportados com sucesso para base_dados.xml\n");
 }
 
 void calcvelociade(Listapassagem *p, distancia *d){
