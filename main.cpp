@@ -45,7 +45,9 @@ int main() {
   // list_veiculo(has);
     //listacarroperiodo(pp);
     //marcapopular(has);
-    rankveiculos(pp,d);
+    //rankveiculos(pp,d);
+    calcvelociade( pp,d);
+    //condutorediamax(has);
 /*
         // Inicializa estruturas
         Listadono* Ld = crialistadono();

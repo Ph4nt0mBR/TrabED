@@ -32,4 +32,6 @@ void listacarroperiodo(Listapassagem *pass);
 void rankveiculos(Listapassagem *pass,distancia *d);
 void rankmarcas(Listapassagem pass, distancia d, HASHING *has);
 
+void condutorediamax(HASHING *has);
 void marcapopular(HASHING *has);
+void calcvelociade(Listapassagem *p, distancia *d);
