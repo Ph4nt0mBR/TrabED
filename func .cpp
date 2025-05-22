@@ -1356,3 +1356,83 @@ void velocidade(Listapassagem *Lp, distancia *d){
         }
 }
 
+size_t calcularMemoriaListadono(pListadono Ld) {
+    if (Ld == NULL) return 0;
+    size_t total = sizeof(Listadono);
+    pno atual = Ld->inicio;
+    while (atual != NULL) {
+        total += sizeof(no) + sizeof(dono);
+        atual = atual->prox;
+    }
+    return total;
+}
+
+size_t calcularMemoriaListacarro(pListacarro Lc) {
+    if (Lc == NULL) return 0;
+    size_t total = sizeof(Listacarro);
+    pnocarro atual = Lc->inicio;
+    while (atual != NULL) {
+        total += sizeof(nocarro) + sizeof(carro);
+        atual = atual->prox;
+    }
+    return total;
+}
+
+size_t calcularMemoriaHashing(HASHING *has) {
+    if (has == NULL) return 0;
+    size_t total = sizeof(HASHING);
+    pmarca atual = has->Inicio;
+    while (atual != NULL) {
+        total += sizeof(marca) + calcularMemoriaListacarro(atual->inf);
+        atual = atual->prox;
+    }
+    return total;
+}
+
+size_t calcularMemoriaListapassagem(pListapassagem Lp) {
+    if (Lp == NULL) return 0;
+    size_t total = sizeof(Listapassagem);
+    pnopassagem atual = Lp->inicio;
+    while (atual != NULL) {
+        total += sizeof(nopassagem) + sizeof(passagem);
+        atual = atual->prox;
+    }
+    return total;
+}
+
+size_t calcularMemoriaListasensor(pListasensor Ls) {
+    if (Ls == NULL) return 0;
+    size_t total = sizeof(Listasensor);
+    pnosensor atual = Ls->inicio;
+    while (atual != NULL) {
+        total += sizeof(nosensor) + sizeof(sensor);
+        atual = atual->prox;
+    }
+    return total;
+}
+
+size_t calcularMemoriaDistancia(pdistancia d) {
+    return (d != NULL) ? sizeof(distancias) : 0;
+}
+
+// Função principal que soma toda a memória
+void memoriateste(Listadono *Ld, HASHING *has, Listapassagem *Lp, Listasensor *Ls, pdistancia d) {
+    size_t total = 0;
+
+    // Memória das listas de donos
+    total += calcularMemoriaListadono(Ld);
+
+    // Memória do hashing (marcas e carros)
+    total += calcularMemoriaHashing(has);
+
+    // Memória das passagens
+    total += calcularMemoriaListapassagem(Lp);
+
+    // Memória dos sensores
+    total += calcularMemoriaListasensor(Ls);
+
+    // Memória da matriz de distâncias
+    total += calcularMemoriaDistancia(d);
+
+    printf("\nMemoria total ocupada: %zu bytes\n", total);
+}

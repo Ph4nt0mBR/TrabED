@@ -38,3 +38,10 @@ void exportarXl(Listapassagem* Lp, HASHING* has);
 
 void calcvelociade(Listapassagem *p, distancia *d);
 float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec);
+void memoriateste(Listadono *Ld, HASHING *has, Listapassagem *Lp, Listasensor *Ls, pdistancia d);
+size_t calcularMemoriaDistancia(pdistancia d);
+size_t calcularMemoriaListasensor(pListasensor Ls);
+size_t calcularMemoriaListapassagem(pListapassagem Lp);
+size_t calcularMemoriaHashing(HASHING has);
+size_t calcularMemoriaListacarro(pListacarro Lc);
+size_t calcularMemoriaListadono(pListadono Ld);
