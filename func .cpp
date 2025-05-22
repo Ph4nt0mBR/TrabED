@@ -935,7 +935,9 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
 
 		while (pnpass != NULL) {
                 printf("\nvou converter a data [%s]",pnpass->info->data);
-            char *diaa = strtok(pnpass->info->data,"-");
+            char copia[30];
+            strcpy(copia,pnpass->info->data);
+            char *diaa = strtok(copia,"-");
             char *mesa = strtok(NULL, "-");
             char *anoa = strtok(NULL, " ");
             char *horaa =strtok(NULL, ":");
@@ -968,7 +970,6 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
                     printf("\ntemp1: %s",temp2->info->data);
                     printf("\ntemp2: %s",temp->info->data);
                         if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
-                                printf("\nchegou");
                             if(temp->info->idsensor == 0){
                                 temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
                             }
@@ -996,7 +997,7 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
                 pnLpass = pnLpass->prox;
             }
 		}while(troca == 1);
-printf("eeeeee");
+
         pnLpass = pLpass->inicio;
 
 		while(pnLpass != NULL){
