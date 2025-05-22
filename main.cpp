@@ -43,10 +43,10 @@ int main() {
    //regist_pass(pp,has,Ls);
    //organizacarros(has);
   // list_veiculo(has);
-    //listacarroperiodo(pp);
+    listacarroperiodo(pp);
     //marcapopular(has);
     //rankveiculos(pp,d);
-    calcvelociade( pp,d);
+    //calcvelociade( pp,d);
     //condutorediamax(has);
 /*
         // Inicializa estruturas

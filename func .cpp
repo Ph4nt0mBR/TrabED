@@ -878,24 +878,28 @@ void listacarroperiodo(Listapassagem *pass) {
        char *horaf =strtok(NULL, ":");
        char *minf = strtok(NULL,":");
        char *segundof = strtok(NULL, ":");
-
+        float tempoi = calctempo(anoi,mesi,diai,horai,mini,segundoi);
+        float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
 		while (pnpass != NULL) {
-       char *anoa = strtok(pnpass->info->data,"-");
+       char *diaa = strtok(pnpass->info->data,"-");
        char *mesa = strtok(NULL, "-");
-       char *diaa = strtok(NULL, " ");
+       char *anoa = strtok(NULL, " ");
        char *horaa =strtok(NULL, ":");
        char *mina = strtok(NULL,":");
        char *segundoa = strtok(NULL, ":");
-
-			//if(){
-				printf("--------------------------\n");
+        float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
+        printf("tempoi : %f\t",tempoi);
+        printf("tempoa : %f\t",tempoa);
+        printf("tempof : %f\n",tempof);
+			if(tempoi<tempoa && tempoa<tempof){
+				printf("\n--------------------------\n");
 				printf("Matricula: %s\n", pnpass->info->codcarro->matricula);
 				printf("Contribuinte do Dono: %d\n", pnpass->info->codcarro->pdonos->numcontibuinte);
 				printf("Marca: %s\n", pnpass->info->codcarro->marca);
 				printf("Modelo: %s\n", pnpass->info->codcarro->modelo);
 				printf("Ano: %d\n", pnpass->info->codcarro->ano);
 				printf("Codigo: %d\b", pnpass->info->codcarro->codigo);
-			//}
+			}
 			pnpass = pnpass->prox;
 		}
 
@@ -1260,4 +1264,27 @@ void calcvelociade(Listapassagem *p, distancia *d){
         np = np->prox;
     }
     printf("    \n %d\n%f",npa->info->codcarro->codigo, npa->info->codcarro->kilometros);
+}
+
+float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
+    float tempo = 0;
+    tempo = tempo + (float)atoi(ano)*365*24*3600;
+    int mesp = atoi(mes);
+    if(mesp == 1 || mesp == 3 || mesp ==  5  || mesp == 7 || mesp ==  8 || mesp  == 10  || mesp == 12){
+      tempo = tempo + 31*24*3600;
+
+    }
+    else if(mesp == 4 || mesp == 6 || mesp ==  9  || mesp == 11){
+      tempo = tempo +30*24*3600;
+
+    }
+    else{
+        tempo = tempo + 28*24*3600;
+    }
+    tempo = tempo + (float)atoi(dia)*24*3600;
+    tempo = tempo + (float)atoi(hora)*3600;
+    tempo = tempo + (float)atoi(minut)*60;
+    tempo = tempo + (float)atoi(sec);
+    return tempo/3600;
+
 }
