@@ -734,23 +734,8 @@ void import(Listadono *Ld, HASHING *has, Listapassagem *Lp) {
 		//sao usadas varias mini funçoes para importar cada um
 }
 
-void memoria() {
-	//Determinar a memoria ocupada por toda a estrutura de dados !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
 void organizacarros(HASHING *has) {
+    //falta fazer a 1 e 3 organização
 	pmarca nm = has->Inicio;
 	pListacarro tempL;
 	pmarca tempmarca;
@@ -849,9 +834,8 @@ void organizacarros(HASHING *has) {
 }
 
 void listacarroperiodo(Listapassagem *pass) {
-    printf("oi");
 	int opcao;
-	printf("Deseja listar os carros que circularam num periodo?\n1-Sim\n2-não");
+	printf("/nDeseja listar os carros que circularam num periodo?\n1-Sim\n2-não");
 	scanf("%d", &opcao);
 
 	if (opcao == 1) {
@@ -1356,6 +1340,8 @@ void velocidade(Listapassagem *Lp, distancia *d){
         }
 }
 
+//------------------------------------------------------------------//
+//funções relacionadas á memoria
 size_t calcularMemoriaListadono(pListadono Ld) {
     if (Ld == NULL) return 0;
     size_t total = sizeof(Listadono);
