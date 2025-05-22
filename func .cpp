@@ -215,7 +215,7 @@ int importpassagem(Listapassagem *L, HASHING *has) {
 
     int contador =0;
     while (fscanf(F, "%d\t%d\t%[^\t]\t%d", &Id, &COD, Data, &regist) == 4) {
-        printf("Processando: ID=%d, COD=%d, Data=%s, Regist=%d\n", Id, COD, Data, regist);
+        //printf("Processando: ID=%d, COD=%d, Data=%s, Regist=%d\n", Id, COD, Data, regist);
         contador++;
 if (contador%100000 == 0)
     printf("\n+ %d passagens lidas",contador);
@@ -389,6 +389,7 @@ void AddDono(Listadono* l, dono* D)
 	l->numel++;
 
 }
+//Adiciona um novo dono a lista ligada "Listadono", inserindo-o no inicio da lista.
 
 void Addcarro(Listacarro* lista, pcarro carro) {
     if (!lista || !carro) return;
@@ -401,6 +402,8 @@ void Addcarro(Listacarro* lista, pcarro carro) {
         lista->numel++;
     }
 }
+//Adiciona um novo carro à lista ligada "Listacarro", inserindo-o no inicio da lista, se for valido.
+
 
 void Addsensor(Listasensor* l, sensor* D)
 {
@@ -411,6 +414,7 @@ void Addsensor(Listasensor* l, sensor* D)
 	l->numel++;
 
 }
+//Adiciona um novo sensor a lista ligada "Listasensor",adicionando-o no inicio da lista.
 
 void Addpassagem(Listapassagem* l, passagem* D)
 {
@@ -934,7 +938,6 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
        float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
 
 		while (pnpass != NULL) {
-                printf("\nvou converter a data [%s]",pnpass->info->data);
             char copia[30];
             strcpy(copia,pnpass->info->data);
             char *diaa = strtok(copia,"-");
@@ -949,7 +952,6 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
             printf("tempoa : %f\t",tempoa);
             printf("tempof : %f\n",tempof);
 			if (tempoi<tempoa && tempof>tempoa) { // esta passagem está no período
-                    printf("\nesta passagem esta no perioodo\n");
 			    pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
 				pnLpass->info = pnpass->info;
                 pnLpass->prox = pLpass->inicio;
@@ -967,11 +969,14 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
             pnopassagem temp2 = pnLpass;
             if(pnLpass->info->codcarro->kilometros == 0){
                 while(temp2 != NULL){
-                    printf("\ntemp1: %s",temp2->info->data);
-                    printf("\ntemp2: %s",temp->info->data);
+                   // printf("\ntemp1: %d",temp->info->tiporegist);
+                   // printf("\ntemp2: %d",temp2->info->tiporegist);
                         if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
-                            if(temp->info->idsensor == 0){
+
+                            if(temp->info->tiporegist == 0){
+
                                 temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
+                               // printf("o kilometro é %d",temp->info->codcarro->codigo);
                             }
                             temp = temp2;
                         }
@@ -990,18 +995,26 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 
 //                    ppassagem ptemp = (ppassagem)malloc(sizeof(passagem));
                     ppassagem ptemp = pnLpass->info;
+                    printf("\no carro temporario %d\n",ptemp->codcarro->codigo);
+                    printf("no caro antes de temp %d\n ",pnLpass->prox->info->codcarro->codigo);
                     pnLpass->info = pnLpass->prox->info;
                     pnLpass->prox->info = ptemp;
+                    printf("\no carro depois de temp %d\n",pnLpass->prox->info->codcarro->codigo);
+
                     troca = 1;
+
                 }
                 pnLpass = pnLpass->prox;
             }
 		}while(troca == 1);
 
         pnLpass = pLpass->inicio;
+        printf("%d",pLpass->inicio->info->codcarro->codigo);
 
 		while(pnLpass != NULL){
                 if(pnLpass->info->codcarro->kilometros != 0){
+                printf("\n------------------------------\n");
+                printf("percorreu %f kilometros",pnLpass->info->codcarro->kilometros);
                 printf("Matricula: %s\n", pnLpass->info->codcarro->matricula);
 				printf("Contribuinte do Dono: %d\n", pnLpass->info->codcarro->pdonos->numcontibuinte);
 				printf("Marca: %s\n", pnLpass->info->codcarro->marca);
@@ -1259,8 +1272,36 @@ void exportarXl(Listapassagem* Lp, HASHING* has) {
 	printf("Dados exportados com sucesso para base_dados.csv\n");
 }
 
-void exportarXML() {
-	//Exportar toda a Base de Dados para o formato *.xml
+void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls) {
+    FILE* f = fopen("base_dados.xml", "w");
+    if (f == NULL) {
+        printf("Erro ao abrir o ficheiro XML para escrita.\n");
+        return;
+    }
+
+    fprintf(f, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(f, "<BaseDeDados>\n");
+
+    pnopassagem atual = Lp->inicio;
+    while (atual != NULL) {
+        if (atual->info->codcarro && atual->info->codcarro->pdonos) {
+            fprintf(f, "  <Passagem>\n");
+            fprintf(f, "    <Matricula>%s</Matricula>\n", atual->info->codcarro->matricula);
+            fprintf(f, "    <Marca>%s</Marca>\n", atual->info->codcarro->marca);
+            fprintf(f, "    <Modelo>%s</Modelo>\n", atual->info->codcarro->modelo);
+            fprintf(f, "    <CodigoCarro>%d</CodigoCarro>\n", atual->info->codcarro->codigo);
+            fprintf(f, "    <ContribuinteDono>%d</ContribuinteDono>\n", atual->info->codcarro->pdonos->numcontibuinte);
+            fprintf(f, "    <NomeDono>%s</NomeDono>\n", atual->info->codcarro->pdonos->nome);
+            fprintf(f, "    <DataHora>%s</DataHora>\n", atual->info->data);
+            fprintf(f, "    <IDSensor>%d</IDSensor>\n", atual->info->idsensor);
+            fprintf(f, "  </Passagem>\n");
+        }
+        atual = atual->prox;
+    }
+
+    fprintf(f, "</BaseDeDados>\n");
+    fclose(f);
+    printf("Dados exportados com sucesso para base_dados.xml\n");
 }
 
 void calcvelociade(Listapassagem *p, distancia *d){
