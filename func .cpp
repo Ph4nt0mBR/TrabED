@@ -449,6 +449,7 @@ void regist_dono(Listadono* Ld) {
 		printf("Qual o codigo postal?\n");
 		scanf("%s", &(ndono->codPostal));
 		AddDono(Ld, ndono);
+		printf("dono adicionado com sucesso");
 	}
 	if (opcao == 0) {
 		return;
@@ -457,6 +458,7 @@ void regist_dono(Listadono* Ld) {
 
 void list_dono(Listadono* Ld) {
 	//função que apresenta no ecrã todos os donos
+	int i = 0, skip = 0, continuar;
 	pdono linfdono;
 	pno ldono = Ld->inicio;
 	while (ldono != NULL) {
@@ -465,6 +467,21 @@ void list_dono(Listadono* Ld) {
 		printf("Nome:%s\n", linfdono->nome);
 		printf("numero de contribuinte:%d\n", linfdono->numcontibuinte);
 		ldono = ldono->prox;
+        i++;
+			if( skip == 0 && i%100 == 0 ){
+                printf("\nmore-1\nexit-2\nskip-3");
+                scanf("%d",&continuar);
+                if(continuar == 1 ){
+                continue;
+                }
+                else if(continuar == 2){
+                    return ;
+                }
+                else{
+                    skip = 1;
+                    continue;
+                }
+            }
 	}
 }
 
@@ -663,7 +680,7 @@ void regist_pass(Listapassagem* Lp, HASHING *has, Listasensor* Ls) {
 
 	novaPassagem->idsensor = codigoSensor;
 
-	printf("Insira a data e hora da passagem (formato: AAAA-MM-DD_HH:MM:SS):\n"); //pede data de passagem
+	printf("Insira a data e hora da passagem (formato: DD-MM-AAAA HH:MM:SS):\n"); //pede data de passagem
 	scanf("%s", dataHora);
 	strcpy(novaPassagem->data, dataHora);
 
@@ -751,31 +768,61 @@ void organizacarros(HASHING *has) {
 	pcarro tempc;
 	char tempn[20];
 	int t;
-	int troca;
+	int troca = 0;
 	int opcao;
 
 	printf("Organizar carros por:\n1-matricula\n2-marca\n3-modelo\n4-Sair");
+	printf("\n <aviso: organizar por matricula ou modelo automaticamente lista os carros, as alteracoes seram revertidas depois da \tlistagem>");
 	scanf("%d",&opcao);
 
 	if (opcao == 1) {
-		do{
-			troca = 0;
-			while (nm != NULL) {
-				Lc = nm->inf;
-				nc = Lc->inicio;
+	    nm = has->Inicio;
+        if(nm == NULL){
+            printf("\n HASH esta a NULL????");
+            return;
+        }
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                pcarro novocarro = nc->info;
+                Addcarro(tempL,novocarro);
+                nc = nc->prox;
+            }
+            nm = nm->prox;
+        }
 
-				while (nc != NULL) {
-					if (strcmp(nc->info->matricula, nc->prox->info->matricula) > 0) {
-						tempc = nc->info;
-						nc->info = nc->prox->info;
-						nc->prox->info = tempc;
-						troca = 1;
-					}
-					nc = nc->prox;
-				}
-				nm = nm->prox;
-			}
-		} while (troca == 1);
+        do{
+            troca = 0;
+            nc = tempL->inicio;
+            while(nc->prox != NULL){
+              if(strcmp(nc->info->matricula,nc->prox->info->matricula)>0){
+                // printf("\n%s\n\n",nc->prox->info->matricula);
+                 pcarro tcarro = nc->info;
+                 nc->info = nc->prox->info;
+                 nc->prox->info =  tcarro;
+                // printf("\n%s\n",nc->prox->info->matricula);
+                 troca = 1;
+
+              }
+                nc = nc->prox;
+            }
+
+
+        }while(troca ==1 );
+
+        nc = tempL->inicio;
+        while(nc != NULL){
+            printf("\n--------------------------\n");
+			printf("Matricula: %s\n", nc->info->matricula);
+			printf("Contribuinte do Dono: %d\n", nc->info->pdonos->numcontibuinte);
+			printf("Marca: %s\n", nc->info->marca);
+			printf("Modelo: %s\n", nc->info->modelo);
+			printf("Ano: %d\n", nc->info->ano);
+			printf("Codigo: %d", nc->info->codigo);
+            nc = nc->prox;
+        }
 	}
 	else if (opcao == 2){
 
@@ -815,24 +862,53 @@ void organizacarros(HASHING *has) {
 		} while (troca == 1);
 	}
 	else if (opcao == 3){
-		do {
-			troca = 0;
-			while (nm != NULL) {
-				Lc = nm->inf;
-				nc = Lc->inicio;
+nm = has->Inicio;
+        if(nm == NULL){
+            printf("\n HASH esta a NULL????");
+            return;
+        }
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                pcarro novocarro = nc->info;
+                Addcarro(tempL,novocarro);
+                nc = nc->prox;
+            }
+            nm = nm->prox;
+        }
 
-				while (nc != NULL) {
-					if (strcmp(nc->info->modelo, nc->prox->info->modelo) > 0) {
-						tempc = nc->info;
-						nc->info = nc->prox->info;
-						nc->prox->info = tempc;
-						troca = 1;
-					}
-					nc = nc->prox;
-				}
-				nm = nm->prox;
-			}
-		} while (troca == 1);
+        do{
+            troca = 0;
+            nc = tempL->inicio;
+            while(nc->prox != NULL){
+              if(strcmp(nc->info->modelo,nc->prox->info->modelo)>0){
+                // printf("\n%s\n\n",nc->prox->info->matricula);
+                 pcarro tcarro = nc->info;
+                 nc->info = nc->prox->info;
+                 nc->prox->info =  tcarro;
+                // printf("\n%s\n",nc->prox->info->matricula);
+                 troca = 1;
+
+              }
+                nc = nc->prox;
+            }
+
+
+        }while(troca ==1 );
+
+        nc = tempL->inicio;
+        while(nc != NULL){
+            printf("\n--------------------------\n");
+			printf("Matricula: %s\n", nc->info->matricula);
+			printf("Contribuinte do Dono: %d\n", nc->info->pdonos->numcontibuinte);
+			printf("Marca: %s\n", nc->info->marca);
+			printf("Modelo: %s\n", nc->info->modelo);
+			printf("Ano: %d\n", nc->info->ano);
+			printf("Codigo: %d", nc->info->codigo);
+            nc = nc->prox;
+        }
 	}
 	else if (opcao == 4){
 		return ;

@@ -35,6 +35,7 @@ void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has);
 void condutorediamax(HASHING *has);
 void marcapopular(HASHING *has);
 void exportarXl(Listapassagem* Lp, HASHING* has);
+void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls);
 
 void calcvelociade(Listapassagem *p, distancia *d);
 float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec);
