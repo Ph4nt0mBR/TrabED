@@ -31,7 +31,7 @@ void organizacarros(HASHING *has);
 void listacarroperiodo(Listapassagem *pass);
 void rankveiculos(Listapassagem *pass,distancia *d);
 void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has);
-
+void listainfracao(Listapassagem* pass, distancia* d);
 void condutorediamax(HASHING *has);
 void marcapopular(HASHING *has);
 void exportarXl(Listapassagem* Lp, HASHING* has);

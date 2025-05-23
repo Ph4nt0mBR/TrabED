@@ -41,7 +41,8 @@ int main() {
 	//list_dono(Ld);
     //regist_veiculo(Ld,m);
    //regist_pass(pp,has,Ls);
-   organizacarros(has);
+   //organizacarros(has);
+   listainfracao(pp, d);
   // list_veiculo(has);
     //listacarroperiodo(pp);
    // marcapopular(has);
