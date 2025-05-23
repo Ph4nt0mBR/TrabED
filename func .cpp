@@ -330,6 +330,7 @@ pListadono crialistadono() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listadono" vazia, com contador a zero.
 
 pListacarro crialistacarro() {
 	pListacarro L = (pListacarro)malloc(sizeof(Listacarro));
@@ -337,6 +338,7 @@ pListacarro crialistacarro() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listacarro" vazia, com contador a zero.
 
 pListasensor crialistasensores() {
 	pListasensor L = (pListasensor)malloc(sizeof(Listasensor));
@@ -344,6 +346,8 @@ pListasensor crialistasensores() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listasensor" vazia, com contador a zero.
+
 
 pListapassagem crialistapasagem() {
 	pListapassagem L = (pListapassagem)malloc(sizeof(Listapassagem));
@@ -351,6 +355,7 @@ pListapassagem crialistapasagem() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listapassagem" vazia, com contador a zero.
 
 pmarca criamarca(HASHING *has ,char *nome) {
     pmarca nova = (pmarca)malloc(sizeof(marca));
@@ -366,6 +371,8 @@ pmarca criamarca(HASHING *has ,char *nome) {
     nova->prox = temp;
     return nova;
 }
+//Cria uma nova marca com nome e lista de carros associada, e insere-a no início da tabela HASHING.
+
 
 HASHING *CriarHASHING()
 {
@@ -1258,6 +1265,8 @@ void marcamedia() {
 }
 
 void condutorediamax(HASHING *has) {
+    /*
+        Esta função não está terminada pois não tenho certeza como faço a parte de velocidade média*/
     pmarca p = has->Inicio;
     pnocarro pnmax = p->inf->inicio;
     while(p!= NULL){
@@ -1318,18 +1327,22 @@ void marcapopular(HASHING *has) {
 }
 
 void exportarXl(Listapassagem* Lp, HASHING* has) {
+    if (Lp == NULL || Lp->inicio == NULL) {
+        printf("ERRO: Lista de passagens vazia ou inválida!\n");
+        return;
+    }
+
 	FILE* f = fopen("base_dados.csv", "w");
 	if (f == NULL) {
 		printf("Erro ao abrir o ficheiro CSV para escrita.\n");
 		return;
 	}
 
-	//cabeçalho do ficheiroCSV
+
 	fprintf(f, "Matricula,Marca,Modelo,CodigoCarro,ContribuinteDono,NomeDono,DataHora,IDSensor\n");
 
 	pnopassagem atual = Lp->inicio;
 	while (atual != NULL) {
-		// Verificar se o carro e o dono existem
 		if (atual->info->codcarro && atual->info->codcarro->pdonos) {
 			fprintf(f, "%s,%s,%s,%d,%d,%s,%s,%d\n",
 				atual->info->codcarro->matricula,
