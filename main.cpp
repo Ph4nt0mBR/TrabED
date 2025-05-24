@@ -45,8 +45,8 @@ int main() {
   // list_veiculo(has);
     //listacarroperiodo(pp);
     //marcapopular(has);
-    rankveiculos(pp,d);
-    //rankmarcas(pp,d, has);
+    rankveiculos(pp,d,has);
+    rankmarcas(pp,d, has);
     //listainfracao(pp, d);
     //calcvelociade( pp,d);
     //condutorediamax(has);

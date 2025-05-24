@@ -29,7 +29,7 @@ void organizadonos(Listadono* Ld);
 void import(Listadono *Ld, HASHING *has, Listapassagem *Lp);
 void organizacarros(HASHING *has);
 void listacarroperiodo(Listapassagem *pass);
-void rankveiculos(Listapassagem *pass,distancia *d);
+void rankveiculos(Listapassagem *pass,distancia *d, HASHING *has);
 void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has);
 void listainfracao(Listapassagem* pass, distancia* d);
 void condutorediamax(HASHING *has);
