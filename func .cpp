@@ -1000,14 +1000,15 @@ void rankveiculos(Listapassagem *pass,distancia *d, HASHING *has) {
 		pnopassagem pnLpass ;
         //pnLpass = NULL;
 		pnopassagem pnpass = ppass->inicio;
-		char horafim[20];
-		char horainicio[20];
+		char horainicio[50];
+		char horafim[50];
+
 
 		printf("entre que datas os carros circularam");
-		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)\n");
-		scanf("%s\n", horainicio);
+		printf("Qual a data inicial(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		scanf("%s",horainicio);
 		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)\n");
-		scanf("%s\n", horafim);
+		scanf("%s",horafim);
 
         char *anoi = strtok(horainicio,"-");
        char *mesi = strtok(NULL, "-");
@@ -1145,11 +1146,11 @@ void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has) {
 		pnopassagem pnLpass ;
         //pnLpass = NULL;
 		pnopassagem pnpass = ppass->inicio;
-		char horafim[30];
 		char horainicio[30];
+		char horafim[30];
 
 		printf("entre que datas os carros circularam");
-		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		printf("Qual a data inicial(formato: AAAA-MM-DD_HH:MM:SS)\n");
 		scanf("%s", horainicio);
 		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)\n");
 		scanf("%s", horafim);
@@ -1247,7 +1248,10 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 
             nm = nm->prox;
         }
-        if(maior->numkillmarca != 0){
+        if(maior->numkillmarca == 0){
+            return ;
+        }
+        else if(maior->numkillmarca != 0){
             printf("kilometros:%d",maior->numkillmarca);
             printf("marca:%s\n",maior->nome);
             maior->numkillmarca = 0;
@@ -1409,12 +1413,167 @@ void rankinfracao() {
 	//número total de infrações de velocidade ocorridas durante determinado período.
 }
 
-void velocidademedia() {
-
+float velocidademedia(carro *c) {
+    float media = 0;
+    if(c->tempototal != 0){
+    media = c->kilometros/c->tempototal;
+    }
+    printf("\nmedia:%f\n",media);
+    return media;
 	//velocidade média
 }
 
-void marcamedia() {
+void marcamedia(Listapassagem *pass, distancia *d, HASHING *has) {
+    int opcao, troca;
+	pListacarro Lc;
+	pnocarro nc;
+	pmarca nm = has->Inicio;
+
+	printf("Deseja ver a marca com os carros que circulam a maior velocidade media ?\n1-Sim\n2-não");
+	scanf("%d", &opcao);
+
+	if (opcao == 1) {
+		int s1, s2;
+		pdistancia td= d;
+		pListapassagem ppass = pass;
+		pListapassagem pLpass = crialistapasagem();
+		//pnopassagem pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
+		pnopassagem pnLpass ;
+        //pnLpass = NULL;
+		pnopassagem pnpass = ppass->inicio;
+		char horainicio[30];
+		char horafim[30];
+
+		printf("entre que datas os carros circularam");
+		printf("Qual a data inicial(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		scanf("%s", horainicio);
+		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		scanf("%s", horafim);
+
+        char *anoi = strtok(horainicio,"-");
+       char *mesi = strtok(NULL, "-");
+       char *diai = strtok(NULL, "_");
+       char *horai =strtok(NULL, ":");
+       char *mini = strtok(NULL,":");
+       char *segundoi = strtok(NULL, ":");
+       char *anof = strtok(horafim,"-");
+       char *mesf = strtok(NULL, "-");
+       char *diaf = strtok(NULL, "_");
+       char *horaf =strtok(NULL, ":");
+       char *minf = strtok(NULL,":");
+       char *segundof = strtok(NULL, ":");
+       float tempoi = calctempo(anoi,mesi,diai,horai,mini,segundoi);
+       float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
+
+		while (pnpass != NULL) {
+            char copia[30];
+            strcpy(copia,pnpass->info->data);
+            char *diaa = strtok(copia,"-");
+            char *mesa = strtok(NULL, "-");
+            char *anoa = strtok(NULL, " ");
+            char *horaa =strtok(NULL, ":");
+            char *mina = strtok(NULL,":");
+            char *segundoa = strtok(NULL, ":");
+
+            float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
+
+			if (tempoi<tempoa && tempof>tempoa) { // esta passagem está no período
+			    pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
+				pnLpass->info = pnpass->info;
+                pnLpass->prox = pLpass->inicio;
+                pLpass->inicio = pnLpass;
+				pLpass->numel= pLpass->numel + 1;
+			}
+			pnpass = pnpass->prox;
+
+		}
+printf("\na lista nova tem %d passagens\n",pLpass->numel);
+		pnLpass = pLpass->inicio;
+
+		while(pnLpass != NULL){
+            pnopassagem temp = pnLpass;
+            pnopassagem temp2 = pnLpass;
+            if(pnLpass->info->codcarro->kilometros == 0){
+                while(temp2 != NULL){
+
+                        if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
+
+                            if(temp->info->tiporegist == 0){
+
+                                temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
+
+                                char copia1[30], copia2[30];
+                                strcpy(copia1,temp->info->data);
+                                char *dia1 = strtok(copia1,"-");
+
+                                char *mes1 = strtok(NULL, "-");
+                                char *ano1 = strtok(NULL, " ");
+                                char *hora1 =strtok(NULL, ":");
+                                char *min1 = strtok(NULL,":");
+                                char *segundo1 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora1,mes1,dia1);
+                                strcpy(copia2,temp2->info->data);
+                                char *dia2 = strtok(copia2,"-");
+                                char *mes2 = strtok(NULL, "-");
+                                char *ano2 = strtok(NULL, " ");
+                                char *hora2 =strtok(NULL, ":");
+                                char *min2 = strtok(NULL,":");
+                                char *segundo2 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora2,mes2,dia2);
+                                float tempo1 = calctempo(ano1,mes1,dia1,hora1,min1,segundo1);
+                                float tempo2 = calctempo(ano2,mes2,dia2,hora2,min2,segundo2);
+                                printf("\ntempo1: %f\n",tempo1);
+                                printf("\ntempo2: %f\n",tempo2);
+                                temp->info->codcarro->tempototal= temp->info->codcarro->tempototal + (tempo2 - tempo1);
+                                printf("\ntempo %f\n",temp->info->codcarro->tempototal);
+                            }
+                            temp = temp2;
+                        }
+                    temp2 =temp2->prox;
+                }
+		    }
+            pnLpass = pnLpass->prox;
+		}
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                if(nc->info->tempototal != 0){
+                nm->numkillmarca = nm->numkillmarca + velocidademedia(nc->info);
+                printf("%f",nm->numkillmarca);
+
+                }
+                nc = nc->prox;
+            }
+            nm->numkillmarca/nm->NUmcarromarca;
+            nm = nm->prox;
+        }
+
+        nm = has->Inicio;
+        pmarca maior = has->Inicio;
+        if(nm == NULL){
+            printf("erro ao procurar marca");
+        }
+
+        while(nm !=  NULL){
+            if(maior->numkillmarca<nm->numkillmarca){
+                maior = nm;
+            }
+
+            nm = nm->prox;
+        }
+        if(maior->numkillmarca == 0){
+            return ;
+        }
+        else if(maior->numkillmarca != 0){
+            printf("media:%d",maior->numkillmarca);
+            printf("marca:%s\n",maior->nome);
+            }
+
+
+
+
+
+	}
 	// Qual a marca dos carros que circulam a maior velocidade média?
 }
 
@@ -1599,9 +1758,12 @@ float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
         tempo = tempo + 28*24*3600;
     }
     tempo = tempo + (float)atoi(dia)*24*3600;
+    printf("\ntempo%f\n",tempo);
+    printf("hora: %d\n", atoi(hora));
     tempo = tempo + (float)atoi(hora)*3600;
     tempo = tempo + (float)atoi(minut)*60;
     tempo = tempo + (float)atoi(sec);
+    printf("tempo%f\n\n",tempo);
     return tempo/3600;
 
 }

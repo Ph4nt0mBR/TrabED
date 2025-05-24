@@ -45,11 +45,12 @@ int main() {
   // list_veiculo(has);
     //listacarroperiodo(pp);
     //marcapopular(has);
-    rankveiculos(pp,d,has);
-    rankmarcas(pp,d, has);
+    //rankveiculos(pp,d,has);
+    //rankmarcas(pp,d, has);
     //listainfracao(pp, d);
     //calcvelociade( pp,d);
     //condutorediamax(has);
+    marcamedia(pp, d, has);
     //memoriateste(Ld, has, pp, Ls, d);
    // exportarXl(pp, has);
     //exportarXML(pp,has, Ls);

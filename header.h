@@ -43,7 +43,7 @@ typedef struct carros
 	donos *pdonos;
 	int codigo = 0;
 	float kilometros;
-	int	tempototal;
+	float tempototal;
 
 }carro,*pcarro;
 
