@@ -42,12 +42,12 @@ int main() {
     //regist_veiculo(Ld,m);
    //regist_pass(pp,has,Ls);
    //organizacarros(has);
-   listainfracao(pp, d);
   // list_veiculo(has);
     //listacarroperiodo(pp);
-   // marcapopular(has);
-    //rankveiculos(pp,d);
+    //marcapopular(has);
+    rankveiculos(pp,d);
     //rankmarcas(pp,d, has);
+    //listainfracao(pp, d);
     //calcvelociade( pp,d);
     //condutorediamax(has);
     //memoriateste(Ld, has, pp, Ls, d);

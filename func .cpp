@@ -253,7 +253,7 @@ if (contador%100000 == 0)
         }
 
         if (!encontrado) {
-            printf("Carro COD %d não encontrado! Registro ignorado.\n", COD);
+            printf("Carro COD %d nao encontrado! Registro ignorado.\n", COD);
             free(npass);
             continue;  // Continua para próximo registro ao invés de retornar
         }
@@ -955,16 +955,18 @@ void listacarroperiodo(Listapassagem *pass) {
         float tempoi = calctempo(anoi,mesi,diai,horai,mini,segundoi);
         float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
 		while (pnpass != NULL) {
-       char *diaa = strtok(pnpass->info->data,"-");
+        char copia[30];
+        strcpy(copia,pnpass->info->data);
+       char *diaa = strtok(copia,"-");
        char *mesa = strtok(NULL, "-");
        char *anoa = strtok(NULL, " ");
        char *horaa =strtok(NULL, ":");
        char *mina = strtok(NULL,":");
        char *segundoa = strtok(NULL, ":");
         float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
-        printf("tempoi : %f\t",tempoi);
+       /* printf("tempoi : %f\t",tempoi);
         printf("tempoa : %f\t",tempoa);
-        printf("tempof : %f\n",tempof);
+        printf("tempof : %f\n",tempof);*/
 			if(tempoi<tempoa && tempoa<tempof){
 				printf("\n--------------------------\n");
 				printf("Matricula: %s\n", pnpass->info->codcarro->matricula);
@@ -1448,17 +1450,31 @@ void marcapopular(HASHING *has) {
         printf("nao existe nenhuma marca");
         return;
 	}
-	pmarca ppm = pm->prox;
+
+	while(pm != NULL){
+
+        pListacarro LC = pm->inf;
+        pnocarro nc = LC->inicio;
+        while(nc != NULL){
+
+            pm->NUmcarromarca= pm->NUmcarromarca + 1;
+            nc = nc->prox;
+        }
+        pm = pm->prox;
+	}
+	pm = has->Inicio;
+	pmarca ppm = pm;
+
 
 	while (ppm->prox != NULL) {
 		if (pm->NUmcarromarca < ppm->NUmcarromarca) {
 			pm = ppm;
-			ppm= ppm->prox;
 		}
+		printf("\n%s",ppm->nome);
     ppm = ppm->prox;
 	}
 
-	printf("marca mais popular: %s", pm->nome);
+	printf("\nMarca mais popular: %s", pm->nome);
 	//Determinar qual a marca de automóvel mais comum?
 }
 
