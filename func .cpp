@@ -32,12 +32,12 @@ pdistancia calcDistancia()
 			fprintf(stderr, "Nó inválido no arquivo: %d %d\n", no1, no2);
 			continue;
 		}
-
+        //printf("\n\n\ndist :%f\n",distancia);
 		nd->cod1[no1 - 1] = no1;
 		nd->cod2[no2 - 1] = no2;
 		nd->dist[no1 - 1][no2 - 1] = distancia;
 		nd->dist[no2 - 1][no1 - 1] = distancia; // Matriz simétrica
-        printf("%f\n",nd->dist[no1-1][no2-1]);
+        //printf("\n%d\n,%d : %f\n",nd->cod1[no1-1],nd->cod2[no2-1],nd->dist[no1-1][no2-1]);
 	}
 	fclose(F);
     return nd;
@@ -213,9 +213,12 @@ int importpassagem(Listapassagem *L, HASHING *has) {
     int Id, COD, regist;
     char Data[20];
 
+    int contador =0;
     while (fscanf(F, "%d\t%d\t%[^\t]\t%d", &Id, &COD, Data, &regist) == 4) {
-        printf("Processando: ID=%d, COD=%d, Data=%s, Regist=%d\n", Id, COD, Data, regist);
-
+        //printf("Processando: ID=%d, COD=%d, Data=%s, Regist=%d\n", Id, COD, Data, regist);
+        contador++;
+if (contador%100000 == 0)
+    printf("\n+ %d passagens lidas",contador);
         passagem* npass = (passagem*)malloc(sizeof(passagem));
         if (!npass) {
             printf("Erro de alocação de memória\n");
@@ -241,7 +244,7 @@ int importpassagem(Listapassagem *L, HASHING *has) {
                 if (current->info != NULL && current->info->codigo == COD) {
                     plc = current;
                     encontrado = 1;
-                    printf("Carro COD %d encontrado na marca\n", COD);
+                    //printf("Carro COD %d encontrado na marca\n", COD);
                 }
                 current = current->prox;
             }
@@ -250,7 +253,7 @@ int importpassagem(Listapassagem *L, HASHING *has) {
         }
 
         if (!encontrado) {
-            printf("Carro COD %d não encontrado! Registro ignorado.\n", COD);
+            printf("Carro COD %d nao encontrado! Registro ignorado.\n", COD);
             free(npass);
             continue;  // Continua para próximo registro ao invés de retornar
         }
@@ -260,7 +263,7 @@ int importpassagem(Listapassagem *L, HASHING *has) {
     }
 
     fclose(F);
-    printf("Importação concluída com sucesso!\n");
+    printf("Importacao concluida com sucesso!\n");
     return 1;
 }
 /*Lê dados de passagens do arquivo "passagem.txt" e associa cada uma ao carro correspondente na estrutura "HASHING".
@@ -327,6 +330,7 @@ pListadono crialistadono() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listadono" vazia, com contador a zero.
 
 pListacarro crialistacarro() {
 	pListacarro L = (pListacarro)malloc(sizeof(Listacarro));
@@ -334,6 +338,7 @@ pListacarro crialistacarro() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listacarro" vazia, com contador a zero.
 
 pListasensor crialistasensores() {
 	pListasensor L = (pListasensor)malloc(sizeof(Listasensor));
@@ -341,6 +346,8 @@ pListasensor crialistasensores() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listasensor" vazia, com contador a zero.
+
 
 pListapassagem crialistapasagem() {
 	pListapassagem L = (pListapassagem)malloc(sizeof(Listapassagem));
@@ -348,6 +355,7 @@ pListapassagem crialistapasagem() {
 	L->numel = 0;
 	return L;
 }
+//Cria e retorna uma nova lista ligada "Listapassagem" vazia, com contador a zero.
 
 pmarca criamarca(HASHING *has ,char *nome) {
     pmarca nova = (pmarca)malloc(sizeof(marca));
@@ -363,6 +371,8 @@ pmarca criamarca(HASHING *has ,char *nome) {
     nova->prox = temp;
     return nova;
 }
+//Cria uma nova marca com nome e lista de carros associada, e insere-a no início da tabela HASHING.
+
 
 HASHING *CriarHASHING()
 {
@@ -386,6 +396,7 @@ void AddDono(Listadono* l, dono* D)
 	l->numel++;
 
 }
+//Adiciona um novo dono a lista ligada "Listadono", inserindo-o no inicio da lista.
 
 void Addcarro(Listacarro* lista, pcarro carro) {
     if (!lista || !carro) return;
@@ -398,6 +409,8 @@ void Addcarro(Listacarro* lista, pcarro carro) {
         lista->numel++;
     }
 }
+//Adiciona um novo carro à lista ligada "Listacarro", inserindo-o no inicio da lista, se for valido.
+
 
 void Addsensor(Listasensor* l, sensor* D)
 {
@@ -408,6 +421,7 @@ void Addsensor(Listasensor* l, sensor* D)
 	l->numel++;
 
 }
+//Adiciona um novo sensor a lista ligada "Listasensor",adicionando-o no inicio da lista.
 
 void Addpassagem(Listapassagem* l, passagem* D)
 {
@@ -442,6 +456,7 @@ void regist_dono(Listadono* Ld) {
 		printf("Qual o codigo postal?\n");
 		scanf("%s", &(ndono->codPostal));
 		AddDono(Ld, ndono);
+		printf("dono adicionado com sucesso");
 	}
 	if (opcao == 0) {
 		return;
@@ -450,6 +465,7 @@ void regist_dono(Listadono* Ld) {
 
 void list_dono(Listadono* Ld) {
 	//função que apresenta no ecrã todos os donos
+	int i = 0, skip = 0, continuar;
 	pdono linfdono;
 	pno ldono = Ld->inicio;
 	while (ldono != NULL) {
@@ -458,6 +474,21 @@ void list_dono(Listadono* Ld) {
 		printf("Nome:%s\n", linfdono->nome);
 		printf("numero de contribuinte:%d\n", linfdono->numcontibuinte);
 		ldono = ldono->prox;
+        i++;
+			if( skip == 0 && i%100 == 0 ){
+                printf("\nmore-1\nexit-2\nskip-3");
+                scanf("%d",&continuar);
+                if(continuar == 1 ){
+                continue;
+                }
+                else if(continuar == 2){
+                    return ;
+                }
+                else{
+                    skip = 1;
+                    continue;
+                }
+            }
 	}
 }
 
@@ -656,7 +687,7 @@ void regist_pass(Listapassagem* Lp, HASHING *has, Listasensor* Ls) {
 
 	novaPassagem->idsensor = codigoSensor;
 
-	printf("Insira a data e hora da passagem (formato: AAAA-MM-DD_HH:MM:SS):\n"); //pede data de passagem
+	printf("Insira a data e hora da passagem (formato: DD-MM-AAAA HH:MM:SS):\n"); //pede data de passagem
 	scanf("%s", dataHora);
 	strcpy(novaPassagem->data, dataHora);
 
@@ -744,31 +775,61 @@ void organizacarros(HASHING *has) {
 	pcarro tempc;
 	char tempn[20];
 	int t;
-	int troca;
+	int troca = 0;
 	int opcao;
 
 	printf("Organizar carros por:\n1-matricula\n2-marca\n3-modelo\n4-Sair");
+	printf("\n <aviso: organizar por matricula ou modelo automaticamente lista os carros, as alteracoes seram revertidas depois da \tlistagem>");
 	scanf("%d",&opcao);
 
 	if (opcao == 1) {
-		do{
-			troca = 0;
-			while (nm != NULL) {
-				Lc = nm->inf;
-				nc = Lc->inicio;
+	    nm = has->Inicio;
+        if(nm == NULL){
+            printf("\n HASH esta a NULL????");
+            return;
+        }
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                pcarro novocarro = nc->info;
+                Addcarro(tempL,novocarro);
+                nc = nc->prox;
+            }
+            nm = nm->prox;
+        }
 
-				while (nc != NULL) {
-					if (strcmp(nc->info->matricula, nc->prox->info->matricula) > 0) {
-						tempc = nc->info;
-						nc->info = nc->prox->info;
-						nc->prox->info = tempc;
-						troca = 1;
-					}
-					nc = nc->prox;
-				}
-				nm = nm->prox;
-			}
-		} while (troca == 1);
+        do{
+            troca = 0;
+            nc = tempL->inicio;
+            while(nc->prox != NULL){
+              if(strcmp(nc->info->matricula,nc->prox->info->matricula)>0){
+                // printf("\n%s\n\n",nc->prox->info->matricula);
+                 pcarro tcarro = nc->info;
+                 nc->info = nc->prox->info;
+                 nc->prox->info =  tcarro;
+                // printf("\n%s\n",nc->prox->info->matricula);
+                 troca = 1;
+
+              }
+                nc = nc->prox;
+            }
+
+
+        }while(troca ==1 );
+
+        nc = tempL->inicio;
+        while(nc != NULL){
+            printf("\n--------------------------\n");
+			printf("Matricula: %s\n", nc->info->matricula);
+			printf("Contribuinte do Dono: %d\n", nc->info->pdonos->numcontibuinte);
+			printf("Marca: %s\n", nc->info->marca);
+			printf("Modelo: %s\n", nc->info->modelo);
+			printf("Ano: %d\n", nc->info->ano);
+			printf("Codigo: %d", nc->info->codigo);
+            nc = nc->prox;
+        }
 	}
 	else if (opcao == 2){
 
@@ -808,24 +869,53 @@ void organizacarros(HASHING *has) {
 		} while (troca == 1);
 	}
 	else if (opcao == 3){
-		do {
-			troca = 0;
-			while (nm != NULL) {
-				Lc = nm->inf;
-				nc = Lc->inicio;
+nm = has->Inicio;
+        if(nm == NULL){
+            printf("\n HASH esta a NULL????");
+            return;
+        }
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                pcarro novocarro = nc->info;
+                Addcarro(tempL,novocarro);
+                nc = nc->prox;
+            }
+            nm = nm->prox;
+        }
 
-				while (nc != NULL) {
-					if (strcmp(nc->info->modelo, nc->prox->info->modelo) > 0) {
-						tempc = nc->info;
-						nc->info = nc->prox->info;
-						nc->prox->info = tempc;
-						troca = 1;
-					}
-					nc = nc->prox;
-				}
-				nm = nm->prox;
-			}
-		} while (troca == 1);
+        do{
+            troca = 0;
+            nc = tempL->inicio;
+            while(nc->prox != NULL){
+              if(strcmp(nc->info->modelo,nc->prox->info->modelo)>0){
+                // printf("\n%s\n\n",nc->prox->info->matricula);
+                 pcarro tcarro = nc->info;
+                 nc->info = nc->prox->info;
+                 nc->prox->info =  tcarro;
+                // printf("\n%s\n",nc->prox->info->matricula);
+                 troca = 1;
+
+              }
+                nc = nc->prox;
+            }
+
+
+        }while(troca ==1 );
+
+        nc = tempL->inicio;
+        while(nc != NULL){
+            printf("\n--------------------------\n");
+			printf("Matricula: %s\n", nc->info->matricula);
+			printf("Contribuinte do Dono: %d\n", nc->info->pdonos->numcontibuinte);
+			printf("Marca: %s\n", nc->info->marca);
+			printf("Modelo: %s\n", nc->info->modelo);
+			printf("Ano: %d\n", nc->info->ano);
+			printf("Codigo: %d", nc->info->codigo);
+            nc = nc->prox;
+        }
 	}
 	else if (opcao == 4){
 		return ;
@@ -865,16 +955,18 @@ void listacarroperiodo(Listapassagem *pass) {
         float tempoi = calctempo(anoi,mesi,diai,horai,mini,segundoi);
         float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
 		while (pnpass != NULL) {
-       char *diaa = strtok(pnpass->info->data,"-");
+        char copia[30];
+        strcpy(copia,pnpass->info->data);
+       char *diaa = strtok(copia,"-");
        char *mesa = strtok(NULL, "-");
        char *anoa = strtok(NULL, " ");
        char *horaa =strtok(NULL, ":");
        char *mina = strtok(NULL,":");
        char *segundoa = strtok(NULL, ":");
         float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
-        printf("tempoi : %f\t",tempoi);
+       /* printf("tempoi : %f\t",tempoi);
         printf("tempoa : %f\t",tempoa);
-        printf("tempof : %f\n",tempof);
+        printf("tempof : %f\n",tempof);*/
 			if(tempoi<tempoa && tempoa<tempof){
 				printf("\n--------------------------\n");
 				printf("Matricula: %s\n", pnpass->info->codcarro->matricula);
@@ -890,8 +982,11 @@ void listacarroperiodo(Listapassagem *pass) {
 	}
 }
 
-void rankveiculos(Listapassagem *pass,distancia *d) {
+void rankveiculos(Listapassagem *pass,distancia *d, HASHING *has) {
 	int opcao, troca;
+	pListacarro Lc;
+	pnocarro nc;
+	pmarca nm = has->Inicio;
 
 	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
 	scanf("%d", &opcao);
@@ -901,17 +996,19 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
 		pdistancia td= d;
 		pListapassagem ppass = pass;
 		pListapassagem pLpass = crialistapasagem();
-		pnopassagem pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
-        pnLpass = pLpass->inicio;
+		//pnopassagem pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
+		pnopassagem pnLpass ;
+        //pnLpass = NULL;
 		pnopassagem pnpass = ppass->inicio;
-		char horafim[100];
-		char horainicio[100];
+		char horainicio[50];
+		char horafim[50];
+
 
 		printf("entre que datas os carros circularam");
-		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)");
-		scanf("%s", horainicio);
-		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)");
-		scanf("%s", horafim);
+		printf("Qual a data inicial(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		scanf("%s",horainicio);
+		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		scanf("%s",horafim);
 
         char *anoi = strtok(horainicio,"-");
        char *mesi = strtok(NULL, "-");
@@ -929,89 +1026,103 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
        float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
 
 		while (pnpass != NULL) {
-            char *anoa = strtok(pnpass->info->data,"-");
+            char copia[30];
+            strcpy(copia,pnpass->info->data);
+            char *diaa = strtok(copia,"-");
             char *mesa = strtok(NULL, "-");
-            char *diaa = strtok(NULL, " ");
+            char *anoa = strtok(NULL, " ");
             char *horaa =strtok(NULL, ":");
             char *mina = strtok(NULL,":");
             char *segundoa = strtok(NULL, ":");
+            //printf("\ndata convertida[%s][%s][%s][%s][%s][%s]",anoa,mesa,diaa,horaa,mina,segundoa);
             float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
-            printf("tempoi : %f\t",tempoi);
-            printf("tempoa : %f\t",tempoa);
-            printf("tempof : %f\n",tempof);
-			if (tempoi<tempoa && tempof>tempoa) {
+           // printf("tempoi : %f\t",tempoi);
+            //printf("tempoa : %f\t",tempoa);
+           // printf("tempof : %f\n",tempof);
+			if (tempoi<tempoa && tempof>tempoa) { // esta passagem está no período
+			    pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
 				pnLpass->info = pnpass->info;
-                printf("r");
-				pnopassagem Lpass =(pnopassagem)malloc(sizeof(nopassagem));
-				pnLpass->prox = Lpass;
+                pnLpass->prox = pLpass->inicio;
+                pLpass->inicio = pnLpass;
 				pLpass->numel= pLpass->numel + 1;
 			}
 			pnpass = pnpass->prox;
 
 		}
-
+printf("\na lista nova tem %d passagens\n",pLpass->numel);
 		pnLpass = pLpass->inicio;
-		while (pnLpass != NULL) {
-			pnopassagem p = pnLpass->prox;
 
-			while (p->prox != NULL) {
-				if (p->prox->info->codcarro == pnLpass->info->codcarro){
-					pnopassagem delp = p;
-					p = p->prox;
-					pnopassagem ptemp = p;
-					s1 = pnLpass->info->idsensor;
-					s2 = p->info->idsensor;
-					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist[s1][s2];
-					p = p->prox;
-					free(ptemp->info);
-					free(ptemp);
-					delp->prox = p;
-				}
-				else{
-					p = p->prox;
-				}
-			}
-			pnLpass = pnLpass->prox;
+		while(pnLpass != NULL){
+            pnopassagem temp = pnLpass;
+            pnopassagem temp2 = pnLpass;
+            if(pnLpass->info->codcarro->kilometros == 0){
+                while(temp2 != NULL){
+                   // printf("\ntemp1: %d",temp->info->tiporegist);
+                   // printf("\ntemp2: %d",temp2->info->tiporegist);
+                        if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
+
+                            if(temp->info->tiporegist == 0){
+
+                                temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
+                               // printf("o kilometro é %d",temp->info->codcarro->codigo);
+                            }
+                            temp = temp2;
+                        }
+                    temp2 =temp2->prox;
+                }
+		    }
+            pnLpass = pnLpass->prox;
 		}
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                if(nc->info->kilometros != 0){
+                pcarro novocarro = nc->info;
+                Addcarro(tempL,novocarro);
+                }
+                nc = nc->prox;
+            }
+            nm = nm->prox;
+        }
+
+        do{
+            troca = 0;
+            nc = tempL->inicio;
+            while(nc->prox != NULL){
+              if(nc->info->kilometros < nc->prox->info->kilometros){
+                // printf("\n%s\n\n",nc->prox->info->matricula);
+                 pcarro tcarro = nc->info;
+                 nc->info = nc->prox->info;
+                 nc->prox->info =  tcarro;
+                // printf("\n%s\n",nc->prox->info->matricula);
+                 troca = 1;
+
+              }
+                nc = nc->prox;
+            }
 
 
-		do{
-			troca = 0;
-			pnLpass = pLpass->inicio;
-			while (pnLpass != NULL) {
-			ppassagem ptemp;
-			if (pnLpass->info->codcarro->kilometros > pnLpass->prox->info->codcarro->kilometros) {
-				ptemp = pnLpass->info;
-				pnLpass->info = pnLpass->prox->info;
-				pnLpass->prox->info = ptemp;
-				troca = 1;
-					}
-				}
-		} while (troca == 1);
+        }while(troca ==1 );
 
-		pnLpass = pLpass->inicio;
-		while (pnLpass != NULL) {
-				printf("--------------------------\n");
-				printf("Matricula: %s\n", pnLpass->info->codcarro->matricula);
-				printf("Contribuinte do Dono: %d\n", pnLpass->info->codcarro->pdonos->numcontibuinte);
-				printf("Marca: %s\n", pnLpass->info->codcarro->marca);
-				printf("Modelo: %s\n", pnLpass->info->codcarro->modelo);
-				printf("Ano: %d\n", pnLpass->info->codcarro->ano);
-				printf("Codigo: %d\b", pnLpass->info->codcarro->codigo);
-				pnLpass = pnLpass->prox;
-		}
+        nc = tempL->inicio;
+        while(nc != NULL){
+            printf("\n--------------------------\n");
+            printf("\nkilometros: %f\n",nc->info->kilometros);
+			printf("Matricula: %s\n", nc->info->matricula);
+			printf("Contribuinte do Dono: %d\n", nc->info->pdonos->numcontibuinte);
+			printf("Marca: %s\n", nc->info->marca);
+			printf("Modelo: %s\n", nc->info->modelo);
+			printf("Ano: %d\n", nc->info->ano);
+			printf("Codigo: %d", nc->info->codigo);
+			nc->info->kilometros = 0;
+            nc = nc->prox;
+        }
 
-		pnLpass = pLpass->inicio;
-		while (pnLpass != NULL) {
-			pnopassagem ptemp;
-			ptemp = pnLpass;
-			pnLpass = pnLpass->prox;
-			free(ptemp->info);
-			free(ptemp);
-		}
-		free(pnLpass);
-		//free(pLpass->numel);
-		free(pLpass);
+
+
+
 	}
 	/*Ranking de circulação. Listagem ordenada pelo total de quilómetros
 	que cada veículo efectuou na auto-estrada durante determinado período. */
@@ -1019,27 +1130,30 @@ void rankveiculos(Listapassagem *pass,distancia *d) {
 
 
 void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has) {
-	int opcao, troca;
-	pmarca pm = has->Inicio;
-	pListacarro pl;
-	pnocarro pn;
-	printf("\n\nDeseja rankear as marcas num periodo pelos kilometros?\n1-Sim\n2-não");
+    int opcao, troca;
+	pListacarro Lc;
+	pnocarro nc;
+	pmarca nm = has->Inicio;
+
+	printf("Deseja rankear as marcas pelos kilometros?\n1-Sim\n2-não");
 	scanf("%d", &opcao);
 
 	if (opcao == 1) {
 		int s1, s2;
-		pdistancia td = d;
+		pdistancia td= d;
 		pListapassagem ppass = pass;
-		pListapassagem pLpass = (pListapassagem)malloc(sizeof(Listapassagem));
-		pnopassagem pnLpass = pLpass->inicio;
+		pListapassagem pLpass = crialistapasagem();
+		//pnopassagem pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
+		pnopassagem pnLpass ;
+        //pnLpass = NULL;
 		pnopassagem pnpass = ppass->inicio;
-		char horafim[100];
-		char horainicio[100];
+		char horainicio[30];
+		char horafim[30];
 
 		printf("entre que datas os carros circularam");
-		printf("Qual a data incial(formato: AAAA-MM-DD_HH:MM:SS)");
+		printf("Qual a data inicial(formato: AAAA-MM-DD_HH:MM:SS)\n");
 		scanf("%s", horainicio);
-		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)");
+		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)\n");
 		scanf("%s", horafim);
 
         char *anoi = strtok(horainicio,"-");
@@ -1058,118 +1172,469 @@ void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has) {
        float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
 
 		while (pnpass != NULL) {
-            char *anoa = strtok(pnpass->info->data,"-");
+            char copia[30];
+            strcpy(copia,pnpass->info->data);
+            char *diaa = strtok(copia,"-");
             char *mesa = strtok(NULL, "-");
-            char *diaa = strtok(NULL, " ");
+            char *anoa = strtok(NULL, " ");
             char *horaa =strtok(NULL, ":");
             char *mina = strtok(NULL,":");
             char *segundoa = strtok(NULL, ":");
+            //printf("\ndata convertida[%s][%s][%s][%s][%s][%s]",anoa,mesa,diaa,horaa,mina,segundoa);
             float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
-            printf("tempoi : %f\t",tempoi);
-            printf("tempoa : %f\t",tempoa);
-            printf("tempof : %f\n",tempof);
-			if (tempoi<tempoa && tempof>tempoa) {
+           // printf("tempoi : %f\t",tempoi);
+            //printf("tempoa : %f\t",tempoa);
+           // printf("tempof : %f\n",tempof);
+			if (tempoi<tempoa && tempof>tempoa) { // esta passagem está no período
+			    pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
 				pnLpass->info = pnpass->info;
-
-				pnopassagem Lpass =(pnopassagem)malloc(sizeof(nopassagem));
-
-				pnLpass->prox = Lpass;
+                pnLpass->prox = pLpass->inicio;
+                pLpass->inicio = pnLpass;
 				pLpass->numel= pLpass->numel + 1;
 			}
 			pnpass = pnpass->prox;
-			printf("o");
-		}
 
+		}
+printf("\na lista nova tem %d passagens\n",pLpass->numel);
 		pnLpass = pLpass->inicio;
-		while (pnLpass != NULL) {
-			pnopassagem p = pnLpass->prox;
 
-			while (p->prox != NULL) {
-				if (p->prox->info->codcarro == pnLpass->info->codcarro) {
-					pnopassagem delp = p;
-					p = p->prox;
-					pnopassagem ptemp = p;
-					s1 = pnLpass->info->idsensor;
-					s2 = p->info->idsensor;
-					pnLpass->info->codcarro->kilometros = pnLpass->info->codcarro->kilometros + td->dist[s1][s2];
-					p = p->prox;
-					free(ptemp->info);
-					free(ptemp);
-					delp->prox = p;
-				}
-				else {
-					p = p->prox;
-				}
-			}
-			pnLpass = pnLpass->prox;
+		while(pnLpass != NULL){
+            pnopassagem temp = pnLpass;
+            pnopassagem temp2 = pnLpass;
+            if(pnLpass->info->codcarro->kilometros == 0){
+                while(temp2 != NULL){
+                   // printf("\ntemp1: %d",temp->info->tiporegist);
+                   // printf("\ntemp2: %d",temp2->info->tiporegist);
+                        if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
+
+                            if(temp->info->tiporegist == 0){
+
+                                temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
+                               // printf("o kilometro é %d",temp->info->codcarro->codigo);
+                            }
+                            temp = temp2;
+                        }
+                    temp2 =temp2->prox;
+                }
+		    }
+            pnLpass = pnLpass->prox;
 		}
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                if(nc->info->kilometros != 0){
+                nm->numkillmarca = nm->numkillmarca + nc->info->kilometros;
+                }
+                nc = nc->prox;
+            }
+            nm = nm->prox;
+        }
 
 
-		while (pm != NULL) {
-			pl = pm->inf;
-			pn = pl->inicio;
 
-			while (pn != NULL) {
-				pm->numkillmarca = pm->numkillmarca + pn->info->kilometros;
-				pn = pn->prox;
-			}
-			pm = pm->prox;
-		}
+    do{
+        troca = 0;
+        nm = has->Inicio;
+        pmarca maior = has->Inicio;
+        if(nm == NULL){
+            printf("erro ao procurar marca");
+        }
 
-		pm = has->Inicio;
+        while(nm !=  NULL){
+            if(maior->numkillmarca<nm->numkillmarca){
+                maior = nm;
+            }
 
-		do
-		{
-			pmarca antpm = pm;
-			pm = pm->prox;
-			pmarca ppm = pm->prox;
-			pmarca temppm;
-			troca = 0;
-
-			if (pm->numkillmarca > antpm->numkillmarca) {
-				antpm->prox = pm->prox;
-				pm->prox = antpm;
-				troca = 1;
-			}
-			while (ppm != NULL) {
-
-
-				if (pm->numkillmarca < ppm->numkillmarca) {
-
-					antpm->prox = ppm;//antpm->pm->ppm->
-					pm = ppm->prox;
-					ppm->prox = pm;//antpm->ppm->pm->
-					troca = 1;
-				}
+            nm = nm->prox;
+        }
+        if(maior->numkillmarca == 0){
+            return ;
+        }
+        else if(maior->numkillmarca != 0){
+            printf("kilometros:%d",maior->numkillmarca);
+            printf("marca:%s\n",maior->nome);
+            maior->numkillmarca = 0;
+            troca = 1;
+            }
+    }while(troca = 1);
 
 
-			}
-		} while (troca == 1);
+
+
+	}
 		/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
 		os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
 	}
+
+void listainfracao(Listapassagem* pass, distancia* d) {
+    if (pass == NULL || d == NULL) {
+        printf("Erro: Dados inválidos.\n");
+        return;
+    }
+
+    char inicio[20], fim[20];
+    printf("\n--- Listagem de Infrações ---\n");
+    printf("Período a analisar (formato AAAA-MM-DD_HH:MM:SS)\n");
+    printf("Data/hora inicial: ");
+    scanf("%19s", inicio);
+    printf("Data/hora final: ");
+    scanf("%19s", fim);
+
+   //data inicio
+    char* anoi = strtok(inicio, "-");
+    char* mesi = strtok(NULL, "-");
+    char* diai = strtok(NULL, "_");
+    char* horai = strtok(NULL, ":");
+    char* mini = strtok(NULL, ":");
+    char* segundoi = strtok(NULL, ":");
+
+    //data fim
+    char* anof = strtok(fim, "-");
+    char* mesf = strtok(NULL, "-");
+    char* diaf = strtok(NULL, "_");
+    char* horaf = strtok(NULL, ":");
+    char* minf = strtok(NULL, ":");
+    char* segundof = strtok(NULL, ":");
+
+    float tempo_inicio = calctempo(anoi, mesi, diai, horai, mini, segundoi);
+    float tempo_fim = calctempo(anof, mesf, diaf, horaf, minf, segundof);
+
+    //lista temporaria de passagems
+    pListapassagem tempList = crialistapasagem();
+    pnopassagem atual = pass->inicio;
+
+    while (atual != NULL) {
+        char data[20];
+        strcpy(data, atual->info->data);
+
+        char* ano = strtok(data, "-");
+        char* mes = strtok(NULL, "-");
+        char* dia = strtok(NULL, "_");
+        char* hora = strtok(NULL, ":");
+        char* min = strtok(NULL, ":");
+        char* segundo = strtok(NULL, ":");
+
+        float tempo_atual = calctempo(ano, mes, dia, hora, min, segundo);
+
+        if (tempo_atual >= tempo_inicio && tempo_atual <= tempo_fim) {
+
+            //adiciona a lista temporaria
+            pnopassagem novo = (pnopassagem)malloc(sizeof(nopassagem));
+            novo->info = atual->info;
+            novo->prox = tempList->inicio;
+            tempList->inicio = novo;
+            tempList->numel++;
+        }
+        atual = atual->prox;
+    }
+
+    printf("\nVeiculos com velocidade media > 120 km/h:\n");
+    printf("----------------------------------------\n");
+
+    pnopassagem p = tempList->inicio;
+    int count = 0;
+
+    while (p != NULL) {
+        pnopassagem prox = p->prox;
+
+        //encontra passagem da saida
+        while (prox != NULL && prox->info->codcarro != p->info->codcarro) {
+            prox = prox->prox;
+        }
+
+        if (prox != NULL && p->info->tiporegist == 0 && prox->info->tiporegist == 1) {
+            //calcular velocidade
+            float distancia = d->dist[p->info->idsensor][prox->info->idsensor];
+
+            // Converter tempos para horas
+            char data_entrada[20], data_saida[20];
+            strcpy(data_entrada, p->info->data);
+            strcpy(data_saida, prox->info->data);
+
+            char* anoe = strtok(data_entrada, "-");
+            char* mese = strtok(NULL, "-");
+            char* diae = strtok(NULL, "_");
+            char* horae = strtok(NULL, ":");
+            char* mine = strtok(NULL, ":");
+            char* sege = strtok(NULL, ":");
+
+            char* anos = strtok(data_saida, "-");
+            char* mess = strtok(NULL, "-");
+            char* dias = strtok(NULL, "_");
+            char* horas = strtok(NULL, ":");
+            char* mins = strtok(NULL, ":");
+            char* segs = strtok(NULL, ":");
+
+            float tempo_entrada = calctempo(anoe, mese, diae, horae, mine, sege);
+            float tempo_saida = calctempo(anos, mess, dias, horas, mins, segs);
+            float tempo_total = tempo_saida - tempo_entrada;
+
+            if (tempo_total > 0) {
+                float velocidade = distancia / tempo_total;
+
+                if (velocidade > 120) {
+                    printf("Matricula: %s\n", p->info->codcarro->matricula);
+                    printf("Marca: %s\n", p->info->codcarro->marca);
+                    printf("Modelo: %s\n", p->info->codcarro->modelo);
+                    printf("Velocidade media: %.2f km/h\n", velocidade);
+                    printf("Data/hora entrada: %s\n", p->info->data);
+                    printf("Data/hora saida: %s\n", prox->info->data);
+                    printf("----------------------------------------\n");
+                    count++;
+                }
+            }
+        }
+        p = p->prox;
+    }
+
+    if (count == 0) {
+        printf("Nenhuma infracao encontrada no período especificado.\n");
+    }
+    else {
+        printf("Total de infracoes: %d\n", count);
+    }
+
+    //free a memoriar temporaria
+    pnopassagem temp = tempList->inicio;
+    while (temp != NULL) {
+        pnopassagem next = temp->prox;
+        free(temp);
+        temp = next;
+    }
+    free(tempList);
 }
 
-void listainfracao() {
-	/*Listagem de infrações. Contém a matrícula dos veículos que
-	circularam com velocidade média superior a 120 km/h durante determinado período*/
-}
+
+
 
 void rankinfracao() {
-	//Ranking de infrações p / veículo.Listagem com o veículo e respectivo
-	//número total de infrações de velocidade ocorridas durante determinado período.
+    //Ranking de infrações p / veículo.Listagem com o veículo e respectivo
+    //número total de infrações de velocidade ocorridas durante determinado período.
 }
 
-void velocidademedia() {
+// Função auxiliar para converter data/hora para tempo numérico
+float converterParaTempo(const char* datahora) {
+    char copia[20];
+    strcpy(copia, datahora);
 
+    char* ano = strtok(copia, "-");
+    char* mes = strtok(NULL, "-");
+    char* dia = strtok(NULL, "_");
+    char* hora = strtok(NULL, ":");
+    char* min = strtok(NULL, ":");
+    char* seg = strtok(NULL, ":");
+
+    return calctempo(ano, mes, dia, hora, min, seg);
+}
+
+float velocidademedia(carro *c) {
+    float media = 0;
+    if(c->tempototal != 0){
+    media = c->kilometros/c->tempototal;
+    }
+    printf("\nmedia:%f\n",media);
+    return media;
 	//velocidade média
 }
 
-void marcamedia() {
+void marcamedia(Listapassagem *pass, distancia *d, HASHING *has) {
+    int opcao, troca;
+	pListacarro Lc;
+	pnocarro nc;
+	pmarca nm = has->Inicio;
+
+	printf("Deseja ver a marca com os carros que circulam a maior velocidade media ?\n1-Sim\n2-não");
+	scanf("%d", &opcao);
+
+	if (opcao == 1) {
+		int s1, s2;
+		pdistancia td= d;
+		pListapassagem ppass = pass;
+		pListapassagem pLpass = crialistapasagem();
+		//pnopassagem pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
+		pnopassagem pnLpass ;
+        //pnLpass = NULL;
+		pnopassagem pnpass = ppass->inicio;
+		char horainicio[30];
+		char horafim[30];
+
+		printf("entre que datas os carros circularam");
+		printf("Qual a data inicial(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		scanf("%s", horainicio);
+		printf("Qual a data final(formato: AAAA-MM-DD_HH:MM:SS)\n");
+		scanf("%s", horafim);
+
+        char *anoi = strtok(horainicio,"-");
+       char *mesi = strtok(NULL, "-");
+       char *diai = strtok(NULL, "_");
+       char *horai =strtok(NULL, ":");
+       char *mini = strtok(NULL,":");
+       char *segundoi = strtok(NULL, ":");
+       char *anof = strtok(horafim,"-");
+       char *mesf = strtok(NULL, "-");
+       char *diaf = strtok(NULL, "_");
+       char *horaf =strtok(NULL, ":");
+       char *minf = strtok(NULL,":");
+       char *segundof = strtok(NULL, ":");
+       float tempoi = calctempo(anoi,mesi,diai,horai,mini,segundoi);
+       float tempof = calctempo(anof,mesf,diaf,horaf,minf,segundof);
+
+		while (pnpass != NULL) {
+            char copia[30];
+            strcpy(copia,pnpass->info->data);
+            char *diaa = strtok(copia,"-");
+            char *mesa = strtok(NULL, "-");
+            char *anoa = strtok(NULL, " ");
+            char *horaa =strtok(NULL, ":");
+            char *mina = strtok(NULL,":");
+            char *segundoa = strtok(NULL, ":");
+
+            float tempoa = calctempo(anoa,mesa,diaa,horaa,mina,segundoa);
+
+			if (tempoi<tempoa && tempof>tempoa) { // esta passagem está no período
+			    pnLpass = (pnopassagem)malloc(sizeof(nopassagem));
+				pnLpass->info = pnpass->info;
+                pnLpass->prox = pLpass->inicio;
+                pLpass->inicio = pnLpass;
+				pLpass->numel= pLpass->numel + 1;
+			}
+			pnpass = pnpass->prox;
+
+		}
+printf("\na lista nova tem %d passagens\n",pLpass->numel);
+		pnLpass = pLpass->inicio;
+
+		while(pnLpass != NULL){
+            pnopassagem temp = pnLpass;
+            pnopassagem temp2 = pnLpass;
+            if(pnLpass->info->codcarro->kilometros == 0){
+                while(temp2 != NULL){
+
+                        if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
+
+                            if(temp->info->tiporegist == 0){
+
+                                temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
+
+                                char copia1[30], copia2[30];
+                                strcpy(copia1,temp->info->data);
+                                char *dia1 = strtok(copia1,"-");
+                                char *mes1 = strtok(NULL, "-");
+                                char *ano1 = strtok(NULL, " ");
+                                char *hora1 =strtok(NULL, ":");
+                                char *min1 = strtok(NULL,":");
+                                char *segundo1 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora1,mes1,dia1);
+                                strcpy(copia2,temp2->info->data);
+                                char *dia2 = strtok(copia2,"-");
+                                char *mes2 = strtok(NULL, "-");
+                                char *ano2 = strtok(NULL, " ");
+                                char *hora2 =strtok(NULL, ":");
+                                char *min2 = strtok(NULL,":");
+                                char *segundo2 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora2,mes2,dia2);
+                                float tempo1 = calctempo(ano1,mes1,dia1,hora1,min1,segundo1);
+                                float tempo2 = calctempo(ano2,mes2,dia2,hora2,min2,segundo2);
+                                tempo2 = tempo2 - tempo1;
+                                temp->info->codcarro->tempototal= temp->info->codcarro->tempototal + tempo2;
+                            }
+                            temp = temp2;
+                        }
+                    temp2 =temp2->prox;
+                }
+		    }
+            pnLpass = pnLpass->prox;
+		}
+        pListacarro tempL = crialistacarro();
+        while(nm != NULL){
+            Lc = nm->inf;
+            nc = Lc->inicio;
+            while(nc != NULL){
+                if(nc->info->tempototal != 0){
+                nm->numkillmarca = nm->numkillmarca + velocidademedia(nc->info);
+
+                }
+                nc = nc->prox;
+            }
+            nm->numkillmarca/nm->NUmcarromarca;
+            nm = nm->prox;
+        }
+
+        nm = has->Inicio;
+        pmarca maior = has->Inicio;
+        if(nm == NULL){
+            printf("erro ao procurar marca");
+        }
+
+        while(nm !=  NULL){
+            if(maior->numkillmarca<nm->numkillmarca){
+                maior = nm;
+            }
+
+            nm = nm->prox;
+        }
+        if(maior->numkillmarca == 0){
+            return ;
+        }
+        else if(maior->numkillmarca != 0){
+            //printf("\n media:%d\n",maior->numkillmarca);
+            printf("\n a marca com maior media:%s\n",maior->nome);
+            }
+
+	}
 	// Qual a marca dos carros que circulam a maior velocidade média?
 }
 
-void condutorediamax(HASHING *has) {
+void condutorediamax(HASHING *has,Listapassagem *pl, distancia *d) {
+
+    int i=0;
+    pnopassagem ppno = pl->inicio;
+
+    		while(ppno != NULL){
+            pnopassagem temp = ppno;
+            pnopassagem temp2 = ppno;
+            if(ppno->info->codcarro->kilometros == 0){
+                i++;
+                if(i%250 == 0){
+                    printf("\nlidas %d passagens",i);
+                }
+                while(temp2 != NULL){
+                   // printf("\ntemp1: %d",temp->info->tiporegist);
+                   // printf("\ntemp2: %d",temp2->info->tiporegist);
+                        if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
+
+                            if(temp->info->tiporegist == 1){
+
+                                temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
+
+                                char copia1[30], copia2[30];
+                                strcpy(copia1,temp->info->data);
+                                char *dia1 = strtok(copia1,"-");
+                                char *mes1 = strtok(NULL, "-");
+                                char *ano1 = strtok(NULL, " ");
+                                char *hora1 =strtok(NULL, ":");
+                                char *min1 = strtok(NULL,":");
+                                char *segundo1 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora1,mes1,dia1);
+                                strcpy(copia2,temp2->info->data);
+                                char *dia2 = strtok(copia2,"-");
+                                char *mes2 = strtok(NULL, "-");
+                                char *ano2 = strtok(NULL, " ");
+                                char *hora2 =strtok(NULL, ":");
+                                char *min2 = strtok(NULL,":");
+                                char *segundo2 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora2,mes2,dia2);
+                                float tempo1 = calctempo(ano1,mes1,dia1,hora1,min1,segundo1);
+                                float tempo2 = calctempo(ano2,mes2,dia2,hora2,min2,segundo2);
+                                tempo2 = tempo2 - tempo1;
+                                temp->info->codcarro->tempototal= temp->info->codcarro->tempototal + tempo2;
+                            }
+                            temp = temp2;
+                        }
+                    temp2 =temp2->prox;
+                }
+		    }
+            ppno = ppno->prox;
+		}
+
     pmarca p = has->Inicio;
     pnocarro pnmax = p->inf->inicio;
     while(p!= NULL){
@@ -1198,10 +1663,10 @@ void condutorediamax(HASHING *has) {
         p = p->prox;
     }
     if(pnmax->info->tempototal == 0){
-        printf("\n\nnenhum condutor tem passagens suficientes para calcular a velocidade");
+        printf("\n nenhum condutor tem passagens suficientes para calcular a velocidade");
         return ;
     }
-    printf("/nO condutor %s codigo:%d tem a maior velocidade media",pnmax->info->pdonos->nome, pnmax->info->pdonos->numcontibuinte);
+    printf("\nO condutor %s codigo:%d tem a maior velocidade media",pnmax->info->pdonos->nome, pnmax->info->pdonos->numcontibuinte);
 	//Qual o condutor(dono) que circula a maior velocidade média ?
 }
 
@@ -1210,58 +1675,132 @@ void condutorpostal() {
 }
 
 void marcapopular(HASHING *has) {
+
+
 	pmarca pm = has->Inicio;
 	if(pm == NULL){
         printf("nao existe nenhuma marca");
         return;
 	}
-	pmarca ppm = pm->prox;
+
+	while(pm != NULL){
+
+        pListacarro LC = pm->inf;
+        pnocarro nc = LC->inicio;
+        while(nc != NULL){
+
+            pm->NUmcarromarca= pm->NUmcarromarca + 1;
+            nc = nc->prox;
+        }
+        pm = pm->prox;
+	}
+	pm = has->Inicio;
+	pmarca ppm = pm;
+
 
 	while (ppm->prox != NULL) {
 		if (pm->NUmcarromarca < ppm->NUmcarromarca) {
 			pm = ppm;
-			ppm= ppm->prox;
 		}
+		printf("\n%s",ppm->nome);
     ppm = ppm->prox;
 	}
 
-	printf("marca mais popular: %s", pm->nome);
-	//Determinar qual a marca de automóvel mais comum?
+	printf("\nMarca mais popular: %s", pm->nome);
+	//determina qual a marca de automovel mais comum
 }
 
 void exportarXl(Listapassagem* Lp, HASHING* has) {
-	FILE* f = fopen("base_dados.csv", "w");
-	if (f == NULL) {
-		printf("Erro ao abrir o ficheiro CSV para escrita.\n");
-		return;
-	}
+    if (Lp == NULL || Lp->inicio == NULL) {
+        printf("ERRO: Lista de passagens vazia ou inválida!\n");
+        return;
+    }
 
-	//cabeçalho do ficheiroCSV
-	fprintf(f, "Matricula,Marca,Modelo,CodigoCarro,ContribuinteDono,NomeDono,DataHora,IDSensor\n");
+    FILE* f = fopen("dados_exportados.csv", "w");
+    if (f == NULL) {
+        printf("Erro ao abrir o ficheiro CSV para escrita.\n");
+        return;
+    }
 
-	pnopassagem atual = Lp->inicio;
-	while (atual != NULL) {
-		// Verificar se o carro e o dono existem
-		if (atual->info->codcarro && atual->info->codcarro->pdonos) {
-			fprintf(f, "%s,%s,%s,%d,%d,%s,%s,%d\n",
-				atual->info->codcarro->matricula,
-				atual->info->codcarro->marca,
-				atual->info->codcarro->modelo,
-				atual->info->codcarro->codigo,
-				atual->info->codcarro->pdonos->numcontibuinte,
-				atual->info->codcarro->pdonos->nome,
-				atual->info->data,
-				atual->info->idsensor);
-		}
-		atual = atual->prox;
-	}
+    fprintf(f, "Matricula;Marca;Modelo;CodigoCarro;ContribuinteDono;NomeDono;DataHora;IDSensor\n");
 
-	fclose(f);
-	printf("Dados exportados com sucesso para base_dados.csv\n");
+    pnopassagem atual = Lp->inicio;
+    while (atual != NULL) {
+        if (atual->info != NULL && atual->info->codcarro != NULL && atual->info->codcarro->pdonos != NULL) {
+            //troca virgulas por ; pra evitar problemas no ficheiro
+            char nomeDono[100];
+            strcpy(nomeDono, atual->info->codcarro->pdonos->nome);
+            for (int i = 0; nomeDono[i]; i++) {
+                if (nomeDono[i] == ',') nomeDono[i] = ';';
+            }
+
+            fprintf(f, "%s;%s;%s;%d;%d;%s;%s;%d\n",
+                atual->info->codcarro->matricula,
+                atual->info->codcarro->marca,
+                atual->info->codcarro->modelo,
+                atual->info->codcarro->codigo,
+                atual->info->codcarro->pdonos->numcontibuinte,
+                nomeDono,
+                atual->info->data,
+                atual->info->idsensor);
+        }
+        atual = atual->prox;
+    }
+
+    fclose(f);
+    printf("Dados exportados com sucesso para dados_exportados.csv\n");
 }
 
-void exportarXML() {
-	//Exportar toda a Base de Dados para o formato *.xml
+void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls) {
+    if (Lp == NULL || Lp->inicio == NULL) {
+        printf("ERRO: Lista de passagens vazia ou inválida!\n");
+        return;
+    }
+
+    FILE* f = fopen("dados_exportados.xml", "w");
+    if (f == NULL) {
+        printf("Erro ao abrir o ficheiro XML para escrita.\n");
+        return;
+    }
+
+    fprintf(f, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(f, "<BaseDeDados>\n");
+
+    pnopassagem atual = Lp->inicio;
+    while (atual != NULL) {
+        if (atual->info != NULL && atual->info->codcarro != NULL && atual->info->codcarro->pdonos != NULL) {
+
+            char* escapeXML(const char* str) {
+                return strdup(str);
+            }
+
+            char* marca = escapeXML(atual->info->codcarro->marca);
+            char* modelo = escapeXML(atual->info->codcarro->modelo);
+            char* nomeDono = escapeXML(atual->info->codcarro->pdonos->nome);
+            char* data = escapeXML(atual->info->data);
+
+            fprintf(f, "  <Passagem>\n");
+            fprintf(f, "    <Matricula>%s</Matricula>\n", atual->info->codcarro->matricula);
+            fprintf(f, "    <Marca>%s</Marca>\n", marca);
+            fprintf(f, "    <Modelo>%s</Modelo>\n", modelo);
+            fprintf(f, "    <CodigoCarro>%d</CodigoCarro>\n", atual->info->codcarro->codigo);
+            fprintf(f, "    <ContribuinteDono>%d</ContribuinteDono>\n", atual->info->codcarro->pdonos->numcontibuinte);
+            fprintf(f, "    <NomeDono>%s</NomeDono>\n", nomeDono);
+            fprintf(f, "    <DataHora>%s</DataHora>\n", data);
+            fprintf(f, "    <IDSensor>%d</IDSensor>\n", atual->info->idsensor);
+            fprintf(f, "  </Passagem>\n");
+
+            free(marca);
+            free(modelo);
+            free(nomeDono);
+            free(data);
+        }
+        atual = atual->prox;
+    }
+
+    fprintf(f, "</BaseDeDados>\n");
+    fclose(f);
+    printf("Dados exportados com sucesso para dados_exportados.xml\n");
 }
 
 void calcvelociade(Listapassagem *p, distancia *d){
@@ -1302,10 +1841,12 @@ float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
         tempo = tempo + 28*24*3600;
     }
     tempo = tempo + (float)atoi(dia)*24*3600;
+
     tempo = tempo + (float)atoi(hora)*3600;
     tempo = tempo + (float)atoi(minut)*60;
     tempo = tempo + (float)atoi(sec);
-    return tempo/3600;
+    //printf("\no tempo em sec: %f o tempo em horas: %f\n",tempo,(float)tempo/(float)3600);
+    return (float)tempo/(float)3600;
 
 }
 
@@ -1421,4 +1962,5 @@ void memoriateste(Listadono *Ld, HASHING *has, Listapassagem *Lp, Listasensor *L
     total += calcularMemoriaDistancia(d);
 
     printf("\nMemoria total ocupada: %zu bytes\n", total);
+    printf("\nMemoria total ocupada: %zu Mbytes\n", total/1024/1024);
 }

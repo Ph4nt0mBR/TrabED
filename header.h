@@ -49,7 +49,7 @@ typedef struct carros
 	donos *pdonos;
 	int codigo = 0;
 	float kilometros;
-	int	tempototal;
+	float tempototal;
 
 }carro,*pcarro;
 
@@ -124,7 +124,7 @@ typedef struct passagem
 {
 	int idsensor;
 	pcarro codcarro;
-	char data[100];
+	char data[30];
 	int tiporegist;
 
 }passagem,*ppassagem;
