@@ -1,3 +1,10 @@
+
+#ifndef FUNC_H
+#define FUNC_H
+
+
+
+
 #pragma once
 #include<stdio.h>
 #include<stdlib.h>
@@ -45,3 +52,6 @@ size_t calcularMemoriaListapassagem(pListapassagem Lp);
 size_t calcularMemoriaHashing(HASHING has);
 size_t calcularMemoriaListacarro(pListacarro Lc);
 size_t calcularMemoriaListadono(pListadono Ld);
+
+
+#endif

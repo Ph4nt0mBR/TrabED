@@ -1,27 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "func.h"
+#include "menu.h"
 
 
 
-/*    void exibirMenuPrincipal() {
-        printf("\n========== MENU PRINCIPAL ==========\n");
-        printf("1. Importar dados\n");
-        printf("2. Registrar novo dono\n");
-        printf("3. Registrar novo veiculo\n");
-        printf("4. Registrar passagem\n");
-        printf("5. Listar donos\n");
-        printf("6. Listar veiculos\n");
-        printf("7. Organizar donos\n");
-        printf("8. Organizar veiculos\n");
-        printf("9. Estatisticas de circulacao\n");
-        printf("10. Marca mais popular\n");
-        printf("11. Exportar dados\n");
-        printf("0. Sair\n");
-        printf("====================================\n");
-        printf("Escolha uma opcao: ");
 
-    }*/
 
 
 

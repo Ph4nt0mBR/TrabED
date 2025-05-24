@@ -1,3 +1,9 @@
+
+#ifndef HEAD_H
+#define HEAD_H
+
+#pragma once
+
 //Manter os inlcudes no header e incluir o header nos outros ficheiros
 #include<stdio.h>
 #include<stdlib.h>
@@ -136,3 +142,6 @@ typedef struct Listapassagem {
 	int numel;
 	pnopassagem inicio;
 } Listapassagem, *pListapassagem;
+
+
+#endif
