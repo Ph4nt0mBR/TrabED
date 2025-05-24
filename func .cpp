@@ -1410,8 +1410,23 @@ void listainfracao(Listapassagem* pass, distancia* d) {
 
 
 void rankinfracao() {
-	//Ranking de infrações p / veículo.Listagem com o veículo e respectivo
-	//número total de infrações de velocidade ocorridas durante determinado período.
+    //Ranking de infrações p / veículo.Listagem com o veículo e respectivo
+    //número total de infrações de velocidade ocorridas durante determinado período.
+}
+
+// Função auxiliar para converter data/hora para tempo numérico
+float converterParaTempo(const char* datahora) {
+    char copia[20];
+    strcpy(copia, datahora);
+
+    char* ano = strtok(copia, "-");
+    char* mes = strtok(NULL, "-");
+    char* dia = strtok(NULL, "_");
+    char* hora = strtok(NULL, ":");
+    char* min = strtok(NULL, ":");
+    char* seg = strtok(NULL, ":");
+
+    return calctempo(ano, mes, dia, hora, min, seg);
 }
 
 float velocidademedia(carro *c) {
@@ -1692,7 +1707,7 @@ void marcapopular(HASHING *has) {
 	}
 
 	printf("\nMarca mais popular: %s", pm->nome);
-	//Determinar qual a marca de automóvel mais comum?
+	//determina qual a marca de automovel mais comum
 }
 
 void exportarXl(Listapassagem* Lp, HASHING* has) {
@@ -1701,37 +1716,48 @@ void exportarXl(Listapassagem* Lp, HASHING* has) {
         return;
     }
 
-	FILE* f = fopen("base_dados.csv", "w");
-	if (f == NULL) {
-		printf("Erro ao abrir o ficheiro CSV para escrita.\n");
-		return;
-	}
+    FILE* f = fopen("dados_exportados.csv", "w");
+    if (f == NULL) {
+        printf("Erro ao abrir o ficheiro CSV para escrita.\n");
+        return;
+    }
 
+    fprintf(f, "Matricula;Marca;Modelo;CodigoCarro;ContribuinteDono;NomeDono;DataHora;IDSensor\n");
 
-	fprintf(f, "Matricula,Marca,Modelo,CodigoCarro,ContribuinteDono,NomeDono,DataHora,IDSensor\n");
+    pnopassagem atual = Lp->inicio;
+    while (atual != NULL) {
+        if (atual->info != NULL && atual->info->codcarro != NULL && atual->info->codcarro->pdonos != NULL) {
+            //troca virgulas por ; pra evitar problemas no ficheiro
+            char nomeDono[100];
+            strcpy(nomeDono, atual->info->codcarro->pdonos->nome);
+            for (int i = 0; nomeDono[i]; i++) {
+                if (nomeDono[i] == ',') nomeDono[i] = ';';
+            }
 
-	pnopassagem atual = Lp->inicio;
-	while (atual != NULL) {
-		if (atual->info->codcarro && atual->info->codcarro->pdonos) {
-			fprintf(f, "%s,%s,%s,%d,%d,%s,%s,%d\n",
-				atual->info->codcarro->matricula,
-				atual->info->codcarro->marca,
-				atual->info->codcarro->modelo,
-				atual->info->codcarro->codigo,
-				atual->info->codcarro->pdonos->numcontibuinte,
-				atual->info->codcarro->pdonos->nome,
-				atual->info->data,
-				atual->info->idsensor);
-		}
-		atual = atual->prox;
-	}
+            fprintf(f, "%s;%s;%s;%d;%d;%s;%s;%d\n",
+                atual->info->codcarro->matricula,
+                atual->info->codcarro->marca,
+                atual->info->codcarro->modelo,
+                atual->info->codcarro->codigo,
+                atual->info->codcarro->pdonos->numcontibuinte,
+                nomeDono,
+                atual->info->data,
+                atual->info->idsensor);
+        }
+        atual = atual->prox;
+    }
 
-	fclose(f);
-	printf("Dados exportados com sucesso para base_dados.csv\n");
+    fclose(f);
+    printf("Dados exportados com sucesso para dados_exportados.csv\n");
 }
 
 void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls) {
-    FILE* f = fopen("base_dados.xml", "w");
+    if (Lp == NULL || Lp->inicio == NULL) {
+        printf("ERRO: Lista de passagens vazia ou inválida!\n");
+        return;
+    }
+
+    FILE* f = fopen("dados_exportados.xml", "w");
     if (f == NULL) {
         printf("Erro ao abrir o ficheiro XML para escrita.\n");
         return;
@@ -1742,24 +1768,39 @@ void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls) {
 
     pnopassagem atual = Lp->inicio;
     while (atual != NULL) {
-        if (atual->info->codcarro && atual->info->codcarro->pdonos) {
+        if (atual->info != NULL && atual->info->codcarro != NULL && atual->info->codcarro->pdonos != NULL) {
+
+            char* escapeXML(const char* str) {
+                return strdup(str);
+            }
+
+            char* marca = escapeXML(atual->info->codcarro->marca);
+            char* modelo = escapeXML(atual->info->codcarro->modelo);
+            char* nomeDono = escapeXML(atual->info->codcarro->pdonos->nome);
+            char* data = escapeXML(atual->info->data);
+
             fprintf(f, "  <Passagem>\n");
             fprintf(f, "    <Matricula>%s</Matricula>\n", atual->info->codcarro->matricula);
-            fprintf(f, "    <Marca>%s</Marca>\n", atual->info->codcarro->marca);
-            fprintf(f, "    <Modelo>%s</Modelo>\n", atual->info->codcarro->modelo);
+            fprintf(f, "    <Marca>%s</Marca>\n", marca);
+            fprintf(f, "    <Modelo>%s</Modelo>\n", modelo);
             fprintf(f, "    <CodigoCarro>%d</CodigoCarro>\n", atual->info->codcarro->codigo);
             fprintf(f, "    <ContribuinteDono>%d</ContribuinteDono>\n", atual->info->codcarro->pdonos->numcontibuinte);
-            fprintf(f, "    <NomeDono>%s</NomeDono>\n", atual->info->codcarro->pdonos->nome);
-            fprintf(f, "    <DataHora>%s</DataHora>\n", atual->info->data);
+            fprintf(f, "    <NomeDono>%s</NomeDono>\n", nomeDono);
+            fprintf(f, "    <DataHora>%s</DataHora>\n", data);
             fprintf(f, "    <IDSensor>%d</IDSensor>\n", atual->info->idsensor);
             fprintf(f, "  </Passagem>\n");
+
+            free(marca);
+            free(modelo);
+            free(nomeDono);
+            free(data);
         }
         atual = atual->prox;
     }
 
     fprintf(f, "</BaseDeDados>\n");
     fclose(f);
-    printf("Dados exportados com sucesso para base_dados.xml\n");
+    printf("Dados exportados com sucesso para dados_exportados.xml\n");
 }
 
 void calcvelociade(Listapassagem *p, distancia *d){
