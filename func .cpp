@@ -263,7 +263,7 @@ if (contador%100000 == 0)
     }
 
     fclose(F);
-    printf("Importação concluída com sucesso!\n");
+    printf("Importacao concluida com sucesso!\n");
     return 1;
 }
 /*Lê dados de passagens do arquivo "passagem.txt" e associa cada uma ao carro correspondente na estrutura "HASHING".
@@ -1116,6 +1116,7 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 			printf("Modelo: %s\n", nc->info->modelo);
 			printf("Ano: %d\n", nc->info->ano);
 			printf("Codigo: %d", nc->info->codigo);
+			nc->info->kilometros = 0;
             nc = nc->prox;
         }
 
@@ -1134,7 +1135,7 @@ void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has) {
 	pnocarro nc;
 	pmarca nm = has->Inicio;
 
-	printf("Deseja rankear os carros que circularam num periodo pelos kilometros?\n1-Sim\n2-não");
+	printf("Deseja rankear as marcas pelos kilometros?\n1-Sim\n2-não");
 	scanf("%d", &opcao);
 
 	if (opcao == 1) {
@@ -1505,7 +1506,6 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
                                 char copia1[30], copia2[30];
                                 strcpy(copia1,temp->info->data);
                                 char *dia1 = strtok(copia1,"-");
-
                                 char *mes1 = strtok(NULL, "-");
                                 char *ano1 = strtok(NULL, " ");
                                 char *hora1 =strtok(NULL, ":");
@@ -1520,10 +1520,8 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
                                 char *segundo2 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora2,mes2,dia2);
                                 float tempo1 = calctempo(ano1,mes1,dia1,hora1,min1,segundo1);
                                 float tempo2 = calctempo(ano2,mes2,dia2,hora2,min2,segundo2);
-                                printf("\ntempo1: %f\n",tempo1);
-                                printf("\ntempo2: %f\n",tempo2);
-                                temp->info->codcarro->tempototal= temp->info->codcarro->tempototal + (tempo2 - tempo1);
-                                printf("\ntempo %f\n",temp->info->codcarro->tempototal);
+                                tempo2 = tempo2 - tempo1;
+                                temp->info->codcarro->tempototal= temp->info->codcarro->tempototal + tempo2;
                             }
                             temp = temp2;
                         }
@@ -1539,7 +1537,6 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
             while(nc != NULL){
                 if(nc->info->tempototal != 0){
                 nm->numkillmarca = nm->numkillmarca + velocidademedia(nc->info);
-                printf("%f",nm->numkillmarca);
 
                 }
                 nc = nc->prox;
@@ -1565,21 +1562,64 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
             return ;
         }
         else if(maior->numkillmarca != 0){
-            printf("media:%d",maior->numkillmarca);
-            printf("marca:%s\n",maior->nome);
+            //printf("\n media:%d\n",maior->numkillmarca);
+            printf("\n a marca com maior media:%s\n",maior->nome);
             }
-
-
-
-
 
 	}
 	// Qual a marca dos carros que circulam a maior velocidade média?
 }
 
-void condutorediamax(HASHING *has) {
-    /*
-        Esta função não está terminada pois não tenho certeza como faço a parte de velocidade média*/
+void condutorediamax(HASHING *has,Listapassagem *pl, distancia *d) {
+
+    int i=0;
+    pnopassagem ppno = pl->inicio;
+
+    		while(ppno != NULL){
+            pnopassagem temp = ppno;
+            pnopassagem temp2 = ppno;
+            if(ppno->info->codcarro->kilometros == 0){
+                i++;
+                if(i%250 == 0){
+                    printf("\nlidas %d passagens",i);
+                }
+                while(temp2 != NULL){
+                   // printf("\ntemp1: %d",temp->info->tiporegist);
+                   // printf("\ntemp2: %d",temp2->info->tiporegist);
+                        if(temp2->info->codcarro->codigo == temp->info->codcarro->codigo){
+
+                            if(temp->info->tiporegist == 1){
+
+                                temp->info->codcarro->kilometros = temp->info->codcarro->kilometros + d->dist[temp->info->idsensor][temp2->info->idsensor];
+
+                                char copia1[30], copia2[30];
+                                strcpy(copia1,temp->info->data);
+                                char *dia1 = strtok(copia1,"-");
+                                char *mes1 = strtok(NULL, "-");
+                                char *ano1 = strtok(NULL, " ");
+                                char *hora1 =strtok(NULL, ":");
+                                char *min1 = strtok(NULL,":");
+                                char *segundo1 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora1,mes1,dia1);
+                                strcpy(copia2,temp2->info->data);
+                                char *dia2 = strtok(copia2,"-");
+                                char *mes2 = strtok(NULL, "-");
+                                char *ano2 = strtok(NULL, " ");
+                                char *hora2 =strtok(NULL, ":");
+                                char *min2 = strtok(NULL,":");
+                                char *segundo2 = strtok(NULL, ":");//printf("hora:%s, min:%s, sec: %s",hora2,mes2,dia2);
+                                float tempo1 = calctempo(ano1,mes1,dia1,hora1,min1,segundo1);
+                                float tempo2 = calctempo(ano2,mes2,dia2,hora2,min2,segundo2);
+                                tempo2 = tempo2 - tempo1;
+                                temp->info->codcarro->tempototal= temp->info->codcarro->tempototal + tempo2;
+                            }
+                            temp = temp2;
+                        }
+                    temp2 =temp2->prox;
+                }
+		    }
+            ppno = ppno->prox;
+		}
+
     pmarca p = has->Inicio;
     pnocarro pnmax = p->inf->inicio;
     while(p!= NULL){
@@ -1608,10 +1648,10 @@ void condutorediamax(HASHING *has) {
         p = p->prox;
     }
     if(pnmax->info->tempototal == 0){
-        printf("\n\nnenhum condutor tem passagens suficientes para calcular a velocidade");
+        printf("\n nenhum condutor tem passagens suficientes para calcular a velocidade");
         return ;
     }
-    printf("/nO condutor %s codigo:%d tem a maior velocidade media",pnmax->info->pdonos->nome, pnmax->info->pdonos->numcontibuinte);
+    printf("\nO condutor %s codigo:%d tem a maior velocidade media",pnmax->info->pdonos->nome, pnmax->info->pdonos->numcontibuinte);
 	//Qual o condutor(dono) que circula a maior velocidade média ?
 }
 
@@ -1620,6 +1660,8 @@ void condutorpostal() {
 }
 
 void marcapopular(HASHING *has) {
+
+
 	pmarca pm = has->Inicio;
 	if(pm == NULL){
         printf("nao existe nenhuma marca");
@@ -1758,13 +1800,12 @@ float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
         tempo = tempo + 28*24*3600;
     }
     tempo = tempo + (float)atoi(dia)*24*3600;
-    printf("\ntempo%f\n",tempo);
-    printf("hora: %d\n", atoi(hora));
+
     tempo = tempo + (float)atoi(hora)*3600;
     tempo = tempo + (float)atoi(minut)*60;
     tempo = tempo + (float)atoi(sec);
-    printf("tempo%f\n\n",tempo);
-    return tempo/3600;
+    //printf("\no tempo em sec: %f o tempo em horas: %f\n",tempo,(float)tempo/(float)3600);
+    return (float)tempo/(float)3600;
 
 }
 

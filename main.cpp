@@ -49,8 +49,8 @@ int main() {
     //rankmarcas(pp,d, has);
     //listainfracao(pp, d);
     //calcvelociade( pp,d);
-    //condutorediamax(has);
-    marcamedia(pp, d, has);
+    condutorediamax(has,pp,d);
+    //marcamedia(pp, d, has);
     //memoriateste(Ld, has, pp, Ls, d);
    // exportarXl(pp, has);
     //exportarXML(pp,has, Ls);

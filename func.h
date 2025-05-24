@@ -35,8 +35,7 @@ void listainfracao(Listapassagem* pass, distancia* d);
 
 float velocidademedia(carro *c);
 void marcamedia(Listapassagem *pass, distancia *d, HASHING *has);
-
-void condutorediamax(HASHING *has);
+void condutorediamax(HASHING *has,Listapassagem *p, distancia *d);
 void marcapopular(HASHING *has);
 void exportarXl(Listapassagem* Lp, HASHING* has);
 void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls);
