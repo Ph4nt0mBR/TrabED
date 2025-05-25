@@ -1,10 +1,3 @@
-
-#ifndef FUNC_H
-#define FUNC_H
-
-
-
-
 #pragma once
 #include<stdio.h>
 #include<stdlib.h>
@@ -42,7 +35,9 @@ void listainfracao(Listapassagem* pass, distancia* d);
 
 float velocidademedia(carro *c);
 void marcamedia(Listapassagem *pass, distancia *d, HASHING *has);
-void condutorediamax(HASHING *has,Listapassagem *p, distancia *d);
+
+void condutorediamax(HASHING *has);
+void condutorpostal(pListapassagem pass, pListadono donos, marca* marcas, distancia* d);
 void marcapopular(HASHING *has);
 void exportarXl(Listapassagem* Lp, HASHING* has);
 void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls);
@@ -56,6 +51,3 @@ size_t calcularMemoriaListapassagem(pListapassagem Lp);
 size_t calcularMemoriaHashing(HASHING has);
 size_t calcularMemoriaListacarro(pListacarro Lc);
 size_t calcularMemoriaListadono(pListadono Ld);
-
-
-#endif
