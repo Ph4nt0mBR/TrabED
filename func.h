@@ -31,7 +31,7 @@ void organizacarros(HASHING *has);
 void listacarroperiodo(Listapassagem *pass);
 void rankveiculos(Listapassagem *pass,distancia *d, HASHING *has);
 void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has);
-void listainfracao(Listapassagem* pass, distancia* d);
+void listainfracao(pListapassagem pass, distancia* d, HASHING* has);
 
 float velocidademedia(carro *c);
 void marcamedia(Listapassagem *pass, distancia *d, HASHING *has);
@@ -40,7 +40,7 @@ void condutorediamax(HASHING *has);
 void condutorpostal(pListapassagem pass, pListadono donos, marca* marcas, distancia* d);
 void marcapopular(HASHING *has);
 void exportarXl(Listapassagem* Lp, HASHING* has);
-void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls);
+void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls,distancia *d, Listadono *Ld);
 
 void calcvelociade(Listapassagem *p, distancia *d);
 float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec);
