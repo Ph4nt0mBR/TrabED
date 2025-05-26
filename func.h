@@ -31,7 +31,7 @@ void organizacarros(HASHING *has);
 void listacarroperiodo(Listapassagem *pass);
 void rankveiculos(Listapassagem *pass,distancia *d, HASHING *has);
 void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has);
-void listainfracao(Listapassagem* pass, distancia* d);
+void listainfracao(pListapassagem pass, distancia* d, HASHING* has);
 
 float velocidademedia(carro *c);
 void marcamedia(Listapassagem *pass, distancia *d, HASHING *has);

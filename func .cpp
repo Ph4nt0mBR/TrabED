@@ -214,8 +214,8 @@ int importpassagem(Listapassagem *L, HASHING *has) {
     while (fscanf(F, "%d\t%d\t%[^\t]\t%d", &Id, &COD, Data, &regist) == 4) {
         //printf("Processando: ID=%d, COD=%d, Data=%s, Regist=%d\n", Id, COD, Data, regist);
         contador++;
-if (contador%100000 == 0)
-    printf("\n+ %d passagens lidas",contador);
+if (contador%100000 == 0){
+    //printf("\n+ %d passagens lidas",contador);
         passagem* npass = (passagem*)malloc(sizeof(passagem));
         if (!npass) {
             printf("Erro de alocação de memória\n");
@@ -262,6 +262,7 @@ if (contador%100000 == 0)
     fclose(F);
     printf("Importação concluída com sucesso!\n");
     return 1;
+}
 }
 /*Lê dados de passagens do arquivo "passagem.txt" e associa cada uma ao carro correspondente na estrutura "HASHING".
 Cada linha deve conter: <ID sensor> <código do carro> <data> <tipo de registo>, separados por tabulações.*/
@@ -1264,145 +1265,154 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 		os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
 	}
 
-void listainfracao(Listapassagem* pass, distancia* d) {
-    if (pass == NULL || d == NULL) {
+void listainfracao(pListapassagem pass, distancia* d, HASHING* has) {
+    if (pass == NULL || d == NULL || has == NULL) {
         printf("Erro: Dados inválidos.\n");
         return;
     }
 
-    char inicio[20], fim[20];
+    char input_inicio[30], input_fim[30];
+
     printf("\n--- Listagem de Infrações ---\n");
+    fflush(stdout);
+
     printf("Período a analisar (formato AAAA-MM-DD_HH:MM:SS)\n");
     printf("Data/hora inicial: ");
-    scanf("%19s", inicio);
+    scanf("%s", input_inicio);
     printf("Data/hora final: ");
-    scanf("%19s", fim);
+    scanf("%s", input_fim);
 
-   //data inicio
-    char* anoi = strtok(inicio, "-");
+    // Preparar datas
+    char inicio_parse[30], fim_parse[30];
+    strcpy(inicio_parse, input_inicio);
+    strcpy(fim_parse, input_fim);
+
+    char* anoi = strtok(inicio_parse, "-");
     char* mesi = strtok(NULL, "-");
     char* diai = strtok(NULL, "_");
     char* horai = strtok(NULL, ":");
     char* mini = strtok(NULL, ":");
-    char* segundoi = strtok(NULL, ":");
+    char* segi = strtok(NULL, ":");
 
-    //data fim
-    char* anof = strtok(fim, "-");
+    char* anof = strtok(fim_parse, "-");
     char* mesf = strtok(NULL, "-");
     char* diaf = strtok(NULL, "_");
     char* horaf = strtok(NULL, ":");
     char* minf = strtok(NULL, ":");
-    char* segundof = strtok(NULL, ":");
+    char* segf = strtok(NULL, ":");
 
-    float tempo_inicio = calctempo(anoi, mesi, diai, horai, mini, segundoi);
-    float tempo_fim = calctempo(anof, mesf, diaf, horaf, minf, segundof);
+    float tempo_inicio = calctempo(anoi, mesi, diai, horai, mini, segi);
+    float tempo_fim = calctempo(anof, mesf, diaf, horaf, minf, segf);
 
-    //lista temporaria de passagems
-    pListapassagem tempList = crialistapasagem();
+    printf("\nVeículos com velocidade média > 120 km/h:\n");
+    printf("-------------------------------------------------\n");
+
     pnopassagem atual = pass->inicio;
-
-    while (atual != NULL) {
-        char data[20];
-        strcpy(data, atual->info->data);
-
-        char* ano = strtok(data, "-");
-        char* mes = strtok(NULL, "-");
-        char* dia = strtok(NULL, "_");
-        char* hora = strtok(NULL, ":");
-        char* min = strtok(NULL, ":");
-        char* segundo = strtok(NULL, ":");
-
-        float tempo_atual = calctempo(ano, mes, dia, hora, min, segundo);
-
-        if (tempo_atual >= tempo_inicio && tempo_atual <= tempo_fim) {
-
-            //adiciona a lista temporaria
-            pnopassagem novo = (pnopassagem)malloc(sizeof(nopassagem));
-            novo->info = atual->info;
-            novo->prox = tempList->inicio;
-            tempList->inicio = novo;
-            tempList->numel++;
-        }
-        atual = atual->prox;
-    }
-
-    printf("\nVeiculos com velocidade media > 120 km/h:\n");
-    printf("----------------------------------------\n");
-
-    pnopassagem p = tempList->inicio;
     int count = 0;
 
-    while (p != NULL) {
-        pnopassagem prox = p->prox;
+    while (atual != NULL && atual->info != NULL) {
+        if (atual->info->tiporegist != 0) {
+            atual = atual->prox;
+            continue;
+        }
 
-        //encontra passagem da saida
-        while (prox != NULL && prox->info->codcarro != p->info->codcarro) {
+        passagem* entrada = atual->info;
+
+        //Corrigir o ponteiro codcarro se estiver NULL
+        if (entrada->codcarro == NULL) {
+            marca* m = has->Inicio;
+            while (m != NULL && entrada->codcarro == NULL) {
+                pnocarro c = m->inf->inicio;
+                while (c != NULL) {
+                    if (c->info->codigo == entrada->tiporegist) {
+                        entrada->codcarro = c->info;
+                        break;
+                    }
+                    c = c->prox;
+                }
+                m = m->prox;
+            }
+        }
+
+        pnopassagem prox = atual->prox;
+        while (prox != NULL && (
+            prox->info == NULL || prox->info->tiporegist != 1)) {
             prox = prox->prox;
         }
 
-        if (prox != NULL && p->info->tiporegist == 0 && prox->info->tiporegist == 1) {
-            //calcular velocidade
-            float distancia = d->dist[p->info->idsensor][prox->info->idsensor];
+        if (prox != NULL && prox->info != NULL) {
+            passagem* saida = prox->info;
 
-            // Converter tempos para horas
-            char data_entrada[20], data_saida[20];
-            strcpy(data_entrada, p->info->data);
-            strcpy(data_saida, prox->info->data);
+            // Corrigir codcarro na saída também
+            if (saida->codcarro == NULL) {
+                marca* m = has->Inicio;
+                while (m != NULL && saida->codcarro == NULL) {
+                    pnocarro c = m->inf->inicio;
+                    while (c != NULL) {
+                        if (c->info->codigo == saida->tiporegist) {
+                            saida->codcarro = c->info;
+                            break;
+                        }
+                        c = c->prox;
+                    }
+                    m = m->prox;
+                }
+            }
 
-            char* anoe = strtok(data_entrada, "-");
-            char* mese = strtok(NULL, "-");
-            char* diae = strtok(NULL, "_");
-            char* horae = strtok(NULL, ":");
-            char* mine = strtok(NULL, ":");
-            char* sege = strtok(NULL, ":");
+            // Validar antes de aceder
+            if (entrada->codcarro && saida->codcarro &&
+                entrada->codcarro->codigo == saida->codcarro->codigo) {
 
-            char* anos = strtok(data_saida, "-");
-            char* mess = strtok(NULL, "-");
-            char* dias = strtok(NULL, "_");
-            char* horas = strtok(NULL, ":");
-            char* mins = strtok(NULL, ":");
-            char* segs = strtok(NULL, ":");
+                // Copiar datas para não corromper
+                char d1[30], d2[30];
+                strcpy(d1, entrada->data);
+                strcpy(d2, saida->data);
 
-            float tempo_entrada = calctempo(anoe, mese, diae, horae, mine, sege);
-            float tempo_saida = calctempo(anos, mess, dias, horas, mins, segs);
-            float tempo_total = tempo_saida - tempo_entrada;
+                char *ae = strtok(d1, "-");
+                char *me = strtok(NULL, "-");
+                char *de = strtok(NULL, "_");
+                char *he = strtok(NULL, ":");
+                char *mie = strtok(NULL, ":");
+                char *se = strtok(NULL, ":");
 
-            if (tempo_total > 0) {
-                float velocidade = distancia / tempo_total;
+                char *as = strtok(d2, "-");
+                char *ms = strtok(NULL, "-");
+                char *ds = strtok(NULL, "_");
+                char *hs = strtok(NULL, ":");
+                char *mis = strtok(NULL, ":");
+                char *ss = strtok(NULL, ":");
 
-                if (velocidade > 120) {
-                    printf("Matricula: %s\n", p->info->codcarro->matricula);
-                    printf("Marca: %s\n", p->info->codcarro->marca);
-                    printf("Modelo: %s\n", p->info->codcarro->modelo);
-                    printf("Velocidade media: %.2f km/h\n", velocidade);
-                    printf("Data/hora entrada: %s\n", p->info->data);
-                    printf("Data/hora saida: %s\n", prox->info->data);
-                    printf("----------------------------------------\n");
-                    count++;
+                float t1 = calctempo(ae, me, de, he, mie, se);
+                float t2 = calctempo(as, ms, ds, hs, mis, ss);
+
+                if (t1 >= tempo_inicio && t2 <= tempo_fim && t2 > t1) {
+                    float tempo_total = t2 - t1;
+                    float dist = d->dist[entrada->idsensor][saida->idsensor];
+                    float vel = dist / tempo_total;
+
+                    if (vel > 120.0) {
+                        printf("Matrícula: %s\n", entrada->codcarro->matricula);
+                        printf("Marca: %s\n", entrada->codcarro->marca);
+                        printf("Modelo: %s\n", entrada->codcarro->modelo);
+                        printf("Velocidade média: %.2f km/h\n", vel);
+                        printf("Entrada: %s\n", entrada->data);
+                        printf("Saída: %s\n", saida->data);
+                        printf("-------------------------------------------------\n");
+                        count++;
+                    }
                 }
             }
         }
-        p = p->prox;
+
+        atual = atual->prox;
     }
 
     if (count == 0) {
-        printf("Nenhuma infracao encontrada no período especificado.\n");
+        printf("Nenhuma infração encontrada no período especificado.\n");
+    } else {
+        printf("Total de infrações: %d\n", count);
     }
-    else {
-        printf("Total de infracoes: %d\n", count);
-    }
-
-    //free a memoriar temporaria
-    pnopassagem temp = tempList->inicio;
-    while (temp != NULL) {
-        pnopassagem next = temp->prox;
-        free(temp);
-        temp = next;
-    }
-    free(tempList);
 }
-
-
 
 
 void rankinfracao() {
@@ -1613,7 +1623,7 @@ void condutorediamax(HASHING *has) {
 }
 
 void condutorpostal(pListapassagem pass, pListadono donos, marca* marcas, distancia* d) {
-	//Qual a velocidade média dos condutores com código postal X?
+	//Qual a velocidade média dos condutores com código postal X
 	char codPostal[9];
     printf("Introduza o código postal a filtrar: ");
     scanf("%s", codPostal);
