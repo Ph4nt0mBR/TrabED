@@ -1,6 +1,7 @@
 #include "header.h"
 #include "func.h"
-#include<locale>
+#include <time.h>
+#include <locale>
 
 pdistancia calcDistancia()
 {
@@ -1416,8 +1417,146 @@ void listainfracao(pListapassagem pass, distancia* d, HASHING* has) {
 
 
 void rankinfracao() {
-	//Ranking de infrações p / veículo.Listagem com o veículo e respectivo
-	//número total de infrações de velocidade ocorridas durante determinado período.
+	if (!pass || !d) {
+        printf("Erro: dados invalidos.\n");
+        return;
+    }
+
+    char input_inicio[30], input_fim[30];
+    printf("\n--- Ranking de Infracoes por Veiculo ---\n");
+    printf("Periodo a analisar (formato AAAA-MM-DD_HH:MM:SS)\n");
+    printf("Data/hora inicial: ");
+    scanf("%s", input_inicio);
+    printf("Data/hora final: ");
+    scanf("%s", input_fim);
+
+    // Separar partes da data de início
+    char ini[30], fim[30];
+    strcpy(ini, input_inicio);
+    strcpy(fim, input_fim);
+
+    char *anoi = strtok(ini, "-");
+    char *mesi = strtok(NULL, "-");
+    char *diai = strtok(NULL, "_");
+    char *horai = strtok(NULL, ":");
+    char *mini = strtok(NULL, ":");
+    char *segi = strtok(NULL, ":");
+
+    char *anof = strtok(fim, "-");
+    char *mesf = strtok(NULL, "-");
+    char *diaf = strtok(NULL, "_");
+    char *horaf = strtok(NULL, ":");
+    char *minf = strtok(NULL, ":");
+    char *segf = strtok(NULL, ":");
+
+    float tempo_inicio = calctempo(anoi, mesi, diai, horai, mini, segi);
+    float tempo_fim = calctempo(anof, mesf, diaf, horaf, minf, segf);
+
+    pcarro carros[1000];
+    int infracoes[1000];
+    int total = 0;
+
+    pnopassagem atual = pass->inicio;
+
+    while (atual != NULL) {
+        if (!atual->info || atual->info->tiporegist != 0 || !atual->info->codcarro) {
+            atual = atual->prox;
+            continue;
+        }
+
+        passagem* entrada = atual->info;
+
+        pnopassagem p = atual->prox;
+        while (p != NULL) {
+            if (p->info && p->info->tiporegist == 1 &&
+                p->info->codcarro == entrada->codcarro) {
+
+                // Parse entrada
+                char d1[30]; strcpy(d1, entrada->data);
+                char *diae = strtok(d1, "-");
+                char *mese = strtok(NULL, "-");
+                char *anoe = strtok(NULL, " ");
+                char *horae = strtok(NULL, ":");
+                char *mine = strtok(NULL, ":");
+                char *sege = strtok(NULL, ".");
+
+                float t1 = calctempo(anoe, mese, diae, horae, mine, sege);
+
+                // Parse saida
+                char d2[30]; strcpy(d2, p->info->data);
+                char *dias = strtok(d2, "-");
+                char *mess = strtok(NULL, "-");
+                char *anos = strtok(NULL, " ");
+                char *horas = strtok(NULL, ":");
+                char *mins = strtok(NULL, ":");
+                char *segs = strtok(NULL, ".");
+
+                float t2 = calctempo(anos, mess, dias, horas, mins, segs);
+
+                if (t1 >= tempo_inicio && t2 <= tempo_fim && t2 > t1) {
+                    float tempo_total = t2 - t1; // já em horas
+                    int s1 = entrada->idsensor;
+                    int s2 = p->info->idsensor;
+
+                    float dist = d->dist[s1][s2];
+                    if (dist == 0) dist = d->dist[s2][s1];
+
+                    if (dist > 0) {
+                        float velocidade = dist / tempo_total;
+
+                        if (velocidade > 120.0) {
+                            int encontrado = 0;
+                            for (int i = 0; i < total; i++) {
+                                if (carros[i] == entrada->codcarro) {
+                                    infracoes[i]++;
+                                    encontrado = 1;
+                                    break;
+                                }
+                            }
+                            if (!encontrado && total < 1000) {
+                                carros[total] = entrada->codcarro;
+                                infracoes[total] = 1;
+                                total++;
+                            }
+                        }
+                    }
+                }
+
+                break; // para no primeiro par entrada/saida válido
+            }
+
+            p = p->prox;
+        }
+
+        atual = atual->prox;
+    }
+
+    // Ordenar o ranking
+    for (int i = 0; i < total - 1; i++) {
+        for (int j = i + 1; j < total; j++) {
+            if (infracoes[j] > infracoes[i]) {
+                int tmp = infracoes[i];
+                infracoes[i] = infracoes[j];
+                infracoes[j] = tmp;
+
+                pcarro tmp_c = carros[i];
+                carros[i] = carros[j];
+                carros[j] = tmp_c;
+            }
+        }
+    }
+
+    // Imprimir resultados
+    if (total == 0) {
+        printf("Nenhuma infracao encontrada no periodo especificado.\n");
+    } else {
+        printf("\n====== RANKING DE INFRACOES ======\n");
+        for (int i = 0; i < total; i++) {
+            printf("Matricula: %s | Marca: %s | Modelo: %s | Infracoes: %d\n",
+                   carros[i]->matricula, carros[i]->marca, carros[i]->modelo, infracoes[i]);
+            printf("--------------------------------------------\n");
+        }
+    }
 }
 
 float velocidademedia(carro *c) {

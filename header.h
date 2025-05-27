@@ -124,7 +124,7 @@ typedef struct passagem
 {
 	int idsensor;
 	pcarro codcarro;
-	char data[30];
+	char data[50];
 	int tiporegist;
 
 }passagem,*ppassagem;

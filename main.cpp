@@ -47,6 +47,7 @@ int main() {
     //marcapopular(has);
     //rankveiculos(pp,d,has);
     //rankmarcas(pp,d, has);
+	//rankinfracao(pp, d);
     //listainfracao(pp, d, has);
     //calcvelocidade( pp,d);
     //condutorpostal(pp, Ld, has->Inicio, d);
