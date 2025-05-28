@@ -43,7 +43,7 @@ int main() {
    //regist_pass(pp,has,Ls);
    //organizacarros(has);
   // list_veiculo(has);
-    //listacarroperiodo(pp);
+    listacarroperiodo(pp);
     //marcapopular(has);
     //rankveiculos(pp,d,has);
     //rankmarcas(pp,d, has);
@@ -54,8 +54,8 @@ int main() {
     //condutorediamax(has);
     //marcamedia(pp, d, has);
     //memoriateste(Ld, has, pp, Ls, d);
-    exportarXl(pp, has);
-    exportarXML(pp,has, Ls,d,Ld);
+    //exportarXl(pp, has);
+    //exportarXML(pp,has, Ls,d,Ld);
 /*
     // Inicializa estruturas
     Listadono* Ld = crialistadono();
