@@ -22,7 +22,7 @@ static  int donosImport(Listadono* Ld) {
     return(Ld != NULL && Ld->numel > 0);
 }
 
-//Vericica import de Carros.txt
+//Verifica import de Carros.txt
 static int carrosImport(HASHING* has) {
     if (has == NULL) retunr 0;
     pmarca atual = has->Inicio;
@@ -32,6 +32,28 @@ static int carrosImport(HASHING* has) {
     }
     return 0;
 }
+
+//Verifica se existem donos (importados ou registrados)
+static int existemDonos(Listadono* Ld) {
+    return(Ld != NULL && Ld->numel > 0);
+}
+
+//Verifica se existem veículos (importados ou registrados)
+static int existemVeiculos(HASHING* has) {
+    if (has == NULL) return 0;
+    pmarca atual = has->Inicio;
+    while (atual != NULL) {
+        if (atual->inf != NULL && atual->inf->numel > 0) return 1;
+        atual = atual->prox;
+    }
+    return 0;
+}
+
+//Verifica se existem sensores
+static int existemSensores(Listasensor* Ls) {
+    return (Ls != NULL && Ls->numel > 0);
+}
+
 /*========================================
             Submenu de importação
   ========================================*/
@@ -91,7 +113,7 @@ void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasen
             return;
 
         default:
-            printf("Opcao invalida!");
+            printf("\nOpcao invalida!");
     }
         pressioneParaContinuar();
     } while (1);
@@ -117,10 +139,20 @@ void submenuRegistroManual(Listadono* Ld, HASHING* has, Listapassagem* Lp, Lista
             regist_dono(Ld);
             break;
         case 2:
-            regist_veiculo(Ld, has);
+            if (existemDonos(Ld)) {
+                regist_veiculo(Ld, has);
+            }
+            else {
+                printf("\nErro: registre donos primeiro!");
+            }
             break;
         case 3:
-            regist_pass(Lp, has, Ls);
+            if (existemVeiculos(has) && existemSensores(Ls)) {
+                regist_pass(Lp, has, Ls);
+            }
+            else {
+                printf("\nErro: Registre veículos e sensores primeiro!");
+            }
             break;
         }
         if (escolha != 0) pressioneParaContinuar();
@@ -149,23 +181,84 @@ void submenuOrganizacao(Listadono* Ld, HASHING* has) {
     } while (escolha != 0);
 }
 
-void submenuRelatorios()
+void submenuListagens(Listadono* Ld, HASHING* has) {
+    int escolha;
+    do {
+        printf("\n=== LISTAR DADOS ===\n");
+        printf("1. Listar Donos\n");
+        printf("2. Listar Veículos\n");
+        printf("0. Voltar\n");
+        printf("Escolha: ");
+        scanf("%d", &escolha);
 
+        switch (escolha) {
+        case 1:
+            if (existemDonos(Ld)) {
+                list_dono(Ld);
+            } else {
+                printf("\nNenhum dono registrado!");
+            }
+            break;
+        case 2:
+            if (existemVeiculos(has)) {
+                list_veiculo(has);
+            }
+            else {
+                printf("\nNenhum veiculo registrado!")
+            }
+            break;
+        case 0:
+            return;
+        default:
+            printf("\nOpcao invalida!")
+        }
+        pressioneParaContinuar();
+    } while (escolha != 0);
+}
+
+void submenuRelatorios(Listapassagem* Lp, HASHING* has, pdistancia p) {
+    int escolha;
+    do {
+        printf("\n=== RELATÓRIOS ===\n");
+        printf("1. Ranking de Quilometragem\n");
+        printf("2. Marca Mais Popular\n");
+        printf("3. Velocidades Médias\n");
+        printf("4. Listar Infrações\n");
+        printf("0. Voltar\n");
+        printf("Escolha: ");
+        scanf("%d", &escolha);
+
+        switch (escolha) {
+        case 1:
+            rankveiculos(Lp, d);
+            break;
+        case 2:
+            marcapopular(has);
+            break;
+        case 3:
+            velocidademedia();
+            break;
+        case 4:
+            listainfracao();
+            break;
+        }
+        if (escolha != 0)pressioneParaContinuar();
+    } while (escolha != 0);
+}
 
 /*=============================================
                 Menu Principal
   =============================================*/
 
-void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, pdistancia d, int importouDados) {
+void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, pdistancia d,) {
     int escolha;
     do{
         printf("\n========== MENU PRINCIPAL ==========\n");
         printf("1. Importar Dados\n");
-        printf("2. Registrar Novo Dono\n");
-        printf("3. Registrar Novo Veículo\n");
-        printf("4. Listar Dados\n");
-        printf("5. Relatórios\n");
-        printf("6. Memória Utilizada\n");
+        printf("2. Registros\n");
+        printf("3. Listas\n");
+        printf("4. Relatórios\n");
+        printf("5. Memória Utilizada\n");
         printf("0. Sair\n");
         printf("====================================\n");
         printf("Escolha uma opcao: ");
@@ -174,9 +267,25 @@ void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, 
     switch(escolha){
     case 1:
         submenuImportacoes(Ld, has, Lp, Ls);
-        importouDados = 1;
         break;
-    
-    
+    case 2:
+        submenuRegistroManual(Ld, has, Lp, Ls);
+        break;
+    case 3:
+        submenuListagens(Ld, has);
+        break;
+    case 4:
+        submenuOrganizacao(Ld, has);
+        break;
+    case 5:
+        if (existemVeiculos(has)) {
+            submenuRelatorios(Lp, has, d);
+        } else {
+            printf("\nImporte ou registre veiculos primeiro!");
+            pressioneParaContinuar();
+            }
+    case 6:
+        memoria
+        }
     
     }

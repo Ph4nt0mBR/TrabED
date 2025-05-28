@@ -505,7 +505,7 @@ void regist_veiculo(Listadono *L,HASHING *has) {
 		if (novoCarro == NULL) {
 			printf("Ocorreu um erro ao adicionar o veiculo.\n");
 			return;
-		}
+		}   
 
 		printf("Insira a matricula do veículo:\n");
 		scanf("%s", novoCarro->matricula);
@@ -705,7 +705,11 @@ void organizadonos(Listadono* Ld) {
 	pdono temp;
 	pno atual, max = NULL;
 
-    printf("Deseja executar a organizacao por que ordem?\n 1- Nome do dono\n 2- Numero de contribuinte\n 3- Parar organizacao\n");
+    printf("Deseja executar a organizacao por que ordem?\n");
+    printf("1. Nome do dono\n");
+    printf("2. Numero de contribuinte\n");
+    printf("3. Parar organizacao\n");
+    printf("Escolha uma opcao: ");
     scanf( "%d", &opcao);
 
 	do {
@@ -778,8 +782,12 @@ void organizacarros(HASHING *has) {
 	int troca = 0;
 	int opcao;
 
-	printf("Organizar carros por:\n1-matricula\n2-marca\n3-modelo\n4-Sair");
-	printf("\n <aviso: organizar por matricula ou modelo automaticamente lista os carros, as alteracoes seram revertidas depois da \tlistagem>");
+    printf("Deseja executar a organizacao por que ordem?\n");
+    printf("1. Matricula\n");
+    printf("2. Marca\n");
+    printf("3. Modelo\n");
+    printf("4. Parar organizacao\n");
+    printf("Escolha uma opcao: ");
 	scanf("%d",&opcao);
 
 	if (opcao == 1) {
@@ -1258,7 +1266,7 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
             maior->numkillmarca = 0;
             troca = 1;
             }
-    }while(troca = 1);
+    }while(troca == 1);
 
 
 
