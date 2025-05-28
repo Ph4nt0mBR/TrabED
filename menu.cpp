@@ -24,7 +24,7 @@ static  int donosImport(Listadono* Ld) {
 
 //Verifica import de Carros.txt
 static int carrosImport(HASHING* has) {
-    if (has == NULL) retunr 0;
+    if (has == NULL) return 0;
     pmarca atual = has->Inicio;
     while (atual != NULL) {
         if (atual->inf != NULL && atual->inf->numel > 0) return 1;
@@ -58,7 +58,7 @@ static int existemSensores(Listasensor* Ls) {
             Submenu de importação
   ========================================*/
 
-void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor) {
+void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls) {
     int escolha;
     do {
         printf("\n=== MENU DE IMPORTACAO ===\n");
@@ -262,7 +262,7 @@ void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, 
         printf("0. Sair\n");
         printf("====================================\n");
         printf("Escolha uma opcao: ");
-        scanf("%d" & escolha);
+        scanf("%d", &escolha);
 
     switch(escolha){
     case 1:
@@ -289,3 +289,5 @@ void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, 
         }
     
     }
+    }while(escolha != 0);
+}
