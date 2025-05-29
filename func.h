@@ -43,7 +43,7 @@ void condutorediamax(HASHING *has,Listapassagem *p, distancia *d);
 void marcapopular(HASHING *has);
 void exportarXl(Listapassagem* Lp, HASHING* has);
 void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls);
-
+void resetmarca(HASHING *has);
 void calcvelociade(Listapassagem *p, distancia *d);
 float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec);
 void memoriateste(Listadono *Ld, HASHING *has, Listapassagem *Lp, Listasensor *Ls, pdistancia d);

@@ -520,7 +520,7 @@ void Addcarro(Listacarro* lista, pcarro carro) {
  * \brief Adiciona um novo sensor à lista ligada de sensores
  *
  * Adiciona um novo sensor a lista ligada "Listasensor",adicionando-o no inicio da lista.
- * 
+ *
  * \param l Ponteiro para a lista de sensores
  * \param D Ponteiro para o sensor a ser adicionado
  */
@@ -636,7 +636,7 @@ void list_dono(Listadono* Ld) {
  * \param L Ponteiro para a lista de donos
  * \param has Ponteiro para a tabela hash das marcas
  */
- 
+
 void regist_veiculo(Listadono *L,HASHING *has) {
 	int opcao = 0, contdono = 0;
 	pListadono pL = L;
@@ -2251,14 +2251,7 @@ float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
 
 }
 
-void resetveiculo(Listapassagem *pass,distancia *d){
-    pnopassagem nop = pass->inicio;
-    while(nop != NULL){
-        nop->info->codcarro->kilometros = 0;
-        nop->info->codcarro->tempototal = 0;
-        nop = nop->prox;
-    }
-}
+
 
 void resetmarca(HASHING *has){
     pmarca m = has->Inicio;
