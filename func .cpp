@@ -1378,6 +1378,22 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 }
 
 
+/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
+os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
+
+/**
+ * @brief Gera um ranking das marcas de veículos com base nos quilometros percorridos numa autoestrada durante um periodo de tempo especificado.
+ *
+ * A função pergunta ao utilizador se pretende visualizar o ranking de marcas por quilómetros e, caso afirmativo, solicita um intervalo de datas. 
+ * Em seguida, filtra todas as passagens nesse período e calcula os quilmetros percorridos por cada veiculo. 
+ * Os valores são agregados por marca, e um ranking é exibido por ordem decrescente de quilómetros.
+ *
+ * @param pass Ponteiro para a lista de passagens registadas.
+ * @param d Ponteiro para a estrutura de distâncias entre sensores.
+ * @param has Ponteiro para a tabela hash que armazena as marcas e os seus veículos.
+ * 
+ * @return Esta função não retorna nenhum valor.
+ */
 void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has) {
     int opcao, troca;
 	pListacarro Lc;
@@ -1513,10 +1529,21 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 
 
 	}
-		/*Ranking por marca. Listagem ordenada pelo total de quilómetros que
-		os veículos das diferentes marcas efectuaram na autoestrada durante determinado período. */
-	}
+}
 
+/**
+ * @brief Lista os veículos que cometeram infrações de velocidade num determinado período.
+ *
+ * Ppercorre a lista de passagens para identificar pares de entradas e saídas dos mesmos veículos e calcula a velocidade média entre os sensores.
+ * Caso a velocidade média ultrapasse os 120 km/h e o evento ocorra dentro do período definido pelo utilizador, a infração é reportada no ecrã.
+ *
+ * @param pass Ponteiro para a lista de passagens registadas.
+ * @param d Ponteiro para a estrutura que contém as distâncias entre os sensores.
+ * @param has Ponteiro para a tabela hash que contém as marcas e os seus veículos.
+ * 
+ * 
+ * @return Esta função não retorna um valor, mas imprime no ecrã as infrações encontradas e respetiva informação detalhada.
+ */
 void listainfracao(pListapassagem pass, distancia* d, HASHING* has) {
     if (pass == NULL || d == NULL || has == NULL) {
         printf("Erro: Dados inválidos.\n");
@@ -1666,6 +1693,18 @@ void listainfracao(pListapassagem pass, distancia* d, HASHING* has) {
     }
 }
 
+/**
+ * @brief Gera um ranking dos veículos com mais infrações de velocidade num dado período.
+ *
+ * Esta função percorre a lista de passagens, identificando pares de entrada e saída para os mesmos veículos.
+ * Para cada par, calcula a velocidade média. 
+ * Se for superior a 120 km/h, conta como uma infração. No final, apresenta os veículos ordenados pelo número de infrações.
+ *
+ * @param pass Ponteiro para a lista de passagens registadas.
+ * @param d Ponteiro para a estrutura que contém as distâncias entre sensores.
+ *
+ * @return Esta função não retorna valores, apenas imprime o ranking no ecrã.
+ */
 
 void rankinfracao(pListapassagem pass, distancia* d) {
 	if (!pass || !d) {
@@ -1810,6 +1849,16 @@ void rankinfracao(pListapassagem pass, distancia* d) {
     }
 }
 
+/**
+ * @brief Calcula a velocidade média de um veículo.
+ *
+ * A função calcula a velocidade média de um carro dividindo o total de quilometros percorridos pelo tempo total registado.
+ *
+ * @param c Ponteiro para a estrutura do carro contendo os dados de quilómetros e tempo.
+ *
+ * @return A velocidade média (em km/h). Retorna 0 se o tempo total for zero.
+ *
+ */
 float velocidademedia(carro *c) {
     float media = 0;
     if(c->tempototal != 0){
@@ -1974,6 +2023,14 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 	// Qual a marca dos carros que circulam a maior velocidade média?
 }
 
+/**
+ * @brief Encontra e exibe o condutor (dono) que circula à maior velocidade média.
+ *
+ * Esta funçao percorre todos os carros registados na estrutura de hashing de marcas e calcula a velocidade média de cada carro com base na distância percorrida e tempo total.
+ * Compara as velocidades medias e identifica o condutor com maior valor.
+ *
+ * @param has Ponteiro para a estrutura de hashing contendo as marcas e respetivos carros.
+ */
 void condutorediamax(HASHING *has) {
     /*
         Esta função não está terminada pois não tenho certeza como faço a parte de velocidade média*/
@@ -2012,6 +2069,17 @@ void condutorediamax(HASHING *has) {
 	//Qual o condutor(dono) que circula a maior velocidade média ?
 }
 
+/**
+ * @brief Calcula e exibe a velocidade média de todos os condutores com um determinado código postal.
+ *
+ * Esta função percorre a lista de donos e filtra os que têm o código postal introduzido. 
+ * Para cada um, verifica os carros associados e as respetivas passagens de entrada e saída, somando a distância percorrida e o tempo total, de forma a calcular a velocidade média de cada condutor.
+ *
+ * @param pass Lista de passagens efetuadas pelos carros.
+ * @param donos Lista de donos registados no sistema.
+ * @param has Ponteiro para a estrutura de hashing contendo as marcas e carros.
+ * @param d Ponteiro para a estrutura com as distâncias entre sensores.
+ */
 void condutorpostal(pListapassagem pass, pListadono donos, HASHING *has, distancia* d) {
 	//Qual a velocidade média dos condutores com código postal X
 	char codPostal[9];
@@ -2083,6 +2151,14 @@ void condutorpostal(pListapassagem pass, pListadono donos, HASHING *has, distanc
     }
 }
 
+/**
+ * @brief Determina e exibe a marca de automóvel mais comum no sistema.
+ *
+ * A função percorre todas as marcas registadas na estrutura de hashing e conta quantos carros existem em cada uma.
+ * Depois, identifica a marca com o maior número de carros registados.
+ *
+ * @param has Ponteiro para a estrutura de hashing que contém as marcas e respetivos carros.
+ */
 void marcapopular(HASHING *has) {
 	pmarca pm = has->Inicio;
 	if(pm == NULL){
@@ -2116,7 +2192,15 @@ void marcapopular(HASHING *has) {
 	printf("\nMarca mais popular: %s", pm->nome);
 	//Determinar qual a marca de automóvel mais comum?
 }
-
+/**
+ * @brief Exporta os dados das passagens para um ficheiro CSV.
+ *
+ * A função percorre a lista de passagens e escreve os dados principais de cada passagem (matrícula, marca, modelo, código do carro, número de contribuinte
+ * do dono, nome do dono, data/hora e ID do sensor) no ficheiro chamado "base_dados.csv".
+ *
+ * @param Lp Ponteiro para a lista de passagens.
+ * @param has Ponteiro para a estrutura de hashing que contém as marcas (não utilizado diretamente na função, mas pode ser necessário para validações futuras).
+ */
 void exportarXl(Listapassagem* Lp, HASHING* has) {
     if (Lp == NULL || Lp->inicio == NULL) {
         printf("ERRO: Lista de passagens vazia ou invalida!\n");
@@ -2152,6 +2236,17 @@ void exportarXl(Listapassagem* Lp, HASHING* has) {
 	printf("Dados exportados com sucesso para base_dados.csv\n");
 }
 
+/**
+ * @brief Exporta os dados dos sensores, distâncias, carros, donos e passagens para um ficheiro XML.
+ *
+ * A função percorre todas as listas fornecidas (sensores, distâncias, veículos, donos e passagens), e escreve essa informação formatada no ficheiro "base_dados.xml".
+ *
+ * @param Lp Ponteiro para a lista de passagens.
+ * @param has Ponteiro para a estrutura de hashing com as marcas e carros.
+ * @param Ls Ponteiro para a lista de sensores.
+ * @param d Ponteiro para a estrutura que contém as distâncias entre sensores.
+ * @param Ld Ponteiro para a lista de donos dos veículos.
+ */
 void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls,distancia *d, Listadono *Ld) {
     FILE* f = fopen("base_dados.xml", "w");
     if (f == NULL) {
@@ -2254,6 +2349,15 @@ void exportarXML(Listapassagem* Lp, HASHING* has, Listasensor* Ls,distancia *d, 
     printf("Dados exportados com sucesso para base_dados.xml\n");
 }
 
+/**
+ * @brief Calcula a distância total percorrida por cada carro com base nas suas passagens.
+ *
+ * A função percorre a lista de passagens e acumula a distância total percorrida por cada carro, utilizando os sensores de entrada e saída e a matriz de distâncias fornecida.
+ *
+ *
+ * @param p Ponteiro para a lista de passagens.
+ * @param d Ponteiro para a estrutura que contém as distâncias entre sensores.
+ */
 void calcvelocidade(Listapassagem *p, distancia *d){
     pnopassagem np = p->inicio;
     pnopassagem npa;
@@ -2276,6 +2380,22 @@ void calcvelocidade(Listapassagem *p, distancia *d){
     printf("    \n %d\n%f",npa->info->codcarro->codigo, npa->info->codcarro->kilometros);
 }
 
+/**
+ * @brief Calcula o tempo total em horas a partir de uma data e hora específicas.
+ *
+ * A função converte uma data e hora no formato (ano, mês, dia, hora, minuto, segundo)
+ * em tempo total em horas desde o "ano 0". 
+ * Esta função é usada para comparar diferenças de tempoentre passagens de veículos.
+ *
+ * @param ano Cadeia de caracteres representando o ano (ex: "2024").
+ * @param mes Cadeia de caracteres representando o mês (ex: "05").
+ * @param dia Cadeia de caracteres representando o dia (ex: "21").
+ * @param hora Cadeia de caracteres representando a hora (ex: "14").
+ * @param minut Cadeia de caracteres representando os minutos (ex: "35").
+ * @param sec Cadeia de caracteres representando os segundos (ex: "20").
+ * 
+ * @return Tempo total em horas (float) desde o ano 0 até à data/hora especificada.
+ */
 float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
     float tempo = 0;
     tempo = tempo + (float)atoi(ano)*365*24*3600;
@@ -2303,7 +2423,13 @@ float calctempo(char *ano,char *mes,char *dia,char *hora,char *minut,char *sec){
 }
 
 
-
+/**
+ * @brief Reinicia o contador de quilómetros por marca.
+ *
+ * Esta função percorre todas as marcas presentes na estrutura de hashing e redefine o valor do campo `numkillmarca` para 0.
+ *
+ * @param has Ponteiro para a estrutura de hashing que contem as marcas.
+ */
 void resetmarca(HASHING *has){
     pmarca m = has->Inicio;
     while( m != NULL){
@@ -2311,6 +2437,15 @@ void resetmarca(HASHING *has){
         m = m->prox;
     }
 }
+
+/**
+ * @brief Planeamento para calcular velocidades médias por veículo com base nas passagens e distâncias.
+ *
+ * Esta função visa percorrer a lista de passagens e calcular a velocidade média dos veículos ao comparar pares de passagens sucessivas do mesmo carro.
+ *
+ * @param Lp Ponteiro para a lista de passagens.
+ * @param d Ponteiro para a estrutura com distâncias entre sensores.
+ */
 
 void velocidade(Listapassagem *Lp, distancia *d){
     pnopassagem np = Lp->inicio;
@@ -2328,6 +2463,16 @@ void velocidade(Listapassagem *Lp, distancia *d){
 
 //------------------------------------------------------------------//
 //funções relacionadas á memoria
+
+/**
+ * @brief Calcula a memória total ocupada por uma lista de donos.
+ *
+ * Soma a memória estatica da estrutura da lista e de cada nó individual.
+ *
+ * @param Ld Ponteiro para a lista de donos.
+ * 
+ * @return Tamanho em bytes da memória ocupada.
+ */
 size_t calcularMemoriaListadono(pListadono Ld) {
     if (Ld == NULL) return 0;
     size_t total = sizeof(Listadono);
@@ -2339,6 +2484,15 @@ size_t calcularMemoriaListadono(pListadono Ld) {
     return total;
 }
 
+/**
+ * @brief Calcula a memória total ocupada por uma lista de carros.
+ *
+ * Soma a memoria estática da estrutura da lista e de cada carro e nó.
+ *
+ * @param Lc Ponteiro para a lista de carros.
+ * 
+ * @return Tamanho em bytes da memória ocupada.
+ */
 size_t calcularMemoriaListacarro(pListacarro Lc) {
     if (Lc == NULL) return 0;
     size_t total = sizeof(Listacarro);
@@ -2349,7 +2503,15 @@ size_t calcularMemoriaListacarro(pListacarro Lc) {
     }
     return total;
 }
-
+/**
+ * @brief Calcula a memória total ocupada pela estrutura de hashing de marcas.
+ *
+ * Percorre todas as marcas, somando sua memória e a das listas de carros associadas.
+ *
+ * @param has Ponteiro para a estrutura de hashing.
+ * 
+ * @return Tamanho em bytes da memória ocupada.
+ */
 size_t calcularMemoriaHashing(HASHING *has) {
     if (has == NULL) return 0;
     size_t total = sizeof(HASHING);
@@ -2361,6 +2523,12 @@ size_t calcularMemoriaHashing(HASHING *has) {
     return total;
 }
 
+/**
+ * @brief Calcula a memória total ocupada pela lista de passagens.
+ *
+ * @param Lp Ponteiro para a lista de passagens.
+ * @return Tamanho em bytes da memória ocupada.
+ */
 size_t calcularMemoriaListapassagem(pListapassagem Lp) {
     if (Lp == NULL) return 0;
     size_t total = sizeof(Listapassagem);
@@ -2371,7 +2539,12 @@ size_t calcularMemoriaListapassagem(pListapassagem Lp) {
     }
     return total;
 }
-
+/**
+ * @brief Calcula a memória total ocupada pela lista de sensores.
+ *
+ * @param Ls Ponteiro para a lista de sensores.
+ * @return Tamanho em bytes da memória ocupada.
+ */
 size_t calcularMemoriaListasensor(pListasensor Ls) {
     if (Ls == NULL) return 0;
     size_t total = sizeof(Listasensor);
@@ -2383,11 +2556,27 @@ size_t calcularMemoriaListasensor(pListasensor Ls) {
     return total;
 }
 
+/**
+ * @brief Retorna a memória ocupada pela estrutura de distâncias.
+ *
+ * @param d Ponteiro para a estrutura de distâncias.
+ * @return Tamanho em bytes da memória ocupada.
+ */
 size_t calcularMemoriaDistancia(pdistancia d) {
     return (d != NULL) ? sizeof(distancias) : 0;
 }
 
-// Função principal que soma toda a memória
+/**
+ * @brief Calcula e imprime a memória total ocupada por todas as estruturas principais.
+ *
+ * Soma a memoria ocupada por listas de donos, veículos, sensores, passagens e a matriz de distancias.
+ *
+ * @param Ld Ponteiro para a lista de donos.
+ * @param has Ponteiro para a tabela de hashing das marcas.
+ * @param Lp Ponteiro para a lista de passagens.
+ * @param Ls Ponteiro para a lista de sensores.
+ * @param d Ponteiro para a estrutura de distâncias.
+ */
 void memoriateste(Listadono *Ld, HASHING *has, Listapassagem *Lp, Listasensor *Ls, pdistancia d) {
     size_t total = 0;
 
