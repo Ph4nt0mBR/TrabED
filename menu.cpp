@@ -1,6 +1,6 @@
 #include "menu.h"
 #include "func.h"
-#include "header.h"
+
 
 /*========================================
         Funções auxiliares do Menu
@@ -62,11 +62,11 @@ static int existemSensores(Listasensor* Ls) {
 void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls) {
     int escolha;
     do {
+        system("cls");
         printf("\n=== MENU DE IMPORTACAO ===\n");
         printf("1. Importar Donos)\n");
-        printf("2. Importar Veículos\n");
+        printf("2. Importar Veiculos\n");
         printf("3. Importar Passagens\n");
-        printf("4. Importar Sensores\n");
         printf("0. Voltar ao Menu Principal\n");
         printf("Escolha: ");
         scanf("%d", &escolha);
@@ -103,13 +103,6 @@ void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasen
             }
             break;
 
-        case 4:
-            if (importsensor(Ls))
-                printf("\nSensores importados com sucesso!");
-            else
-                printf("\nErro na importacao");
-            break;
-
         case 0:
             return;
 
@@ -127,9 +120,10 @@ void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasen
 void submenuRegistroManual(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls) {
     int escolha;
     do {
+        system("cls");
         printf("\n=== REGISTRO MANUAL ===\n");
         printf("1. Novo Dono\n");
-        printf("2. Novo Veículo\n");
+        printf("2. Novo Veiculo\n");
         printf("3. Nova Passagem\n");
         printf("0. Voltar\n");
         printf("Escolha: ");
@@ -152,7 +146,7 @@ void submenuRegistroManual(Listadono* Ld, HASHING* has, Listapassagem* Lp, Lista
                 regist_pass(Lp, has, Ls);
             }
             else {
-                printf("\nErro: Registre veículos e sensores primeiro!");
+                printf("\nErro: Registre veiculos e sensores primeiro!");
             }
             break;
         }
@@ -163,9 +157,11 @@ void submenuRegistroManual(Listadono* Ld, HASHING* has, Listapassagem* Lp, Lista
 void submenuOrganizacao(Listadono* Ld, HASHING* has) {
     int escolha;
     do {
+        system("cls");
         printf("\n=== ORGANIZAR DADOS ===\n");
         printf("1. Donos\n");
-        printf("2. Veículos\n");
+        printf("2. Veiculos\n");
+        printf("0. Sair\n");
         printf("Escolha: ");
         scanf("%d", &escolha);
 
@@ -173,10 +169,11 @@ void submenuOrganizacao(Listadono* Ld, HASHING* has) {
         case 1:
             organizadonos(Ld);
             printf("\nDonos organizados.");
-
+            break;
         case 2:
             organizacarros(has);
             printf("\nCarros organizados.");
+            break;
         }
         if (escolha != 0) pressioneParaContinuar();
     } while (escolha != 0);
@@ -185,9 +182,11 @@ void submenuOrganizacao(Listadono* Ld, HASHING* has) {
 void submenuListagens(Listadono* Ld, HASHING* has) {
     int escolha;
     do {
+        system("cls");
+        system("cls");
         printf("\n=== LISTAR DADOS ===\n");
         printf("1. Listar Donos\n");
-        printf("2. Listar Veículos\n");
+        printf("2. Listar Veiculos\n");
         printf("0. Voltar\n");
         printf("Escolha: ");
         scanf("%d", &escolha);
@@ -217,33 +216,40 @@ void submenuListagens(Listadono* Ld, HASHING* has) {
     } while (escolha != 0);
 }
 
-void submenuRelatorios(Listapassagem* Lp, HASHING* has, pdistancia p) {
+void submenuRelatorios(Listapassagem* Lp,Listadono *Ld, HASHING* has, pdistancia d) {
     int escolha;
     do {
-        printf("\n=== RELATÓRIOS ===\n");
+        system("cls");
+        resetmarca(has);
+        printf("\n=== RELATORIOS ===\n");
         printf("1. Ranking de Quilometragem\n");
-        printf("2. Marca Mais Popular\n");
-        printf("3. Velocidades Médias\n");
-        printf("4. Listar Infrações\n");
-        printf("0. Voltar\n");
-        printf("Escolha: ");
-        scanf("%d", &escolha);
+        printf("2. ranking de marca por quilometragem\n");
+        printf("3. Marca Mais Popular\n");
+        printf("4. Listar Infracoes\n");
+        printf("5. velocidade de condutor x\n");
+        printf("0. sair\n");
+        scanf("%d",&escolha);
 
         switch (escolha) {
         case 1:
-            //rankveiculos(pp,d,has);
+            rankveiculos(Lp,d,has);
             break;
         case 2:
-            //marcapopular(has);
+            rankmarcas(Lp,d,has);
             break;
         case 3:
-            //velocidademedia();
+            marcapopular(has);
             break;
         case 4:
-            //listainfracao();
+            listainfracao(Lp,d,has);
+            break;
+        case 5:
+            condutorpostal(Lp, Ld, has, d);
+            marcapopular(has);
             break;
         }
-        if (escolha != 0)pressioneParaContinuar();
+
+        pressioneParaContinuar();
     } while (escolha != 0);
 }
 
@@ -251,15 +257,19 @@ void submenuRelatorios(Listapassagem* Lp, HASHING* has, pdistancia p) {
                 Menu Principal
   =============================================*/
 
-/*void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, pdistancia d,) {
+void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, pdistancia d) {
+
     int escolha;
     do{
+        system("cls");
         printf("\n========== MENU PRINCIPAL ==========\n");
         printf("1. Importar Dados\n");
         printf("2. Registros\n");
         printf("3. Listas\n");
-        printf("4. Relatórios\n");
-        printf("5. Memória Utilizada\n");
+        printf("4. Organizacao\n");
+        printf("5. Relatorios\n");
+        printf("6. Exportacao\n");
+        printf("7. Memoria Utilizada\n");
         printf("0. Sair\n");
         printf("====================================\n");
         printf("Escolha uma opcao: ");
@@ -280,15 +290,36 @@ void submenuRelatorios(Listapassagem* Lp, HASHING* has, pdistancia p) {
         break;
     case 5:
         if (existemVeiculos(has)) {
-            submenuRelatorios(Lp, has, d);
+            submenuRelatorios(Lp,Ld ,has, d);
+            break;
         } else {
             printf("\nImporte ou registre veiculos primeiro!");
             pressioneParaContinuar();
+            break;
             }
+    case 7:
+        memoriateste(Ld,has,Lp,Ls,d);
+        pressioneParaContinuar();
+        break;
     case 6:
-        memoria
+        int opcao = 0;
+        printf("deseja exportar para .csv?\n1-Sim\n2-Nao\n");
+        scanf("%d",&opcao);
+        if(opcao == 1){
+            exportarXl(Lp,has);
+        memoriateste(Ld,has,Lp,Ls,d);
+        pressioneParaContinuar();
+        break;
         }
+        printf("deseja exportar para .xml?\n1-Sim\n2-Nao\n");
+        scanf("%d",&opcao);
+        if(opcao == 1){
+            exportarXML(Lp, has, Ls, d, Ld);
 
+        }
+        pressioneParaContinuar();
+        break;
     }
+
     }while(escolha != 0);
-}*/
+}

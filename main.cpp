@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "func.h"
+#include"menu.h"
+//#include "func.h"
 
 
 
@@ -36,7 +37,8 @@ int main() {
     importsensor(Ls);
     HASHING *has = CriarHASHING();
 	pListadono Ld = crialistadono();
-    import(Ld, has, pp);
+	main_menu(Ld,has,pp,Ls,d);
+    //import(Ld, has, pp);
     //organizadonos(Ld);
 	//list_dono(Ld);
     //regist_veiculo(Ld,m);
@@ -47,7 +49,7 @@ int main() {
     //marcapopular(has);
     //rankveiculos(pp,d,has);
     //rankmarcas(pp,d, has);
-	rankinfracao(pp, d);
+	//rankinfracao(pp, d);
     //listainfracao(pp, d, has);
     //calcvelocidade( pp,d);
     //condutorpostal(pp, Ld, has->Inicio, d);
