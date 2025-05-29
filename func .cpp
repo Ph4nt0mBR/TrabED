@@ -3,6 +3,10 @@
 #include <time.h>
 #include <locale>
 
+
+/** Lê distâncias entre pares de nós do arquivo "distancias.txt" e armazena-as numa matriz 10x10 dentro da struct "distancias".
+Cada linha do arquivo deve conter: <no1> <no2> <distancia>. Os nós devem estar no intervalo [1, 10]. A distância é registada nos dois sentidos.
+*/
 pdistancia calcDistancia()
 {
     printf("sizeof(distancias) = %d\n", sizeof(distancias));
@@ -40,8 +44,7 @@ pdistancia calcDistancia()
 	fclose(F);
     return nd;
 }
-/*Lê distâncias entre pares de nós do arquivo "distancias.txt" e armazena-as numa matriz 10x10 dentro da struct "distancias".
-Cada linha do arquivo deve conter: <no1> <no2> <distancia>. Os nós devem estar no intervalo [1, 10]. A distância é registada nos dois sentidos.*/
+
 
 
 
