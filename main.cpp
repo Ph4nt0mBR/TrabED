@@ -47,14 +47,14 @@ int main() {
     //marcapopular(has);
     //rankveiculos(pp,d,has);
     //rankmarcas(pp,d, has);
-	//rankinfracao(pp, d);
+	rankinfracao(pp, d);
     //listainfracao(pp, d, has);
     //calcvelocidade( pp,d);
     //condutorpostal(pp, Ld, has->Inicio, d);
     //condutorediamax(has);
     //marcamedia(pp, d, has);
     //memoriateste(Ld, has, pp, Ls, d);
-    exportarXl(pp, has);
+    //exportarXl(pp, has);
     //exportarXML(pp,has, Ls,d,Ld);
 /*
     // Inicializa estruturas
