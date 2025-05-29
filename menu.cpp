@@ -6,6 +6,7 @@
         Funções auxiliares do Menu
   ========================================*/
 
+// Função para limpar o buffer e evitar que não faça um scanf
 static void limpaBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -204,13 +205,13 @@ void submenuListagens(Listadono* Ld, HASHING* has) {
                 list_veiculo(has);
             }
             else {
-                printf("\nNenhum veiculo registrado!")
+                printf("\nNenhum veiculo registrado!");
             }
             break;
         case 0:
             return;
         default:
-            printf("\nOpcao invalida!")
+            printf("\nOpcao invalida!");
         }
         pressioneParaContinuar();
     } while (escolha != 0);
@@ -230,16 +231,16 @@ void submenuRelatorios(Listapassagem* Lp, HASHING* has, pdistancia p) {
 
         switch (escolha) {
         case 1:
-            rankveiculos(Lp, d);
+            //rankveiculos(pp,d,has);
             break;
         case 2:
-            marcapopular(has);
+            //marcapopular(has);
             break;
         case 3:
-            velocidademedia();
+            //velocidademedia();
             break;
         case 4:
-            listainfracao();
+            //listainfracao();
             break;
         }
         if (escolha != 0)pressioneParaContinuar();
@@ -250,7 +251,7 @@ void submenuRelatorios(Listapassagem* Lp, HASHING* has, pdistancia p) {
                 Menu Principal
   =============================================*/
 
-void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, pdistancia d,) {
+/*void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, pdistancia d,) {
     int escolha;
     do{
         printf("\n========== MENU PRINCIPAL ==========\n");
@@ -287,7 +288,7 @@ void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, 
     case 6:
         memoria
         }
-    
+
     }
     }while(escolha != 0);
-}
+}*/
