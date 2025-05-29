@@ -1,9 +1,5 @@
-
 #ifndef FUNC_H
 #define FUNC_H
-
-
-
 
 #pragma once
 #include<stdio.h>
@@ -38,6 +34,7 @@ void organizacarros(HASHING *has);
 void listacarroperiodo(Listapassagem *pass);
 void rankveiculos(Listapassagem *pass,distancia *d, HASHING *has);
 void rankmarcas(Listapassagem *pass, distancia *d, HASHING *has);
+void rankinfracao(pListapassagem pass, distancia* d);
 void listainfracao(Listapassagem* pass, distancia* d);
 
 float velocidademedia(carro *c);

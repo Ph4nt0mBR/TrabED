@@ -1462,23 +1462,23 @@ void listainfracao(pListapassagem pass, distancia* d, HASHING* has) {
 
 
 void rankinfracao(pListapassagem pass, distancia* d) {
-	if (!pass || !d) {
+    if (!pass || !d) {
         printf("Erro: dados invalidos.\n");
         return;
     }
 
-    char input_inicio[30], input_fim[30];
+    char horainicio[30], horafim[30];
     printf("\n--- Ranking de Infracoes por Veiculo ---\n");
     printf("Periodo a analisar (formato AAAA-MM-DD_HH:MM:SS)\n");
     printf("Data/hora inicial: ");
-    scanf("%s", input_inicio);
+    scanf("%s", horainicio);
     printf("Data/hora final: ");
-    scanf("%s", input_fim);
+    scanf("%s", horafim);
 
-    // Separar partes da data de início
+    // Copiar e separar as datas com strtok como na listacarroperiodo
     char ini[30], fim[30];
-    strcpy(ini, input_inicio);
-    strcpy(fim, input_fim);
+    strcpy(ini, horainicio);
+    strcpy(fim, horafim);
 
     char *anoi = strtok(ini, "-");
     char *mesi = strtok(NULL, "-");
@@ -1502,7 +1502,6 @@ void rankinfracao(pListapassagem pass, distancia* d) {
     int total = 0;
 
     pnopassagem atual = pass->inicio;
-
     while (atual != NULL) {
         if (!atual->info || atual->info->tiporegist != 0 || !atual->info->codcarro) {
             atual = atual->prox;
@@ -1516,8 +1515,11 @@ void rankinfracao(pListapassagem pass, distancia* d) {
             if (p->info && p->info->tiporegist == 1 &&
                 p->info->codcarro == entrada->codcarro) {
 
+                char d1[30], d2[30];
+                strcpy(d1, entrada->data);
+                strcpy(d2, p->info->data);
+
                 // Parse entrada
-                char d1[30]; strcpy(d1, entrada->data);
                 char *diae = strtok(d1, "-");
                 char *mese = strtok(NULL, "-");
                 char *anoe = strtok(NULL, " ");
@@ -1527,8 +1529,7 @@ void rankinfracao(pListapassagem pass, distancia* d) {
 
                 float t1 = calctempo(anoe, mese, diae, horae, mine, sege);
 
-                // Parse saida
-                char d2[30]; strcpy(d2, p->info->data);
+                // Parse saída
                 char *dias = strtok(d2, "-");
                 char *mess = strtok(NULL, "-");
                 char *anos = strtok(NULL, " ");
@@ -1539,7 +1540,11 @@ void rankinfracao(pListapassagem pass, distancia* d) {
                 float t2 = calctempo(anos, mess, dias, horas, mins, segs);
 
                 if (t1 >= tempo_inicio && t2 <= tempo_fim && t2 > t1) {
-                    float tempo_total = t2 - t1; // já em horas
+                    printf("Entrada: %s -> %.2f h | Saida: %s -> %.2f h\n",
+                           entrada->data, t1, p->info->data, t2);
+                    printf("Intervalo analisado: %.2f a %.2f\n", tempo_inicio, tempo_fim);
+
+                    float tempo_total = t2 - t1;
                     int s1 = entrada->idsensor;
                     int s2 = p->info->idsensor;
 
@@ -1548,7 +1553,6 @@ void rankinfracao(pListapassagem pass, distancia* d) {
 
                     if (dist > 0) {
                         float velocidade = dist / tempo_total;
-
                         if (velocidade > 120.0) {
                             int encontrado = 0;
                             for (int i = 0; i < total; i++) {
@@ -1576,7 +1580,7 @@ void rankinfracao(pListapassagem pass, distancia* d) {
         atual = atual->prox;
     }
 
-    // Ordenar o ranking
+    // Ordenar por número de infrações decrescentemente
     for (int i = 0; i < total - 1; i++) {
         for (int j = i + 1; j < total; j++) {
             if (infracoes[j] > infracoes[i]) {
@@ -1591,11 +1595,11 @@ void rankinfracao(pListapassagem pass, distancia* d) {
         }
     }
 
-    // Imprimir resultados
+    // Mostrar resultados
+    printf("\n====== RANKING DE INFRACOES ======\n");
     if (total == 0) {
         printf("Nenhuma infracao encontrada no periodo especificado.\n");
     } else {
-        printf("\n====== RANKING DE INFRACOES ======\n");
         for (int i = 0; i < total; i++) {
             printf("Matricula: %s | Marca: %s | Modelo: %s | Infracoes: %d\n",
                    carros[i]->matricula, carros[i]->marca, carros[i]->modelo, infracoes[i]);
