@@ -844,7 +844,12 @@ void regist_pass(Listapassagem* Lp, HASHING *has, Listasensor* Ls) {
 }
 //Regista uma nova passagem de veiculo. Solicita a marca, matricula, ID so sensor, data e hora, e adiciona a lista passagem.
 
-
+/**
+ * \brief Organiza a lista de donos por nome ou número de contribuinte
+ *
+ *
+ * \param Ld Ponteiro para a lista ligada de donos
+ */
 void organizadonos(Listadono* Ld) {
 	if (Ld->inicio == NULL || Ld->inicio->prox == NULL) {
 		printf("Poucos ou nenhum dono registrado para ordenar.\n");
@@ -893,8 +898,25 @@ void organizadonos(Listadono* Ld) {
 
 }
 
-//Organiza a lista de donos por nome ou contribuinte conforme escolha do utilizador.
-
+/**
+ * \brief Importa dados de donos, carros e passagens.
+ *
+ * Esta função interage com o utilizador para importar dados de:
+ * - Donos
+ * - Carros (dependente dos donos)
+ * - Passagens (dependente dos carros)
+* 
+ *
+ * As funçoes especificas de importaçao devem estar implementadas:
+ * - importdono()
+ * - importcarro()
+ * - importpassagem()
+ * Sensores e distâncias não são importados aqui.
+ *
+ * \param Ld Ponteiro para a lista de donos.
+ * \param has Ponteiro para a tabela hash de marcas e carros.
+ * \param Lp Ponteiro para a lista de passagens.
+ */
 void import(Listadono *Ld, HASHING *has, Listapassagem *Lp) {
 		int opcao = 0;
 
@@ -916,12 +938,20 @@ void import(Listadono *Ld, HASHING *has, Listapassagem *Lp) {
 				}
 			}
 		}
-		//funcao que permite importar as listas(exceto sensores e distancias)
-		//sao usadas varias mini funçoes para importar cada um
 }
-
+/**
+ * \brief Organiza os carros por matrícula, marca ou modelo.
+ *
+ * Esta função permite ao utilizador escolher um critério para organizar os carros:
+ * - Opção 1: Por matrícula (ordem alfabética global, usando uma lista temporaria)
+ * - Opção 2: Por marca (ordem alfabética das marcas na tabela hash)
+ * - Opção 3: Por modelo (ordem alfabética global, usando uma lista temporária)
+ * - Opção 4: Terminar (não realiza nenhuma organização)
+ *
+ *
+ * \param has Ponteiro para a tabela hash contendo marcas e listas de carros.
+ */
 void organizacarros(HASHING *has) {
-    //falta fazer a 1 e 3 organização
 	pmarca nm = has->Inicio;
 	pListacarro tempL;
 	pmarca tempmarca;
@@ -1081,9 +1111,19 @@ nm = has->Inicio;
 	}
 
 }
-//Organiza e exibe veículos por opcao escolhida: 1=matricula, 2=marca, 3=modelo.
 
+//Lista veiculos que circularam num periodo de tempo especifico, ordenados por matricula.
 
+/**
+ * \brief Lista veículos que circularam num dado periodo
+ *
+ * Solicita ao utilizador a data e hora inicial e final, e percorre a lista de passagens para identificar os veículos distintos que circularam nesse intervalo.
+ * Os veículos encontrados são apresentados por ordem alfabética da matricula.
+ *
+ * A função ignora veículos duplicados e exibe todos os dados relevantes do carro e do seu dono.
+ *
+ * \param pass Ponteiro para a lista de passagens a ser analisada
+ */
 void listacarroperiodo(pListapassagem pass) {
     int opcao;
     printf("\nDeseja listar os carros que circularam num periodo?\n1 - Sim\n2 - Nao\n");
@@ -1179,8 +1219,21 @@ void listacarroperiodo(pListapassagem pass) {
         }
     }
 }
-//Lista veiculos que circularam num periodo de tempo especifico, ordenados por matricula.
 
+/*Ranking de circulação. Listagem ordenada pelo total de quilómetros
+    que cada veículo efectuou na auto-estrada durante determinado período. */
+
+/**
+ * \brief Gera um ranking de veículos por quilometragem em um período
+ *
+ * Solicita ao utilizador um intervalo de datas e horas e filtra todas as passagens de veículos que ocorreram nesse intervalo. Com base nessas passagens e na matriz de distâncias entre sensores, calcula a quilometragem percorrida por cada veículo.
+ *
+ * Em seguida, ordena os veículos com base na distância total percorrida e exibe um ranking com os dados principais de cada um.
+ *
+ * \param pass Ponteiro para a lista de passagens registadas
+ * \param d Ponteiro para a estrutura de distâncias entre sensores
+ * \param has Ponteiro para a tabela hash com todas as marcas e respetivos carros
+ */
 void rankveiculos(Listapassagem *pass,distancia *d, HASHING *has) {
 	int opcao, troca;
 	pListacarro Lc;
@@ -1322,8 +1375,6 @@ printf("\na lista nova tem %d passagens\n",pLpass->numel);
 
 
 	}
-	/*Ranking de circulação. Listagem ordenada pelo total de quilómetros
-	que cada veículo efectuou na auto-estrada durante determinado período. */
 }
 
 
