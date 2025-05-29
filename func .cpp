@@ -7,6 +7,13 @@
 /** Lê distâncias entre pares de nós do arquivo "distancias.txt" e armazena-as numa matriz 10x10 dentro da struct "distancias".
 Cada linha do arquivo deve conter: <no1> <no2> <distancia>. Os nós devem estar no intervalo [1, 10]. A distância é registada nos dois sentidos.
 */
+
+/**
+ * @brief Lê distâncias entre pares de nós do arquivo "distancias.txt" e armazena-as numa matriz 10x10 dentro da struct "distancias".
+Cada linha do arquivo deve conter: <no1> <no2> <distancia>. Os nós devem estar no intervalo [1, 10]. A distância é registada nos dois sentidos.
+ *
+ * @return ponteiro para estrutura distancias preenchida
+ */
 pdistancia calcDistancia()
 {
     printf("sizeof(distancias) = %d\n", sizeof(distancias));
@@ -48,6 +55,18 @@ pdistancia calcDistancia()
 
 
 
+/**
+ * \brief Importa dados de donos de veículos a partir de um arquivo
+ *
+ * Lê dados de donos a partir do arquivo "donos.txt" e adiciona-os à lista ligada "Listadono".
+ * Cada linha deve conter: <código> <nome> <código postal>, separados por tabulação ou espaço.
+ *
+ * \param ld Ponteiro para a lista de donos onde os dados serão importados
+ * \return int 1 se pelo menos um registro foi importado com sucesso, 0 caso contrário
+ *
+ *
+ *
+ */
 int importdono(Listadono *ld) {
     pListadono L = ld;
     FILE* F = fopen("donos.txt", "r");
@@ -127,13 +146,21 @@ int importdono(Listadono *ld) {
 
     return (count > 0) ? 1 : 0;
 }
-/*Lê dados de donos a partir do arquivo "donos.txt" e adiciona-os à lista ligada "Listadono". Cada linha deve conter: <código> <nome> <código postal>, separados por tabulação ou espaço.
-Ignora ou reporta linhas mal formatadas ou com dados inválidos.*/
 
 
+/**
+ * \brief Importa dados de veículos a partir de um arquivo
+ *
+ * Esta função lê dados de veículos do arquivo "carros.txt" e associa-os:
+ * 1. Ao respectivo dono na lista de donos (atraves do NIF)
+ * 2. A marca correspondente no hashing
+ *
+ * \param L Ponteiro para a lista de donos
+ * \param has Ponteiro para o hashing das marcas
+ * \return int 1 se a importaçao teve sucesso (pelo menos 1 carro importado), 0 se não tiver
+ */
 
-int importcarro(Listadono *L, HASHING *has)
-{
+int importcarro(Listadono *L, HASHING *has){
     FILE* F = fopen("carros.txt", "r");
     if (F == NULL) {
         printf("\nErro ao abrir o ficheiro para leitura!!!!\n");
@@ -200,10 +227,20 @@ int importcarro(Listadono *L, HASHING *has)
     fclose(F);
     return 1;
 }
-/*Lê dados de carros do arquivo "carros.txt" e associa-os ao respetivo dono na lista "Listadono" e à marca na struct hashing.
-Cada linha deve conter: <matrícula> <marca> <modelo> <ano> <NIF do dono> <código>, separados por tabulações.*/
 
 
+
+
+/**
+ * \brief Importa dados de passagens a partir de um arquivo
+ *
+ * Lê dados de passagens do arquivo "passagem.txt" e associa cada uma ao carro correspondente na estrutura "HASHING".
+ * Cada linha deve conter: <ID sensor> <código do carro> <data> <tipo de registo>, separados por tabulações.
+ *
+ * \param L Ponteiro para a lista de passagens
+ * \param has Ponteiro para a estrutura de hashing contendo as marcas e seus veículos
+ * \return int 1 se a importação teve sucesso (pelo menos uma passagem foi importada), 0 caso contrário
+ */
 int importpassagem(Listapassagem *L, HASHING *has) {
     FILE* F = fopen("passagem.txt", "r");
     if (F == NULL) {
@@ -268,10 +305,20 @@ if (contador%100000 == 0)
 
     return 1;
 }
-/*Lê dados de passagens do arquivo "passagem.txt" e associa cada uma ao carro correspondente na estrutura "HASHING".
-Cada linha deve conter: <ID sensor> <código do carro> <data> <tipo de registo>, separados por tabulações.*/
 
 
+
+/**
+ * \brief Importa dados de sensores a partir de um arquivo
+ *
+ * Lê dados dos sensores do arquivo "sensores.txt" e adiciona-os à lista "Listasensores".
+ * Cada linha deve conter: <código> <designação> <latitude> <longitude>, separados por tabulações.
+ *
+ * Linhas vazias são ignoradas.
+ *
+ * \param L Ponteiro para a lista de sensores
+ * \return int 1 se a importaçao teve sucesso (pelo menos um sensor foi importado), 0 caso contrario
+ */
 int importsensor(Listasensores *L) {
      setlocale(LC_ALL, "Portuguese");
     setlocale(LC_ALL, "pt_PT.UTF-8");
@@ -314,8 +361,6 @@ int importsensor(Listasensores *L) {
     fclose(F);
     return 1;
 }
-/*Lê dados dos sensores do arquivo "sensores.txt" e adiciona-os à lista "Listasensores".
-Cada linha deve conter: <código> <designação> <latitude> <longitude>, separados por tabulações.*/
 
 
 
@@ -325,6 +370,15 @@ Cada linha deve conter: <código> <designação> <latitude> <longitude>, separados 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
+
+
+/**
+ * \brief Cria uma nova lista ligada de donos
+ *
+ * Cria e retorna uma nova lista ligada "Listadono" vazia, com contador a zero.
+ *
+ * \return pListadono Ponteiro para a nova lista de donos inicializada
+ */
 pListadono crialistadono() {
 
 	pListadono L = (pListadono)malloc(sizeof(Listadono));
@@ -332,33 +386,59 @@ pListadono crialistadono() {
 	L->numel = 0;
 	return L;
 }
-//Cria e retorna uma nova lista ligada "Listadono" vazia, com contador a zero.
 
+/**
+ * \brief Cria uma nova lista ligada de carros
+ *
+ * Cria e retorna uma nova lista ligada "Listacarro" vazia, com contador a zero.
+ *
+ * \return pListacarro Ponteiro para a nova lista de carros
+ */
 pListacarro crialistacarro() {
 	pListacarro L = (pListacarro)malloc(sizeof(Listacarro));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;
 }
-//Cria e retorna uma nova lista ligada "Listacarro" vazia, com contador a zero.
 
+/**
+ * \brief Cria uma nova lista ligada de sensores
+ *
+ * Cria e retorna uma nova lista ligada "Listasensor" vazia, com contador a zero.
+ *
+ * \return pListasensor Ponteiro para a nova lista de sensores
+ */
 pListasensor crialistasensores() {
 	pListasensor L = (pListasensor)malloc(sizeof(Listasensor));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;
 }
-//Cria e retorna uma nova lista ligada "Listasensor" vazia, com contador a zero.
 
 
+/**
+ * \brief Cria uma nova lista ligada de passagens
+ *
+ * Cria e retorna uma nova lista ligada "Listapassagem" vazia, com contador a zero.
+ *
+ * \return pListapassagem Ponteiro para a nova lista de passagens
+ */
 pListapassagem crialistapasagem() {
 	pListapassagem L = (pListapassagem)malloc(sizeof(Listapassagem));
 	L->inicio = NULL;
 	L->numel = 0;
 	return L;
 }
-//Cria e retorna uma nova lista ligada "Listapassagem" vazia, com contador a zero.
 
+/**
+ * \brief Cria uma nova marca e insere-a na tabela HASHING
+ *
+ * Cria uma nova marca com nome e lista de carros associada, e insere-a no início da tabela HASHING.
+ *
+ * \param has Ponteiro para a estrutura de hashing onde a nova marca será inserida
+ * \param nome Nome da marca a ser criada
+ * \return pmarca Ponteiro para a nova marca criada
+ */
 pmarca criamarca(HASHING *has ,char *nome) {
     pmarca nova = (pmarca)malloc(sizeof(marca));
     if (nova) {
@@ -373,9 +453,15 @@ pmarca criamarca(HASHING *has ,char *nome) {
     nova->prox = temp;
     return nova;
 }
-//Cria uma nova marca com nome e lista de carros associada, e insere-a no início da tabela HASHING.
 
 
+/**
+ * \brief Cria e inicializa uma nova estrutura HASHING
+ *
+ * Esta funçao aloca memória para um hashing e define seu ponteiro de inicio como NULL.
+ *
+ * \return HASHING* Ponteiro para a nova tabela de hashing inicializada
+ */
 HASHING *CriarHASHING()
 {
     HASHING *Has = (HASHING *)malloc(sizeof(HASHING));
@@ -384,11 +470,22 @@ HASHING *CriarHASHING()
     //Has->Flag_Destruir = flag;
     return Has;
 }
+
+
 //funçoes que criam listas
 //----------------------------------------------------
 //----------------------------------------------------
 //----------------------------------------------------
 
+
+/**
+ * \brief Adiciona um novo dono à lista ligada de donos
+ *
+ * Adiciona um novo dono a lista ligada "Listadono", inserindo-o no inicio da lista.
+ *
+ * \param l Ponteiro para a lista de donos
+ * \param D Ponteiro para o dono a ser adicionado
+ */
 void AddDono(Listadono* l, dono* D)
 {
 	pno nNo = (pno)malloc(sizeof(no));
@@ -398,8 +495,15 @@ void AddDono(Listadono* l, dono* D)
 	l->numel++;
 
 }
-//Adiciona um novo dono a lista ligada "Listadono", inserindo-o no inicio da lista.
 
+/**
+ * \brief Adiciona um novo carro à lista ligada de carros
+ *
+ * Adiciona um novo carro à lista ligada "Listacarro", inserindo-o no inicio da lista, se for valido.
+ *
+ * \param lista Ponteiro para a lista de carros
+ * \param carro Ponteiro para o carro a ser adicionado
+ */
 void Addcarro(Listacarro* lista, pcarro carro) {
     if (!lista || !carro) return;
 
@@ -411,9 +515,15 @@ void Addcarro(Listacarro* lista, pcarro carro) {
         lista->numel++;
     }
 }
-//Adiciona um novo carro à lista ligada "Listacarro", inserindo-o no inicio da lista, se for valido.
 
-
+/**
+ * \brief Adiciona um novo sensor à lista ligada de sensores
+ *
+ * Adiciona um novo sensor a lista ligada "Listasensor",adicionando-o no inicio da lista.
+ * 
+ * \param l Ponteiro para a lista de sensores
+ * \param D Ponteiro para o sensor a ser adicionado
+ */
 void Addsensor(Listasensor* l, sensor* D)
 {
 	pnosensor nNo = (pnosensor)malloc(sizeof(nosensor));
@@ -423,8 +533,15 @@ void Addsensor(Listasensor* l, sensor* D)
 	l->numel++;
 
 }
-//Adiciona um novo sensor a lista ligada "Listasensor",adicionando-o no inicio da lista.
 
+/**
+ * \brief Adiciona uma nova passagem à lista ligada de passagens
+ *
+ * Insere uma nova estrutura de passagem no início da lista `Listapassagem`.
+ *
+ * \param l Ponteiro para a lista de passagens
+ * \param D Ponteiro para a estrutura de passagem a ser adicionada
+ */
 void Addpassagem(Listapassagem* l, passagem* D)
 {
 	pnopassagem nNo = (pnopassagem)malloc(sizeof(nopassagem));
@@ -434,11 +551,19 @@ void Addpassagem(Listapassagem* l, passagem* D)
 	l->numel++;
 }
 
+
 //funçoes que introduzem um item na sua lista
 //----------------------------------------------------
 //----------------------------------------------------
 //-----------------------------------------------
 
+/**
+ * \brief Regista interativamente um novo dono
+ *
+ * Regista um novo dono interativamente e adiciona-o a lista ligada "Listadono".
+ *
+ * \param Ld Ponteiro para a lista de donos onde o novo dono será inserido
+ */
 void regist_dono(Listadono* Ld) {
 	int opcao = 0;
 	pListadono n;
@@ -464,7 +589,15 @@ void regist_dono(Listadono* Ld) {
 		return;
 	}
 }
-//regista um novo dono interativamente e adiciona-o a lista ligada "Listadono".
+
+
+/**
+ * \brief Lista todos os donos da estrutura Listadono
+ *
+ * ~Função que apresenta todos os donos no ecrã.
+ *
+ * \param Ld Ponteiro para a lista de donos a ser listada
+ */
 
 void list_dono(Listadono* Ld) {
 	int i = 0, skip = 0, continuar;
@@ -495,8 +628,15 @@ void list_dono(Listadono* Ld) {
 }
 
 
-//função que apresenta no ecrã todos os donos
-
+/**
+ * \brief Regista um novo veículo e associa-o a um dono e marca
+ *
+ * Regista um novo veiculo interativamente e associa-o a um dono existente e marca. Pede a: matrícula, NIF do dono, marca, modelo e ano. Insere no hashing.
+ *
+ * \param L Ponteiro para a lista de donos
+ * \param has Ponteiro para a tabela hash das marcas
+ */
+ 
 void regist_veiculo(Listadono *L,HASHING *has) {
 	int opcao = 0, contdono = 0;
 	pListadono pL = L;
@@ -569,7 +709,7 @@ void regist_veiculo(Listadono *L,HASHING *has) {
 		return;
 	}
 }
-//Regista um novo veiculo interativamente e associa-o a um dono existente e marca. Pede a: matrícula, NIF do dono, marca, modelo e ano. Insere no hashing.
+
 
 
 void list_veiculo(HASHING *has) {
