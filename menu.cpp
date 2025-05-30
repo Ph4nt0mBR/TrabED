@@ -7,23 +7,46 @@
   ========================================*/
 
 // Função para limpar o buffer e evitar que não faça um scanf
+
+/**
+ * @brief Limpa o buffer de entrada.
+ *
+ * A função lê e descarta todos os caracteres do buffer de entrada até encontrar uma nova linha (`'\n'`) ou o fim do ficheiro (`EOF`).
+ *
+ */
 static void limpaBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+/**
+ * @brief Espera que o utilizador pressione "Enter" para continuar.
+ *
+ * Exibe uma mensagem e espera que o utilizador pressione a tecla "Enter".
+ * Utiliza limpaBuffer() para garantir que o buffer de entrada esteja limpo.
+ */
 static void pressioneParaContinuar() {
     printf("\nPressione Enter para continuar...");
     limpaBuffer();
     getchar();
 }
 
-//verifica import de Donos.txt
+/**
+ * @brief Verifica se a lista de donos foi importada corretamente.
+ *
+ * @param Ld Ponteiro para a lista de donos.
+ * @return 1 se a lista estiver importada e contiver elementos, 0 caso contrário.
+ */
 static  int donosImport(Listadono* Ld) {
     return(Ld != NULL && Ld->numel > 0);
 }
 
-//Verifica import de Carros.txt
+/**
+ * @brief Verifica se os carros foram importados corretamente.
+ *
+ * @param has Ponteiro para a estrutura de hashing contendo marcas e listas de carros.
+ * @return 1 se houver pelo menos uma marca com carros importados, 0 caso contrario.
+ */
 static int carrosImport(HASHING* has) {
     if (has == NULL) return 0;
     pmarca atual = has->Inicio;
@@ -34,12 +57,22 @@ static int carrosImport(HASHING* has) {
     return 0;
 }
 
-//Verifica se existem donos (importados ou registrados)
+/**
+ * @brief Verifica se existem donos (importados ou registados).
+ *
+ * @param Ld Ponteiro para a lista de donos.
+ * @return 1 se existirem donos na lista, 0 caso contrário.
+ */
 static int existemDonos(Listadono* Ld) {
     return(Ld != NULL && Ld->numel > 0);
 }
 
-//Verifica se existem veículos (importados ou registrados)
+/**
+ * @brief Verifica se existem veiculos (importados ou registados).
+ *
+ * @param has Ponteiro para a estrutura de hashing contendo marcas e listas de carros.
+ * @return 1 se houver pelo menos uma marca com veículos registados, 0 caso contrário.
+ */
 static int existemVeiculos(HASHING* has) {
     if (has == NULL) return 0;
     pmarca atual = has->Inicio;
@@ -50,7 +83,14 @@ static int existemVeiculos(HASHING* has) {
     return 0;
 }
 
-//Verifica se existem sensores
+/**
+ * @brief Verifica se existem sensores na lista.
+ *
+ * Esta função verifica se a lista de sensores foi iniciada e se contém elementos.
+ *
+ * @param Ls Ponteiro para a lista de sensores.
+ * @return 1 se existirem sensores na lista, 0 caso contrário.
+ */
 static int existemSensores(Listasensor* Ls) {
     return (Ls != NULL && Ls->numel > 0);
 }
@@ -59,6 +99,16 @@ static int existemSensores(Listasensor* Ls) {
             Submenu de importação
   ========================================*/
 
+  /**
+   * @brief Submenu para importação de dados.
+   *
+   * Permite ao utilizador importar dados de donos, veículos e passagens, desde que as dependências sejam respeitadas (por exemplo, veículos só podem ser importados após donos).
+   *
+   * @param Ld Ponteiro para a lista de donos.
+   * @param has Ponteiro para a tabela de hash contendo marcas e veículos.
+   * @param Lp Ponteiro para a lista de passagens.
+   * @param Ls Ponteiro para a lista de sensores.
+   */
 void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls) {
     int escolha;
     do {
@@ -117,6 +167,16 @@ void submenuImportacoes(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasen
               Submenus Especializados
   =============================================*/
 
+  /**
+   * @brief Submenu para registo manual de dados.
+   *
+   * Permite ao utilizador registar manualmente novos donos, veículos e passagens, assegurando que as dependências estão satisfeitas (por exemplo, veículos só podem ser registados após donos).
+   *
+   * @param Ld Ponteiro para a lista de donos.
+   * @param has Ponteiro para a tabela de hash contendo marcas e veículos.
+   * @param Lp Ponteiro para a lista de passagens.
+   * @param Ls Ponteiro para a lista de sensores.
+   */
 void submenuRegistroManual(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls) {
     int escolha;
     do {
@@ -154,6 +214,14 @@ void submenuRegistroManual(Listadono* Ld, HASHING* has, Listapassagem* Lp, Lista
     } while (escolha != 0);
 }
 
+/**
+ * @brief Submenu para organização de dados.
+ *
+ * Permite ao utilizador organizar a lista de donos e os veículos associados às marcas.
+ *
+ * @param Ld Ponteiro para a lista de donos.
+ * @param has Ponteiro para a tabela de hash contendo marcas e veículos.
+ */
 void submenuOrganizacao(Listadono* Ld, HASHING* has) {
     int escolha;
     do {
@@ -179,6 +247,14 @@ void submenuOrganizacao(Listadono* Ld, HASHING* has) {
     } while (escolha != 0);
 }
 
+/**
+ * @brief Submenu para listagem de dados.
+ *
+ * Permite listar todos os donos ou todos os veículos, caso existam na base de dados.
+ *
+ * @param Ld Ponteiro para a lista de donos.
+ * @param has Ponteiro para a tabela de hash contendo marcas e veículos.
+ */
 void submenuListagens(Listadono* Ld, HASHING* has) {
     int escolha;
     do {
@@ -216,6 +292,16 @@ void submenuListagens(Listadono* Ld, HASHING* has) {
     } while (escolha != 0);
 }
 
+/**
+ * @brief Submenu para geração de relatórios.
+ *
+ * Gera relatórios como ranking de quilometragem por veiÍculo e por marca, marca mais popular, lista de infrações e velocidade média por condutor.
+ *
+ * @param Lp Ponteiro para a lista de passagens.
+ * @param Ld Ponteiro para a lista de donos.
+ * @param has Ponteiro para a tabela de hash contendo marcas e veículos.
+ * @param d Ponteiro para a estrutura de distâncias entre sensores.
+ */
 void submenuRelatorios(Listapassagem* Lp,Listadono *Ld, HASHING* has, pdistancia d) {
     int escolha;
     do {
@@ -257,6 +343,20 @@ void submenuRelatorios(Listapassagem* Lp,Listadono *Ld, HASHING* has, pdistancia
                 Menu Principal
   =============================================*/
 
+
+  /**
+   * @brief Exibe o menu principal da aplicação e executa as operações conforme a escolha do utilizador.
+   *
+   * A função apresenta o menu principal com várias opções, como importação de dados, registro manual, listagens, organização de dados, geração de relatórios, exportação
+   * e verificação de memória utilizada. 
+   * O menu repete até o utilizador escolher a opção de sair (0).
+   *
+   * @param Ld Ponteiro para a lista de donos.
+   * @param has Ponteiro para a tabela de hash contendo marcas e veículos.
+   * @param Lp Ponteiro para a lista de passagens.
+   * @param Ls Ponteiro para a lista de sensores.
+   * @param d Ponteiro para a estrutura de distâncias entre sensores.
+   */
 void main_menu(Listadono* Ld, HASHING* has, Listapassagem* Lp, Listasensor* Ls, pdistancia d) {
 
     int escolha;
